@@ -25,6 +25,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### 文件清单
 
+```
 ├─public
 └─src
     ├─api
@@ -48,6 +49,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
             ├─problem
             ├─rank
             └─team
+```
 
 
 
