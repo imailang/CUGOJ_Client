@@ -24,6 +24,7 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### 文件清单
+
 ├─public
 └─src
     ├─api
@@ -51,3 +52,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 - 4/7 初此发布，实现了项目前端框架，封装了导航栏、代码编辑器等组件
+
