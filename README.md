@@ -23,7 +23,30 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-
+### 文件清单
+├─public
+└─src
+    ├─api
+    ├─assets
+    ├─common
+    ├─components
+    │  ├─admin
+    │  └─oj
+    │      └─common
+    ├─router
+    ├─store
+    ├─utils
+    └─views
+        ├─admin
+        └─oj
+            ├─about
+            ├─competition
+            ├─discuss
+            ├─evaluation
+            ├─practice
+            ├─problem
+            ├─rank
+            └─team
 
 
 
