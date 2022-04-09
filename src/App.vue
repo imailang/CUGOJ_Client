@@ -1,11 +1,8 @@
 <template>
-  <div>
-    <router-view></router-view>
-  </div>
+  <router-view></router-view>
 </template>
 
 <script setup>
-
 
 </script>
 
@@ -18,5 +15,4 @@
   text-align: center;
   color: #2c3e50;
 }
-
 </style>

@@ -1,44 +1,40 @@
 <template>
 <div>
-  <el-drawer :model-value="props.drawerVisible"
+  <el-drawer :model-value="leftDrawerVisible"
              direction="ltr"
              :show-close="false"
              :before-close="closeDrawer">
-    <NavBar mode="vertical" @clickClose="clickClose"></NavBar>
+    <NavBar mode="vertical"></NavBar>
   </el-drawer>
 </div>
 </template>
 
 <script setup>
 
-import NavBar from "@/components/oj/common/NavBar";
+import NavBar from "@/components/oj/basic/NavBar";
+import {computed} from "vue";
+import {mapGetters} from "vuex/dist/vuex.esm-browser";
+import store from "@/store";
 
 /**
  * 传入数据
  */
 
-// eslint-disable-next-line no-undef
-const props = defineProps({
-  drawerVisible:Boolean
-})
-// /**
-//  * 返回函数接口
-//  */
-// // eslint-disable-next-line no-undef
-// const emits = defineEmits(["closeDrawer"])
-// /**
-//  * 执行接口
-//  */
-// eslint-disable-next-line no-undef,vue/valid-define-emits
-const emits = defineEmits();
+
+/**
+ * 左弹窗显示
+ */
+const leftDrawerVisible = computed(
+    mapGetters(['getLeftDrawerVisible']).getLeftDrawerVisible.bind({$store:store})
+)
+
+/**
+ * 关闭左弹窗
+ */
 const closeDrawer =()=>{
-  emits("update:drawerVisible",false)
+  store.dispatch("changeLeftDrawerVisible",false)
 }
 
-const clickClose = () => {
-  closeDrawer()
-
-}
 
 
 </script>

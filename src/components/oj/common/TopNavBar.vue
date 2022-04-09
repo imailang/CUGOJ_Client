@@ -4,7 +4,7 @@
       <el-row justify="space-between" align="middle">
         <!-- 导航菜单图标-->
         <el-col :sm="0" :xs="3">
-          <el-button type="text" class="btn-icon" @click="data.leftDrawerVisible=true">
+          <el-button type="text" class="btn-icon" @click="openLeftDrawer">
             <el-icon>
               <Expand></Expand>
             </el-icon>
@@ -27,13 +27,13 @@
         <el-col :sm="6" :xs="16">
           <!-- 未登录显示-->
           <div v-if="!isLogin" class="btn-menu">
-            <el-button type="primary" round @click="data.loginVisible=true" size="large">
+            <el-button type="primary" round @click="openLogin" size="large">
               登录
             </el-button>
             <el-button
                 round
                 type="danger"
-                @click="data.registerVisible=true"
+                @click="openRegister"
                 style="margin-left: 5px"
                 size="large">
               注册
@@ -74,9 +74,9 @@
         </el-col>
       </el-row>
     </div>
-    <OjLogin :dialog-visible="data.loginVisible" @closeDialog="closeDialog"></OjLogin>
-    <OjRegister :dialog-visible="data.registerVisible" @closeDialog="closeDialog"></OjRegister>
-    <LeftDrawer v-model:drawer-visible="data.leftDrawerVisible"></LeftDrawer>
+    <OjLogin></OjLogin>
+    <OjRegister></OjRegister>
+    <LeftDrawer></LeftDrawer>
   </div>
 </template>
 
@@ -84,23 +84,34 @@
 import {
   ArrowDown, BellFilled, Expand,
 } from "@element-plus/icons-vue";
-import {computed, reactive} from "vue";
+import {computed} from "vue";
 import OjLogin from "@/components/oj/common/OjLogin";
 import OjRegister from "@/components/oj/common/OjRegister";
 import store from "@/store";
 import {mapGetters} from "vuex";
 import LeftDrawer from "@/components/oj/common/LeftDrawer";
-import NavBar from "@/components/oj/common/NavBar";
-
+import NavBar from "@/components/oj/basic/NavBar";
 
 
 /**
- * 关闭登录、注册对话框
+ * 打开左弹窗
  */
-const closeDialog = () => {
-  data.registerVisible = false
-  data.loginVisible = false
+const openLeftDrawer = () => {
+  store.dispatch("changeLeftDrawerVisible",true)
 }
+/**
+ * 打开登录窗口
+ */
+const openLogin = () => {
+  store.dispatch("changeLoginVisible",true)
+}
+/**
+ * 打开注册窗口
+ */
+const openRegister = () => {
+  store.dispatch("changeRegisterVisible",true)
+}
+
 /**
  * 获取store 是否登录字段
  */
@@ -108,16 +119,6 @@ const isLogin = computed(
     mapGetters(['getIsLogin']).getIsLogin.bind({$store: store})
 )
 
-
-/**
- * 数据
- */
-// eslint-disable-next-line no-unused-vars
-const data = reactive({
-  loginVisible: false,
-  registerVisible: false,
-  leftDrawerVisible:false,
-})
 
 </script>
 

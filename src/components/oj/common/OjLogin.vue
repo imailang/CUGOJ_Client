@@ -1,13 +1,13 @@
 <template>
   <div>
     <el-dialog
-        :model-value="props.dialogVisible"
+        :model-value="loginVisible"
         width="370px"
         class="dialog"
         title="登录-OJ"
         label-width="0"
         :close-on-click-modal="false"
-        :before-close="closeDialog"
+        :before-close="closeLogin"
     >
       <div>
         <el-form
@@ -43,46 +43,29 @@
 
 <script setup>
 import {User, Lock} from '@element-plus/icons-vue'
-import {reactive, ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import {ElMessage} from 'element-plus'
 import store from "@/store";
+import {mapGetters} from "vuex";
 
 /**
  * 登录
  */
 const clickLogin = () => {
-  //***********************************************登录验证
   ElMessage({
     type: 'success',
     message: '欢迎回来~',
     duration:3000
   })
   store.dispatch("changeIsLogin",'true')
-  closeDialog()
+  store.dispatch("changeLoginVisible",false)
+}
+const closeLogin = () => {
+  store.dispatch("changeLoginVisible",false)
+  resetForm();
 }
 
-/**
- * 传入数据
- */
-// eslint-disable-next-line no-undef
-const props = defineProps({
-  dialogVisible: Boolean,
-})
 
-/**
- * 返回函数接口
- * @type {EmitFn<string[]>}
- */
-// eslint-disable-next-line no-undef
-const emits = defineEmits(["closeDialog"])
-
-/**
- * 执行接口
- */
-const closeDialog = () => {
-  emits("closeDialog")
-  resetForm()
-}
 
 /**
  * 重置表单
@@ -91,12 +74,26 @@ const resetForm = () => {
   formLoginRef.value.resetFields()
 }
 
-
+/**
+ * 登录窗口显示
+ */
+const loginVisible = computed(
+    mapGetters(['getLoginVisible']).getLoginVisible.bind({$store:store})
+)
+/**
+ * 登录表单容器
+ */
 const formLoginRef = ref()
+/**
+ * 登录表单
+ */
 const formLogin = reactive({
   username: '',
   password: '',
 })
+/**
+ * 验证规则
+ */
 const rules = reactive({
   username: [
     {

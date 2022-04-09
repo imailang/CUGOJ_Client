@@ -1,87 +1,87 @@
 <template>
-<div>
   <div>
-    <el-dialog
-        :model-value="props.dialogVisible"
-        width="370px"
-        class="dialog"
-        title="注册-OJ"
-        label-width="0"
-        :close-on-click-modal="false"
-        :before-close="closeDialog"
-    >
-      <div>
-        <el-form
-            :model="formRegister"
-            :rules="rules"
-            ref="formRegisterRef"
-        >
-          <el-form-item prop="username">
-            <el-input
-                v-model="formRegister.username"
-                :prefix-icon="User"
-                :placeholder="'用户名'"
-                size="large"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="password">
-            <el-input
-                v-model="formRegister.password"
-                :prefix-icon="Lock"
-                :placeholder="'密码'"
-                type="password"
-                size="large"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="passwordAgain">
-            <el-input
-                v-model="formRegister.passwordAgain"
-                :prefix-icon="Lock"
-                :placeholder="'确认密码'"
-                type="password"
-                size="large"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="email">
-            <el-input
-                v-model="formRegister.email"
-                :prefix-icon="Message"
-                :placeholder="'请输入邮箱'"
-            >
-            </el-input>
-          </el-form-item>
-        </el-form>
-        <div class="footer">
-          <el-button type="primary" size="large">注册</el-button>
+    <div>
+      <el-dialog
+          :model-value="registerVisible"
+          width="370px"
+          class="dialog"
+          title="注册-OJ"
+          label-width="0"
+          :close-on-click-modal="false"
+          :before-close="closeRegister"
+      >
+        <div>
+          <el-form
+              :model="formRegister"
+              :rules="rules"
+              ref="formRegisterRef"
+          >
+            <el-form-item prop="username">
+              <el-input
+                  v-model="formRegister.username"
+                  :prefix-icon="User"
+                  :placeholder="'用户名'"
+                  size="large"
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input
+                  v-model="formRegister.password"
+                  :prefix-icon="Lock"
+                  :placeholder="'密码'"
+                  type="password"
+                  size="large"
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="passwordAgain">
+              <el-input
+                  v-model="formRegister.passwordAgain"
+                  :prefix-icon="Lock"
+                  :placeholder="'确认密码'"
+                  type="password"
+                  size="large"
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="email">
+              <el-input
+                  size="large"
+                  v-model="formRegister.email"
+                  :prefix-icon="Message"
+                  :placeholder="'请输入邮箱,点击右侧获取验证码'"
+              >
+                <template #append>
+                  <el-button size="small" :icon="Message" class="iconSize"/>
+                </template>
+              </el-input>
+            </el-form-item>
+          </el-form>
+          <div class="footer">
+            <el-button type="primary" size="large">注册</el-button>
+          </div>
         </div>
-      </div>
-    </el-dialog>
+      </el-dialog>
+    </div>
   </div>
-
-</div>
 </template>
 
 <script setup>
-import { User,Lock ,Message} from '@element-plus/icons-vue'
-import {reactive, ref} from "vue";
+import {User, Lock, Message} from '@element-plus/icons-vue'
+import {computed, reactive, ref} from "vue";
+import store from "@/store";
+import {mapGetters} from "vuex";
+
 
 /**
- * 定义返回函数接口
- * @type {EmitFn<string[]>}
+ * 关闭注册窗口
  */
-// eslint-disable-next-line no-undef
-const emits = defineEmits(["closeDialog"])
-/**
- * 执行关闭
- */
-const closeDialog = () => {
-  emits("closeDialog")
+const closeRegister = () => {
+  store.dispatch("changeRegisterVisible", false)
   resetForm()
 }
 /**
  * 重置表单
  */
-const resetForm=()=>{
+const resetForm = () => {
   formRegisterRef.value.resetFields()
 }
 
@@ -89,23 +89,22 @@ const resetForm=()=>{
  * 检查用户是否已经存在
  * @constructor
  */
-const CheckUsernameNotExist = (rule, value, callback) => {
-   return callback()
+const checkUsernameNotExist = (rule, value, callback) => {
+  return callback()
 }
 /**
  * 检查邮箱是否存在
  * @constructor
  */
-const CheckEmailNotExist = (rule, value, callback) => {
+const checkEmailNotExist = (rule, value, callback) => {
   return callback()
 }
 /**
  * 检查密码
  * @constructor
  */
-const CheckPassword = (rule, value, callback) => {
-  if(formRegister.password!=='')
-  {
+const checkPassword = (rule, value, callback) => {
+  if (formRegister.password !== '') {
     formRegisterRef.value.validateField('passwordAgain')
   }
   return callback();
@@ -114,22 +113,37 @@ const CheckPassword = (rule, value, callback) => {
  * 检查密码
  * @constructor
  */
-const CheckAgainPassword = (rule, value, callback) => {
-  if(value!==formRegister.password){
+const checkAgainPassword = (rule, value, callback) => {
+  if (value !== formRegister.password) {
     callback(new Error('两次密码不一致'))
   }
   callback();
 }
 
+/**
+ * 注册窗口显示
+ */
+const registerVisible = computed(
+    mapGetters(['getRegisterVisible']).getRegisterVisible.bind({$store: store})
+)
 
+/**
+ * 注册表单容器
+ */
 const formRegisterRef = ref()
-const formRegister =reactive({
+/**
+ * 注册表单
+ */
+const formRegister = reactive({
   username: '',
   password: '',
   passwordAgain: '',
-  email:'',
+  email: '',
 })
-const rules =reactive({
+/**
+ * 验证规则
+ */
+const rules = reactive({
   username: [
     {
       required: true,
@@ -137,7 +151,7 @@ const rules =reactive({
       trigger: 'blur',
     },
     {
-      validator: CheckUsernameNotExist,
+      validator: checkUsernameNotExist,
       trigger: 'blur',
       message: '用户名已存在',
     },
@@ -159,7 +173,7 @@ const rules =reactive({
       trigger: 'blur',
     },
     {
-      validator: CheckEmailNotExist,
+      validator: checkEmailNotExist,
       message: '邮箱已存在',
       trigger: 'blur',
     },
@@ -176,7 +190,7 @@ const rules =reactive({
       message: '请输入长度为6-20的密码',
       trigger: 'blur',
     },
-    { validator: CheckPassword, trigger: 'blur' },
+    {validator: checkPassword, trigger: 'blur'},
   ],
   passwordAgain: [
     {
@@ -184,17 +198,9 @@ const rules =reactive({
       message: '请再次输入密码',
       trigger: 'blur',
     },
-    { validator: CheckAgainPassword, trigger: 'change' },
+    {validator: checkAgainPassword, trigger: 'change'},
   ],
 })
-/**
- * 传入数据
- */
-// eslint-disable-next-line no-undef
-const props = defineProps({
-  dialogVisible: Boolean,
-})
-
 
 </script>
 
@@ -203,6 +209,7 @@ const props = defineProps({
   border-radius: 10px !important;
   text-align: center;
 }
+
 /deep/ .el-dialog__header .el-dialog__title {
   font-size: 22px;
   font-weight: 600;
@@ -210,13 +217,21 @@ const props = defineProps({
   line-height: 1em;
   color: #4e4e4e;
 }
+
 /deep/ .el-form-item__content {
-  margin-left: 0px !important;
+  margin-left: 0 !important;
 }
-/deep/.el-button {
+
+/deep/ .el-button {
   margin: 0 0 15px 0;
   width: 100%;
 }
+
+.iconSize {
+  font-size: 20px;
+  padding: 8px;
+}
+
 .footer {
   overflow: auto;
   margin-top: 20px;
