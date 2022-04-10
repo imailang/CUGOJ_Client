@@ -1,23 +1,25 @@
 <template>
-    <div v-if="role==='user'">
-      <!-- 顶部导航栏 -->
-      <div ref="affix">
-        <el-affix v-if="isRefresh" :offset="0">
-          <TopNavBar></TopNavBar>
-        </el-affix>
-      </div>
-      <div id="oj-content">
-        <router-view></router-view>
-      </div>
+  <div v-if="role==='user'" style="background-color: #eff3f5">
+    <!-- 顶部导航栏 -->
+    <div ref="affix">
+      <el-affix v-if="isRefresh" :offset="0">
+        <OjNavBar></OjNavBar>
+      </el-affix>
     </div>
+    <div id="oj-content">
+      <router-view></router-view>
+    </div>
+  </div>
+
+
 </template>
 
 <script setup>
-import TopNavBar from "@/components/oj/common/TopNavBar";
 import elementResizeDetectorMaker from 'element-resize-detector'
 import {computed, nextTick, onMounted, ref} from "vue";
 import store from "@/store";
 import {mapGetters} from "vuex";
+import OjNavBar from "@/components/oj/common/OjNavBar";
 
 //顶部导航栏容器
 const affix = ref()
@@ -63,6 +65,7 @@ el-row去除margin
   #oj-content {
     margin-top: 20px;
     padding: 0 5px;
+    min-width: 300px;
   }
 
   .el-row {

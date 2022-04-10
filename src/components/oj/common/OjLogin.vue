@@ -35,6 +35,14 @@
         </el-form>
         <div class="footer">
           <el-button type="primary" size="large" @click="clickLogin">登录</el-button>
+          <el-row justify="space-between">
+            <el-col :span="10">
+              <el-button type="text" @click="openRegister">没有账号？立即注册</el-button>
+            </el-col>
+            <el-col :span="5">
+              <el-button type="text">忘记密码</el-button>
+            </el-col>
+          </el-row>
         </div>
       </div>
     </el-dialog>
@@ -60,11 +68,20 @@ const clickLogin = () => {
   store.dispatch("changeIsLogin",'true')
   store.dispatch("changeLoginVisible",false)
 }
+/**
+ * 关闭登录
+ */
 const closeLogin = () => {
   store.dispatch("changeLoginVisible",false)
   resetForm();
 }
-
+/**
+ * 打开注册
+ */
+const openRegister = () => {
+  closeLogin()
+  store.dispatch("changeRegisterVisible",true)
+}
 
 
 /**

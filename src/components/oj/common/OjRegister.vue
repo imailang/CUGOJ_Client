@@ -57,6 +57,7 @@
           </el-form>
           <div class="footer">
             <el-button type="primary" size="large">注册</el-button>
+            <el-button type="text" @click="openLogin">已有账号？立即登录！</el-button>
           </div>
         </div>
       </el-dialog>
@@ -77,6 +78,13 @@ import {mapGetters} from "vuex";
 const closeRegister = () => {
   store.dispatch("changeRegisterVisible", false)
   resetForm()
+}
+/**
+ * 打开登录
+ */
+const openLogin = () => {
+  store.dispatch("changeLoginVisible",true)
+  closeRegister()
 }
 /**
  * 重置表单

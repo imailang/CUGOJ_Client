@@ -12,7 +12,7 @@
     <el-option label="Visual Studio" value="vs"></el-option>
     <el-option label="High Contrast Dark" value="hc-black"></el-option>
   </el-select>
-  <div ref="container" style="text-align: left;height: 500px">
+  <div ref="container" class="container">
   </div>
 
 </template>
@@ -20,20 +20,12 @@
 <script setup>
 import * as monaco from 'monaco-editor'
 import {onMounted, reactive, ref, toRaw} from "vue";
-import {
-  cppCompletion,
-  csharpCompletion,
-  goCompletion,
-  javaCompletion,
-  pythonCompletion,
-  sqlCompletion
-} from "@/utils/completion";
+
 
 //实例
 const editor = ref()
 //容器
 const container = ref()
-
 //基础数据
 const data = reactive({
   language: 'java',
@@ -41,7 +33,7 @@ const data = reactive({
   //   "java", "javascript", "json", "julia", "kotlin", "less", "markdown", "mysql", "objective-c", "pascal", "pascaligo",
   //   "perl", "php", "powershell", "python", "r", "redis", "rust", "scala", "scheme", "scss", "shell",
   //   "sophia", "sql", "swift", "tcl", "typescript", "xml", "yaml"],
-  languageOptions: ['java', 'cpp', 'python', 'sql', 'csharp','go'],
+  languageOptions: ['java', 'cpp', 'python', 'sql', 'csharp', 'go', 'javascript'],
   editorTheme: 'vs-dark',
 })
 
@@ -65,30 +57,35 @@ const initEditor = () => {
     quickSuggestionsDelay: 100, //代码提示延时
   });
   //代码提示
-  pythonCompletion
-  sqlCompletion
-  cppCompletion
-  csharpCompletion
-  javaCompletion
-  goCompletion
+  // jsCompletion
+  // pythonCompletion
+  // sqlCompletion
+  // cppCompletion
+  // csharpCompletion
+  // javaCompletion
+  // goCompletion
 }
 
-// eslint-disable-next-line no-unused-vars
+/**
+ * 改变主题
+ */
 const changeTheme = (val) => {
-
   data.editorTheme = val
   monaco.editor.setTheme(val)
-
   console.log(toRaw(editor.value).getValue())
 }
-//修改语言
+/**
+ * 改变语言
+ */
 const changeLanguage = (val) => {
   data.language = val;
   console.log(val)
-  monaco.editor.setModelLanguage(toRaw(editor.value).getModel(),val)
+  monaco.editor.setModelLanguage(toRaw(editor.value).getModel(), val)
 }
 
-
+/**
+ * 初始化
+ */
 onMounted(() => {
   initEditor();
 })
@@ -96,5 +93,9 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.container {
+  text-align: left;
+  height: 500px
+}
 
 </style>

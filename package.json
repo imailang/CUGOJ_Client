@@ -1,5 +1,5 @@
 {
-  "name": "oj",
+  "name": "oj3",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -14,12 +14,15 @@
     "echarts": "^5.3.2",
     "element-plus": "^2.1.8",
     "element-resize-detector": "^1.2.4",
+    "moment": "^2.29.2",
     "monaco-editor": "^0.33.0",
-    "monaco-editor-webpack-plugin": "^7.0.1",
     "vue": "^3.2.13",
     "vue-monaco-editor": "^0.0.19",
+    "vue-monaco-editor-zh": "^0.0.26",
     "vue-router": "^4.0.14",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "vxe-table": "^4.2.2",
+    "xe-utils": "^3.5.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -27,6 +30,7 @@
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "compression-webpack-plugin": "^9.2.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3"
   },
