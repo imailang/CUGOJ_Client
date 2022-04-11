@@ -32,16 +32,16 @@
         </div>
         <!-- 表-->
         <div>
-          <vxe-table :data="tableData" ref="Xtable">
+          <vxe-table :data="problemList" ref="Xtable">
             <vxe-column type="seq" width="60"></vxe-column>
-            <vxe-column field="problemId" title="题目ID"></vxe-column>
-            <vxe-column field="problemName" title="题目">
+            <vxe-column field="ID" title="题目ID"></vxe-column>
+            <vxe-column field="Title" title="题目">
               <template v-slot="{row}">
-                <el-link @click="getProblemUri(row.problemId)">{{row.problemName}}</el-link>
+                <el-link @click="getProblemUri(row.ID)">{{row.Title}}</el-link>
               </template>
             </vxe-column>
-            <vxe-column field="problemLevel" title="难度"></vxe-column>
-            <vxe-column field="AC" title="AC通过率"></vxe-column>
+            <vxe-column field="SubmitNumber" title="提交数"></vxe-column>
+            <vxe-column field="SubmitACNumber" title="AC"></vxe-column>
           </vxe-table>
         </div>
       </el-card>
@@ -60,10 +60,7 @@ import router from "@/router";
 import api from "@/api/api";
 
 
-const tableData = ref([
-  { problemId: 10001, problemName: '猴子偷套', problemLevel: '入门', AC: '50%' },
-  { problemId: 10002, problemName: '猴子偷桃', problemLevel: '一般', AC: '80%' },
-])
+const problemList =ref([])
 
 const pageBody=reactive({
   pagesize:10,
@@ -74,12 +71,18 @@ const pageBody=reactive({
  * 初始化
  */
 onMounted(()=>{
-  api.problem.getProblemList(pageBody)
-  .then(response=>{
-    console.log(response.data)
-    console.log(response)
-  })
+  getProblemList()
 })
+/**
+ * 获取题目列表
+ */
+const getProblemList = () => {
+  api.problem.getProblemList(pageBody)
+      .then(response=>{
+        problemList.value=response
+        console.log(problemList.value)
+      })
+}
 
 /**
  * 点击跳转题目

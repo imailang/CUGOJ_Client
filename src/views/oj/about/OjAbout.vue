@@ -1,11 +1,12 @@
 <template>
-<div>
-  关于
-</div>
+  <div>关于</div>
 </template>
 
 <script setup>
+
+
 </script>
+
 
 <style scoped>
 
