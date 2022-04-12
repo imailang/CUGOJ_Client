@@ -12,6 +12,8 @@
   </div>
 
 
+  <!-- 回到顶部-->
+  <el-backtop/>
 </template>
 
 <script setup>

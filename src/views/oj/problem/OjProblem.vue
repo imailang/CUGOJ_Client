@@ -37,17 +37,56 @@
             <vxe-column field="ID" title="题目ID"></vxe-column>
             <vxe-column field="Title" title="题目">
               <template v-slot="{row}">
-                <el-link @click="getProblemUri(row.ID)">{{row.Title}}</el-link>
+                <el-link @click="getProblemUri(row.ID)">{{ row.Title }}</el-link>
               </template>
             </vxe-column>
             <vxe-column field="SubmitNumber" title="提交数"></vxe-column>
-            <vxe-column field="SubmitACNumber" title="AC"></vxe-column>
+            <vxe-column field="SubmitACNumber" title="AC">
+              <template v-slot="{row}">
+                <el-progress :text-inside="true" :percentage="calAcRate(row.SubmitNumber,row.SubmitACNumber)" :stroke-width="24"/>
+              </template>
+            </vxe-column>
           </vxe-table>
+        </div>
+        <!-- 分页-->
+        <div style="float: right">
+          <el-pagination
+              v-model:currentPage="pageBody.offset"
+              v-model:page-size="pageBody.pagesize"
+              :page-sizes="[10, 20, 30, 40]"
+              layout=" prev, pager, next,sizes"
+              :total="pageBody.total"
+              background
+              @size-change="handleSizeChange"
+          />
         </div>
       </el-card>
     </el-col>
     <el-col :sm="7" :xs="24">
-      <el-card shadow="always"> Always</el-card>
+      <el-card shadow="always">
+        <!-- 进度条-->
+        <div class="demo-progress">
+          <el-progress :text-inside="true" :stroke-width="26" :percentage="70"/>
+          <el-progress
+              :text-inside="true"
+              :stroke-width="24"
+              :percentage="100"
+              status="success"
+          />
+          <el-progress
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="80"
+              status="warning"
+          />
+          <el-progress
+              :text-inside="true"
+              :stroke-width="20"
+              :percentage="50"
+              status="exception"
+          />
+        </div>
+      </el-card>
     </el-col>
   </el-row>
 </template>
@@ -59,18 +98,39 @@ import {onMounted, reactive, ref} from "vue";
 import router from "@/router";
 import api from "@/api/api";
 
+/**
+ * 题目列表
+ */
+const problemList = ref([])
 
-const problemList =ref([])
-
-const pageBody=reactive({
-  pagesize:10,
-  offset:0
+/**
+ * 分页
+ */
+const pageBody = reactive({
+  pagesize: 10,
+  offset: 0,
+  total: 0,
 })
 
 /**
+ * 计算AC率
+ */
+const calAcRate = (num, acNum) => {
+  if(num===0) return 0
+  return (num / acNum).toFixed(2)*100
+}
+
+/**
+ * 页面变化
+ */
+const handleSizeChange = () => {
+  console.log('页面变化pageBody', pageBody)
+  getProblemList()
+}
+/**
  * 初始化
  */
-onMounted(()=>{
+onMounted(() => {
   getProblemList()
 })
 /**
@@ -78,9 +138,10 @@ onMounted(()=>{
  */
 const getProblemList = () => {
   api.problem.getProblemList(pageBody)
-      .then(response=>{
-        problemList.value=response
-        console.log(problemList.value)
+      .then(response => {
+        problemList.value = response
+        pageBody.total = problemList.value.length
+        console.log('题目列表', problemList.value)
       })
 }
 
@@ -89,7 +150,7 @@ const getProblemList = () => {
  */
 const getProblemUri = (problemId) => {
   router.push({
-    path:'/problem/'+problemId
+    path: '/problem/' + problemId
   })
 }
 
@@ -105,5 +166,9 @@ const getProblemUri = (problemId) => {
 
 .el-input {
   max-width: 200px;
+}
+
+.demo-progress .el-progress--line {
+  margin-bottom: 15px;
 }
 </style>

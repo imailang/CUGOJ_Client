@@ -78,7 +78,7 @@ const editor = ref()
 const options = ref({
   // codemirror options
   tabSize: 4,
-  mode: 'text/x-java',
+  mode: 'text/x-c++src',
   theme: 'solarized',
   // 显示行号
   lineNumbers: true,

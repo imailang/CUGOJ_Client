@@ -4,8 +4,8 @@ import axios from 'axios'
 // 根据环境变量区分接口默认地址这里看自己需求配
 switch (process.env.NODE_ENV) {
     case "production":
-         axios.defaults.baseURL = "http://xsyd.zxlong.love:13000"
-        // axios.defaults.baseURL="/api/"
+         // axios.defaults.baseURL = "http://xsyd.zxlong.love:13000"
+         axios.defaults.baseURL="/api/"
         break;
     case "test":
         axios.defaults.baseURL = "http://192.168.1.1"
