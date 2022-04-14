@@ -116,12 +116,28 @@ const languages = ref([
     value: 'text/x-java'
   },
   {
-    label: 'c',
-    value: 'text/x-csrc'
+    label: 'c99',
+    value: 'gnu c99'
   },
   {
-    label: 'c++',
-    value: 'text/x-c++src'
+    label: 'c11',
+    value: 'gnu c11'
+  },
+  {
+    label: 'c++11',
+    value: 'gnu cpp11'
+  },
+  {
+    label: 'c++14',
+    value: 'gnu cpp14'
+  },
+  {
+    label: 'c++17',
+    value: 'gnu cpp17'
+  },
+  {
+    label: 'c++20',
+    value: 'gnu cpp20'
   },
   {
     label: 'c#',
@@ -138,7 +154,14 @@ const languages = ref([
 ])
 const theme = ref('solarized')
 
-
+const editorLanguage =ref({
+  'gnu c99':'text/x-csrc',
+  'gnu c11':'text/x-csrc',
+  'gnu cpp11':'text/x-c++src',
+  'gnu cpp14':'text/x-c++src',
+  'gnu cpp17':'text/x-c++src',
+  'gnu cpp20':'text/x-c++src',
+})
 // eslint-disable-next-line no-undef,no-unused-vars
 const props=defineProps({
   code:{
@@ -147,11 +170,11 @@ const props=defineProps({
   },
   language:{
     type:String,
-    default:'c'
+    default:'c++11'
   }
 })
 // eslint-disable-next-line no-undef
-const emits =defineEmits(['update:code'])
+const emits =defineEmits(['update:code','update:language'])
 
 /**
  * 代码改变
@@ -177,8 +200,20 @@ const changeTheme = (val) => {
  * 改变语言
  */
 const changeLanguage = (val) => {
-  toRaw(editor.value).setOption('mode', val)
+  console.log(val)
+  toRaw(editor.value).setOption('mode', calLanguage(val))
   emits('update:language',val)
+}
+
+/**
+ * 适配编辑器语言
+ */
+const calLanguage = (val) => {
+  if(typeof editorLanguage.value[val]!=='undefined')
+  {
+    val=editorLanguage.value[val]
+  }
+  return val;
 }
 
 </script>

@@ -87,14 +87,12 @@ import {
   ArrowDown, BellFilled, Expand,
 } from "@element-plus/icons-vue";
 import {computed} from "vue";
-import OjLogin from "@/components/oj/common/OjLogin";
-import OjRegister from "@/components/oj/common/OjRegister";
 import store from "@/store";
 import {mapGetters} from "vuex";
-import NavBar from "@/components/oj/basic/NavBar";
+import NavBar from "@/components/oj/basic/BaseNavBar";
+import OjLogin from "@/components/oj/common/OjLogin";
+import OjRegister from "@/components/oj/common/OjRegister";
 import OjLeftDrawer from "@/components/oj/common/OjLeftDrawer";
-
-
 /**
  * 打开左弹窗
  */

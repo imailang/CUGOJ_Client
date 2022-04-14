@@ -10,7 +10,11 @@
       <router-view></router-view>
     </div>
   </div>
-
+  <div v-else>
+    <div id="admin-content">
+        <router-view></router-view>
+    </div>
+  </div>
 
   <!-- 回到顶部-->
   <el-backtop/>
@@ -22,6 +26,7 @@ import {computed, nextTick, onMounted, ref} from "vue";
 import store from "@/store";
 import {mapGetters} from "vuex";
 import OjNavBar from "@/components/oj/common/OjNavBar";
+import {useRoute} from "vue-router";
 
 //顶部导航栏容器
 const affix = ref()
@@ -33,6 +38,7 @@ const isRefresh = ref(false)
 const role = computed(
     mapGetters(['getRole']).getRole.bind({$store: store})
 )
+const route =useRoute()
 
 /**
  * 初始化
@@ -45,10 +51,29 @@ onMounted(() => {
       isRefresh.value = true  //渲染后又展示 实现刷新组件
     })
   })
+  if(route.path.split('/')[1]==='admin')
+  {
+    store.dispatch("changeRole",'admin')
+  }
 })
 </script>
 
 <style>
+#admin-content {
+  background-color: #1e9fff;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+#particles-js {
+  position: fixed;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
 /**
 屏幕宽度大于 768
  */

@@ -5,6 +5,7 @@
         <el-tabs
             type="border-card"
         >
+          <!--题目描述 -->
           <el-tab-pane>
             <template #label>
               <div>
@@ -15,42 +16,45 @@
               </div>
             </template>
             <div style="text-align: left">
-              <div class="problem-title">{{ problemInfo.Title}}</div>
+              <div class="problem-title">{{ problemInfo.Title }}</div>
               <div>
                 <div style="color: #3090f2">题目背景 ：</div>
-                <p style="margin-left: 30px">
-                  {{description.BackGround}}
+                <p style="margin-left: 30px" v-html="description.BackGround ">
                 </p>
               </div>
               <div>
                 <div style="color: #3090f2">题目描述 ：</div>
-                <p style="margin-left: 30px">
-                  {{description.Description}}
+                <p style="margin-left: 30px" v-html="description.Description">
                 </p>
               </div>
               <div>
                 <div style="color: #3090f2">输入描述 ：</div>
-                <p style="margin-left: 30px">
-                  {{description.Input}}
+                <p style="margin-left: 30px" v-html="description.Input">
                 </p>
               </div>
               <div>
                 <div style="color: #3090f2">输出描述 ：</div>
-                <p style="margin-left: 30px">
-                  {{description.Output}}
-                </p>
+                <p style="margin-left: 30px" v-html="description.Output"></p>
               </div>
               <div>
                 <el-row justify="space-between">
                   <el-col :span="12" style="color: #308ff1">
                     <div>用例输入1</div>
-                    <p style="background-color: #f0f0f0;width: 60%;height: 30px">2</p>
+                    <div style="background-color: #f0f0f0;width: 60%;height: 30px;line-height: 30px;margin-left: 30px">
+                      <p>2</p>
+                    </div>
                   </el-col>
-                  <el-col :span="12" style="color: #308ff1">用例输入2</el-col>
+                  <el-col :span="12" style="color: #308ff1">
+                    <div>用例输出2</div>
+                    <div style="background-color: #f0f0f0;width: 60%;height: 30px;line-height: 30px;margin-left: 30px">
+                      <p>2</p>
+                    </div>
+                  </el-col>
                 </el-row>
               </div>
             </div>
           </el-tab-pane>
+          <!--我的提交 -->
           <el-tab-pane>
             <template #label>
               <div>
@@ -88,28 +92,45 @@ const route = useRoute();
  */
 const problemStatus = ref('')
 const problemInfo = ref({})
-const description =ref({})
-const code =ref('class')
-const language=ref('c++')
-
+const description = ref({})
+const code = ref('class')
+const language = ref('c++11')
+const submitLanguage =ref({
+  'c99':'gnu c99',
+  'c11':'gnu c11',
+  'c++11':'gnu cpp11',
+  'c++14':'gnu cpp14',
+  'c++17':'gnu cpp17',
+  'c++20':'gnu cpp20'
+})
+/**
+ * 适配后端语言
+ */
+const calLanguage = (val) => {
+  if(typeof submitLanguage.value[val]!=='undefined')
+  {
+    val=submitLanguage.value[val]
+  }
+  return val
+}
 /**
  * 提交代码
  */
 const submitCode = () => {
   api.judge.getBaseJudge()
-  .then(response=>{
-    console.log(response)
-    const tmp =response
-    tmp.PID=1;
-    tmp.Language='gnu cpp11';
-    tmp.UID= 1
-    tmp.Code=code.value
-    console.log('tmp',tmp)
-    api.judge.addJudge(tmp)
-    .then(response=>{
-      console.log(response)
-    })
-  })
+      .then(response => {
+        console.log(response)
+        const tmp = response
+        tmp.PID = 1;
+        tmp.Language =calLanguage(language.value);
+        tmp.UID = 1
+        tmp.Code = code.value
+        console.log('tmp', tmp)
+        // api.judge.addJudge(tmp)
+        //     .then(response => {
+        //       console.log(response)
+        //     })
+      })
 
   console.log(code.value)
 }
@@ -130,10 +151,10 @@ const getProblem = () => {
         console.log(response)
         problemInfo.value = JSON.parse(response.Info)
         problemStatus.value = response.Statu
-        description.value=problemInfo.value.Description
-        console.log('problemInfo',problemInfo.value)
-        console.log('description',description.value)
-        console.log('problemStatus',problemStatus.value)
+        description.value = problemInfo.value.Description
+        console.log('problemInfo', problemInfo.value)
+        console.log('description', description.value)
+        console.log('problemStatus', problemStatus.value)
 
 
       })
@@ -141,7 +162,7 @@ const getProblem = () => {
 </script>
 
 <style scoped>
-.problem-title{
+.problem-title {
   font-weight: 500;
   font-size: 30px;
 }
@@ -154,6 +175,7 @@ const getProblem = () => {
     overflow-x: hidden;
     float: left;
   }
+
   .problem-right {
     height: 100%;
     float: left;
@@ -161,8 +183,7 @@ const getProblem = () => {
   }
 }
 
-@media screen  and (max-width: 1080px)
-{
+@media screen  and (max-width: 1080px) {
 
 
 }

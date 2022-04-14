@@ -1,20 +1,22 @@
 import axios from 'axios'
 //import qs from 'qs'
 
-// 根据环境变量区分接口默认地址这里看自己需求配
-switch (process.env.NODE_ENV) {
-    case "production":
-         // axios.defaults.baseURL = "http://xsyd.zxlong.love:13000"
-         axios.defaults.baseURL="/api/"
-        break;
-    case "test":
-        axios.defaults.baseURL = "http://192.168.1.1"
-        break;
-    default:
-        // axios.defaults.baseURL="http://localhost:8000"
-        // axios.defaults.baseURL="http://xsyd.zxlong.love:13000/api"
-        axios.defaults.baseURL = "/api/"
-}
+// // 根据环境变量区分接口默认地址这里看自己需求配
+// switch (process.env.NODE_ENV) {
+//     case "production":
+//          // axios.defaults.baseURL = "http://xsyd.zxlong.love:13000"
+//          axios.defaults.baseURL="/api/"
+//         break;
+//     case "test":
+//         axios.defaults.baseURL = "http://192.168.1.1"
+//         break;
+//     default:
+//         // axios.defaults.baseURL="http://localhost:8000"
+//         // axios.defaults.baseURL="http://xsyd.zxlong.love:13000/api"
+//         // axios.defaults.baseURL = "/api/"
+// }
+
+axios.defaults.baseURL = "/api"
 
 //设置超时时间和跨域是否携带凭证
 axios.defaults.timeout = 10000;

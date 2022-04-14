@@ -11,7 +11,7 @@
 
 <script setup>
 
-import NavBar from "@/components/oj/basic/NavBar";
+import NavBar from "@/components/oj/basic/BaseNavBar";
 import {computed} from "vue";
 import {mapGetters} from "vuex/dist/vuex.esm-browser";
 import store from "@/store";

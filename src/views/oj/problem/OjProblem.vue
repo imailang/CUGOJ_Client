@@ -33,7 +33,6 @@
         <!-- 表-->
         <div>
           <vxe-table :data="problemList" ref="Xtable">
-            <vxe-column type="seq" width="60"></vxe-column>
             <vxe-column field="ID" title="题目ID"></vxe-column>
             <vxe-column field="Title" title="题目">
               <template v-slot="{row}">
@@ -121,7 +120,7 @@ const calAcRate = (num, acNum) => {
 }
 
 /**
- * 页面变化
+ * 翻页
  */
 const handleSizeChange = () => {
   console.log('页面变化pageBody', pageBody)

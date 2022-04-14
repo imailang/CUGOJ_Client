@@ -4,9 +4,7 @@
       <el-dialog
           :model-value="registerVisible"
           width="370px"
-          class="dialog"
           title="注册-OJ"
-          label-width="0"
           :close-on-click-modal="false"
           :before-close="closeRegister"
       >
@@ -50,13 +48,22 @@
                   :placeholder="'请输入邮箱,点击右侧获取验证码'"
               >
                 <template #append>
-                  <el-button size="small" :icon="Message" class="iconSize"/>
+                  <el-button size="small" @click="emailVerification" :icon="Message" class="iconSize"/>
                 </template>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="code">
+              <el-input
+                  size="large"
+                  v-model="formRegister.code"
+                  :prefix-icon="Stamp"
+                  placeholder="请输入6位验证码"
+              >
               </el-input>
             </el-form-item>
           </el-form>
           <div class="footer">
-            <el-button type="primary" size="large">注册</el-button>
+            <el-button type="primary" size="large" @click="clickRegister">注册</el-button>
             <el-button type="text" @click="openLogin">已有账号？立即登录！</el-button>
           </div>
         </div>
@@ -66,12 +73,48 @@
 </template>
 
 <script setup>
-import {User, Lock, Message} from '@element-plus/icons-vue'
+import {User, Lock, Message, Stamp} from '@element-plus/icons-vue'
 import {computed, reactive, ref} from "vue";
 import store from "@/store";
 import {mapGetters} from "vuex";
+import api from "@/api/api";
+import {ElMessage} from "element-plus";
 
-
+/**
+ * 注册
+ */
+const clickRegister = () => {
+  formRegisterRef.value.validate((valid)=>{
+    if(valid)
+    {
+      api.user
+      ElMessage({
+        message:'注册成功',
+        type:'success',
+      })
+    }
+  })
+}
+/**
+ * 邮箱验证 发送验证码
+ */
+const emailVerification = () => {
+  formRegisterRef.value.validateField('email', (valid) => {
+    if (valid) {
+      let tmp = {
+        email: formRegister.email
+      }
+      api.user.emailVerification(tmp)
+          .then(res => {
+            ElMessage({
+              message: '验证码已发送!',
+              type: 'success',
+            })
+            console.log(res)
+          })
+    }
+  })
+}
 /**
  * 关闭注册窗口
  */
@@ -83,7 +126,7 @@ const closeRegister = () => {
  * 打开登录
  */
 const openLogin = () => {
-  store.dispatch("changeLoginVisible",true)
+  store.dispatch("changeLoginVisible", true)
   closeRegister()
 }
 /**
@@ -147,6 +190,7 @@ const formRegister = reactive({
   password: '',
   passwordAgain: '',
   email: '',
+  code: '',
 })
 /**
  * 验证规则
@@ -208,6 +252,19 @@ const rules = reactive({
     },
     {validator: checkAgainPassword, trigger: 'change'},
   ],
+  code:[
+    {
+      required: true,
+      message: '验证码不能为空',
+      trigger: 'blur',
+    },
+    {
+      min: 6,
+      max:6,
+      message: '验证码长度为6',
+      trigger: 'blur',
+    },
+  ]
 })
 
 </script>

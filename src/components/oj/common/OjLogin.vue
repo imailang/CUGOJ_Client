@@ -3,9 +3,7 @@
     <el-dialog
         :model-value="loginVisible"
         width="370px"
-        class="dialog"
         title="登录-OJ"
-        label-width="0"
         :close-on-click-modal="false"
         :before-close="closeLogin"
     >

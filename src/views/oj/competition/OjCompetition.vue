@@ -46,8 +46,6 @@
                   />
                 </el-col>
               </el-row>
-
-
             </el-col>
           </el-row>
         </template>
@@ -99,7 +97,7 @@
                 <el-tag v-else-if="item.status==='已结束'" class="ml-2" type="danger" effect="dark" size="large">
                   已结束
                 </el-tag>
-                <el-tag v-else-if="item.status==='筹备中'" class="ml-2" type="primary" effect="dark" size="large">
+                <el-tag v-else-if="item.status==='筹备中'" class="ml-2" effect="dark" size="large">
                   筹备中
                 </el-tag>
               </el-col>

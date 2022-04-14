@@ -4,7 +4,7 @@ const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i;
 module.exports = defineConfig({
     transpileDependencies: true,
     assetsDir: 'static',
-    publicPath: '/oj',
+    publicPath: '/cugoj',
     chainWebpack: (config) => {
         if (process.env.NODE_ENV === 'production') {
             config.plugin('compressionPlugin')
@@ -17,13 +17,13 @@ module.exports = defineConfig({
     },
     devServer: {
         proxy:{
-            '/api/':{
-                target:'http://xsyd.zxlong.love:13000/',
+            '/api':{
+                target:'http://xsyd.zxlong.love:13000',
                 changeOrigin:true,
                 pathRewrite:{
-                    '^/api/':''
+                    '^/api':'/'
                 }
-            }
+            },
         }
     }
 })

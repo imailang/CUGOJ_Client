@@ -1,10 +1,9 @@
 <template>
-  <OjCodeEditor></OjCodeEditor>
+  <div></div>
 </template>
 
 <script setup>
 
-import OjCodeEditor from "@/components/oj/common/OjCodeEditor";
 </script>
 
 <style scoped>
