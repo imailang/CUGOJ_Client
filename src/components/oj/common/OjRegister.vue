@@ -87,10 +87,13 @@ const clickRegister = () => {
   formRegisterRef.value.validate((valid)=>{
     if(valid)
     {
-      api.user
-      ElMessage({
-        message:'注册成功',
-        type:'success',
+      api.user.register(formRegister)
+      .then(res=>{
+        console.log(res)
+        ElMessage({
+          message:'注册成功',
+          type:'success',
+        })
       })
     }
   })

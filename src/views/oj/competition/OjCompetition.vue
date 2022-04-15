@@ -1,7 +1,7 @@
 <template>
   <el-row justify="space-around">
     <el-col :span="24">
-      <el-card shadow="">
+      <el-card>
         <template #header>
           <el-row justify="space-between" align="middle">
             <el-col :xs="6" :sm="4"><p class="panel-title">全部竞赛</p></el-col>
@@ -65,9 +65,9 @@
                   :lg="20"
                   class="contest-main"
               >
-                <p class="contest-title">
+                <el-link class="contest-title" @click="getCompetitionUri(item.id)">
                   {{ item.title }}
-                </p>
+                </el-link>
                 <div class="detail">
                   <el-icon color="#3091f2" :size="18">
                     <Calendar></Calendar>
@@ -115,6 +115,7 @@ import moment from 'moment'
 import {Avatar, Calendar, Clock, Search} from "@element-plus/icons-vue";
 import {ArrowDown} from "@element-plus/icons-vue";
 import {onMounted, ref} from "vue";
+import router from "@/router";
 
 /**
  * 比赛数据
@@ -126,6 +127,7 @@ const contests = ref()
 onMounted(() => {
   contests.value = [
     {
+      id:'1',
       type: 'acm',
       title: '小白月赛',
       startTime: '2022-4-13 12:00:00',
@@ -134,6 +136,7 @@ onMounted(() => {
       num:60
     },
     {
+      id:'2',
       type: 'oi',
       title: '小白月赛',
       startTime: '2022-4-15 12:00:00',
@@ -142,6 +145,7 @@ onMounted(() => {
       num:4
     },
     {
+      id:'3',
       type: 'oi',
       title: '小白月赛',
       startTime: '2022-4-15 12:00:00',
@@ -162,7 +166,14 @@ const calTime = (start) => {
   }
   return day + '天';
 }
-
+/**
+ * 点击跳转比赛
+ */
+const getCompetitionUri = (competitionUri) => {
+  router.push({
+    path: '/competition/' + competitionUri
+  })
+}
 </script>
 
 <style scoped>

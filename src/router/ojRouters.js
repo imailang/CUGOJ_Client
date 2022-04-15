@@ -10,6 +10,7 @@ const OjEvaluation=()=> import('@/views/oj/evaluation/OjEvaluation')
 const OjDiscuss =()=>import("@/views/oj/discuss/OjDiscuss");
 const OjProblemDetails=()=>import("@/views/oj/problem/OjProblemDetails")
 const OjNotFound=()=>import("@/views/OjNotFound")
+const OjCompetitionDetails =() =>import("@/views/oj/competition/OjCompetitionDetails")
 
 const ojRouters = [
     {
@@ -65,6 +66,10 @@ const ojRouters = [
             {
                 path: '/competition',
                 component: OjCompetition
+            },
+            {
+                path:'/competition/:competitionId',
+                component:OjCompetitionDetails,
             }
         ],
         redirect:'/home'

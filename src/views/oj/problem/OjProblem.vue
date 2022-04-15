@@ -138,7 +138,7 @@ onMounted(() => {
 const getProblemList = () => {
   api.problem.getProblemList(pageBody)
       .then(response => {
-        problemList.value = response
+        problemList.value = JSON.parse(response.Info)
         pageBody.total = problemList.value.length
         console.log('题目列表', problemList.value)
       })
