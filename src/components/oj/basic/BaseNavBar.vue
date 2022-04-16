@@ -75,7 +75,8 @@ import {
   TrendCharts,
 } from "@element-plus/icons-vue";
 import store from "@/store";
-import {ref} from "vue";
+import {onBeforeMount, ref} from "vue";
+import {useRoute} from "vue-router";
 
 /**
  * 传入数据 选择 横 竖 模式
@@ -84,13 +85,22 @@ import {ref} from "vue";
 const props= defineProps({
   mode:String,
 })
+/**
+ * 当前页面
+ */
+const active=ref()
+/**
+ * 理由
+ */
+const route =useRoute()
 
-const active=ref('/home')
+onBeforeMount(()=>{
+  active.value="/"+route.path.split('/')[1]
+})
 /**
  * 关闭左弹窗
  */
-const closeDrawer =(val)=>{
-  active.value=val
+const closeDrawer =()=>{
   store.dispatch("changeLeftDrawerVisible",false)
 }
 

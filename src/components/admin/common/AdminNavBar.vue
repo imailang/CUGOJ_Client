@@ -40,12 +40,6 @@
         </el-icon>
         <span>题目列表</span>
       </el-menu-item>
-      <el-menu-item index="/admin/problem/create">
-        <el-icon>
-          <Grid></Grid>
-        </el-icon>
-        <span>创建题目</span>
-      </el-menu-item>
     </el-sub-menu>
     <el-sub-menu index="/admin/competitions">
       <template #title>

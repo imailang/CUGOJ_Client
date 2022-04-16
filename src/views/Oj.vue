@@ -94,7 +94,14 @@ el-row去除margin
     padding: 0 5px;
     min-width: 300px;
   }
-
+  #admin-content {
+    background-color: #1e9fff;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    min-width: 700px;
+  }
   .el-row {
     margin-left: 0 !important;
     margin-right: 0 !important;

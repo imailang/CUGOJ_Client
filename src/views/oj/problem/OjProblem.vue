@@ -40,24 +40,33 @@
               </template>
             </vxe-column>
             <vxe-column field="SubmitNumber" title="提交数"></vxe-column>
+            <vxe-column field="SubmitNumber" title="提交数"></vxe-column>
             <vxe-column field="SubmitACNumber" title="AC">
               <template v-slot="{row}">
-                <el-progress :text-inside="true" :percentage="calAcRate(row.SubmitNumber,row.SubmitACNumber)" :stroke-width="24"/>
+                <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    :content="row.SubmitACNumber+'/'+row.SubmitNumber"
+                    placement="top"
+                >
+                  <el-progress :text-inside="true" :percentage="calAcRate(row.SubmitNumber,row.SubmitACNumber)"
+                               :stroke-width="24"/>
+                </el-tooltip>
               </template>
             </vxe-column>
           </vxe-table>
         </div>
         <!-- 分页-->
         <div style="float: right">
-          <el-pagination
-              v-model:currentPage="pageBody.offset"
-              v-model:page-size="pageBody.pagesize"
-              :page-sizes="[10, 20, 30, 40]"
-              layout=" prev, pager, next,sizes"
+          <vxe-pager
+              perfect
+              v-model:current-page="pageBody.offset"
+              v-model:page-size="pageBody.pageSize"
               :total="pageBody.total"
-              background
-              @size-change="handleSizeChange"
-          />
+              @page-change="handleSizeChange"
+              :page-sizes="[5,10, 20, 50]"
+              :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+          </vxe-pager>
         </div>
       </el-card>
     </el-col>
@@ -93,7 +102,7 @@
 <script setup>
 import {Search} from "@element-plus/icons-vue";
 import {Refresh} from "@element-plus/icons-vue";
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, ref} from "vue";
 import router from "@/router";
 import api from "@/api/api";
 
@@ -105,9 +114,9 @@ const problemList = ref([])
 /**
  * 分页
  */
-const pageBody = reactive({
-  pagesize: 10,
-  offset: 0,
+const pageBody = ref({
+  pageSize: 10,
+  offset: 1,
   total: 0,
 })
 
@@ -115,8 +124,8 @@ const pageBody = reactive({
  * 计算AC率
  */
 const calAcRate = (num, acNum) => {
-  if(num===0) return 0
-  return (num / acNum).toFixed(2)*100
+  if (num === 0) return 0
+  return (acNum / num).toFixed(2) * 100
 }
 
 /**
@@ -136,12 +145,16 @@ onMounted(() => {
  * 获取题目列表
  */
 const getProblemList = () => {
-  api.problem.getProblemList(pageBody)
-      .then(response => {
-        problemList.value = JSON.parse(response.Info)
-        pageBody.total = problemList.value.length
-        console.log('题目列表', problemList.value)
-      })
+  api.problem.getProblemList({
+    "pagequery": {
+      "offset": pageBody.value.offset - 1,
+      "pagesize": pageBody.value.pageSize
+    }
+  }).then(response => {
+    problemList.value = JSON.parse(response.Info)
+    pageBody.value.total = problemList.value.length
+    console.log('题目列表', problemList.value)
+  })
 }
 
 /**

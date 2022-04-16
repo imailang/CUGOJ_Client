@@ -6,6 +6,7 @@ const Oj  =()=>import ( '@/views/Oj')
 const AdminUsers =()=>import('@/views/admin/user/AdminUsers')
 const AdminCompetitions =()=>import('@/views/admin/competition/AdminCompetitions')
 const AdminCompetitionCreate =()=>import('@/views/admin/competition/AdminCompetitionCreate')
+const AdminProblemEdit =() =>import('@/views/admin/problem/AdminProblemEdit')
 
 const adminRouters = [
     {
@@ -27,10 +28,14 @@ const adminRouters = [
                         meta: { title:'创建题目'},
                     },
                     {
+                        path:'/admin/problem/edit/:problemId',
+                        component:AdminProblemEdit,
+                        meta: { title:'编辑题目'},
+                    },
+                    {
                         path:'/admin/problems',
                         component:AdminProblems,
                         meta: { title:'题目列表'},
-
                     },
                     {
                         path:'/admin/users',

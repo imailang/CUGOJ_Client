@@ -56,7 +56,6 @@ const getRoutePath = () => {
  */
 watch(()=>route.path,()=>{
   getRoutePath()
-  console.log(route.path)
 })
 
 </script>

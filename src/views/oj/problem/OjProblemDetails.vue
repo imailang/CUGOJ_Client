@@ -126,10 +126,10 @@ const submitCode = () => {
         tmp.UID = 1
         tmp.Code = code.value
         console.log('tmp', tmp)
-        // api.judge.addJudge(tmp)
-        //     .then(response => {
-        //       console.log(response)
-        //     })
+        api.judge.addJudge(tmp)
+            .then(response => {
+              console.log(response)
+            })
       })
 
   console.log(code.value)
