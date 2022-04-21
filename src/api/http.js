@@ -57,7 +57,7 @@ axios.interceptors.response.use(response => {
     return response.data;
     //看项目实际情况，这样写返回的数据就只有主体内容
 }, error => {
-    let {response} = error;
+    let { response } = error;
     if (response) {
         //服务器最起码返回结果
         switch (response.status) {
