@@ -11,9 +11,9 @@
               <el-col>
                 <div style="margin-top: 5px">
                   已选择
-                  <font color="blue">
+                  <span style="color: blue; ">
                     {{ caseCheckInfo.cnt }}
-                  </font>
+                  </span>
                   项
                 </div>
               </el-col>
@@ -358,7 +358,6 @@
   </el-dialog>
 </template>
 <script setup>
-const { ref, onMounted, onBeforeMount, reactive } = require("_vue@3.2.33@vue");
 import {
   UploadFilled,
   Delete,
@@ -370,6 +369,7 @@ import router from "@/router";
 import { useRoute } from "vue-router";
 import api from "@/api/api";
 import { ElMessage } from "element-plus";
+import {onBeforeMount, onMounted, reactive,ref} from "vue";
 const loading = ref(false);
 const showHelp = ref(false);
 const fileData = ref();
@@ -631,6 +631,7 @@ const unCompressAll = async () => {
   });
 };
 
+
 const setCases = () => {
   loading.value = true;
   var tmp = [problemId.value.toString()];
@@ -648,6 +649,9 @@ const setCases = () => {
   });
 };
 
+/**
+ * 解压
+ */
 const unCompress = async (path) => {
   await api.cases
     .unCompress([problemId.value.toString(), path])
@@ -661,6 +665,9 @@ const unCompress = async (path) => {
     });
 };
 
+/**
+ * 返回
+ */
 const goBack = () => {
   router.back();
 };

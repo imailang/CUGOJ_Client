@@ -12,13 +12,13 @@
       <!-- 题目标题-->
       <el-row :gutter="20">
         <el-col :span="24">
-          <el-form-item prop="Title"
+          <el-form-item prop="title"
                         label="题目标题"
                         required>
             <el-input
                 placeholder="请输入题目标题"
                 size="large"
-                v-model="problemInfo.Title"
+                v-model="problemInfo.title"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -54,14 +54,15 @@
         </el-col>
       </el-row>
       <!-- 题目描述模块-->
-      <el-switch v-model="problemInfo.Markdown"/>
+      <el-switch v-model="problemInfo.markdown"/>
       <i style="font-size: 10px;color: #cac6c6">文件上传描述</i>
       <!-- 开启markdown-->
-      <el-row v-if="problemInfo.Markdown" :gutter="20">
+      <el-row v-if="problemInfo.markdown" :gutter="20">
         <el-col :span="24">
           <el-form-item
               label="文件上传"
-              v-model="problemInfo.Description"
+              v-model="problemInfo.description"
+              prop="description"
           >
             <el-upload
                 class="upload-demo"
@@ -88,7 +89,8 @@
           <el-col :span="24">
             <el-form-item
                 label="题目背景"
-                v-model="problemInfo.BackGround"
+                v-model="problemInfo.background"
+                prop="background"
             >
               <AdminMakedown v-model:code="problemInfo.background"></AdminMakedown>
             </el-form-item>
@@ -99,7 +101,8 @@
           <el-col :span="24">
             <el-form-item
                 label="题目描述"
-                v-model="problemInfo.Description"
+                v-model="problemInfo.description"
+                prop="description"
             >
               <AdminMakedown v-model:code="problemInfo.description"></AdminMakedown>
             </el-form-item>
@@ -110,7 +113,8 @@
           <el-col :span="24">
             <el-form-item
                 label="输入描述"
-                v-model="problemInfo.Input"
+                v-model="problemInfo.input"
+                prop="input"
             >
               <AdminMakedown v-model:code="problemInfo.input"></AdminMakedown>
             </el-form-item>
@@ -121,7 +125,8 @@
           <el-col :span="24">
             <el-form-item
                 label="输出描述"
-                v-model="problemInfo.Output"
+                v-model="problemInfo.output"
+                prop="output"
             >
               <AdminMakedown v-model:code="problemInfo.output"></AdminMakedown>
             </el-form-item>
@@ -132,7 +137,8 @@
           <el-col :span="24">
             题目样例
             <el-form-item
-                v-for="(example,index) in problemInfo.Examples"
+                v-for="(example,index) in problemInfo.examples"
+                prop="examples"
                 :key="index"
             >
               <AdminAccordion :title="'样例'+(index+1)" v-model:is-open="example.isOpen" :index="index">
@@ -196,9 +202,10 @@
           <el-col :span="24">
             <el-form-item
                 label="题目提示"
-                v-model="problemInfo.Hint"
+                v-model="problemInfo.hint"
+                prop="hint"
             >
-              <AdminMakedown v-model:code="problemInfo.Hint"></AdminMakedown>
+              <AdminMakedown v-model:code="problemInfo.hint"></AdminMakedown>
             </el-form-item>
           </el-col>
         </el-row>
@@ -211,7 +218,7 @@
 <script setup>
 import {ref} from "vue";
 import AdminMakedown from "@/components/admin/common/AdminMakedown";
-import {UploadFilled, Delete, Plus} from "@element-plus/icons-vue";
+import {Delete, Plus, UploadFilled} from "@element-plus/icons-vue";
 import {marked} from 'marked'
 import api from "@/api/api";
 import router from "@/router";
@@ -222,18 +229,18 @@ import AdminAccordion from "@/components/admin/common/AdminAccordion";
  * 题目信息
  */
 const problemInfo = ref({
-  Title: '',
-  timeLimit: '1000',
-  memoryLimit: '256',
-  stackLimit: '128',
-  Markdown: false,
-  BackGround: '',
-  Description: '',
-  Input: '',
-  Output: '',
-  Examples: [],
-  Hint: '',
-  CaseFiles:'',
+  title: '',
+  timeLimit: 1000,
+  memoryLimit: 256,
+  stackLimit: 128,
+  markdown: false,
+  background: '',
+  description: '',
+  input: '',
+  output: '',
+  examples: [],
+  hint: '',
+  caseFiles:'',
 })
 
 /**
@@ -245,36 +252,44 @@ const problemInfoRef = ref()
  * 删除样例
  */
 const delExample = (index) => {
-  problemInfo.value.Examples.splice(index, 1)
+  problemInfo.value.examples.splice(index, 1)
 }
 /**
  * 添加样例
  */
 const addExample = () => {
-  problemInfo.value.Examples.push({isOpen: true, input: '', tips: '', output: ''})
+  problemInfo.value.examples.push({isOpen: true, input: '', tips: '', output: ''})
 }
 /**
  * 提交
  */
 const submit = () => {
-  problemInfoRef.value.validateField('Title', (valid) => {
+  problemInfoRef.value.validateField('title', (valid) => {
     if (valid) {
       api.problem.getBaseProblem()
           .then(response => {
             let tmp = response;
-            tmp.Description.BackGround = marked(problemInfo.value.BackGround)
-            tmp.Description.CaseFiles = ''
-            tmp.Description.Description = marked(problemInfo.value.Description)
-            tmp.Description.Examples = JSON.stringify(problemInfo.value.Examples)
-            tmp.Description.Hint = marked(problemInfo.value.Hint.toString())
-            tmp.Description.Input = marked(problemInfo.value.Input)
-            tmp.Description.Output = marked(problemInfo.value.Output)
-            tmp.Description.Markdown = problemInfo.value.Markdown
-            tmp.Title = problemInfo.value.Title
+            tmp.Description.BackGround = marked(problemInfo.value.background)
+            tmp.Description.Description = marked(problemInfo.value.description)
+            tmp.Description.Examples = JSON.stringify(problemInfo.value.examples)
+            tmp.Description.Hint = marked(problemInfo.value.hint.toString())
+            tmp.Description.Input = marked(problemInfo.value.input)
+            tmp.Description.Output = marked(problemInfo.value.output)
+            tmp.Description.Markdown = problemInfo.value.markdown
+            tmp.CaseFiles = ''
+            tmp.Title = problemInfo.value.title
+            tmp.TimeLimit=problemInfo.value.timeLimit
+            tmp.StackLimit=problemInfo.value.stackLimit
+            tmp.MemoryLimit= problemInfo.value.memoryLimit
             console.log('提交',tmp)
             api.problem.addProblem(tmp)
                 .then(res => {
                   console.log(res)
+                  ElMessage({
+                    type:'success',
+                    message:'创建成功！'
+                  })
+                  reset()
                 })
           })
     } else {
@@ -284,20 +299,23 @@ const submit = () => {
       })
     }
   })
-
+}
+/**
+ * 重置
+ */
+const reset=()=>{
+  problemInfoRef.value.resetFields()
+  problemInfo.value.examples=[]
 }
 /**
  * 选择markdown文件
  * 转化为Html
  */
 const selectFile = (uploadFile) => {
-  console.log(uploadFile)
   const reader = new FileReader();
   reader.readAsText(uploadFile.raw, 'utf8');
   reader.onload = () => {
-    let tmp = marked(reader.result)
-    problemInfo.value.Description = tmp;
-    console.log(tmp)
+    problemInfo.value.Description = marked(reader.result);
   }
 }
 

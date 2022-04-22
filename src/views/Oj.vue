@@ -1,18 +1,18 @@
 <template>
-  <div v-if="role==='user'" style="background-color: #eff3f5">
+  <div v-if="role==='user'">
     <!-- 顶部导航栏 -->
-    <div ref="affix">
-      <el-affix v-if="isRefresh" :offset="0">
-        <OjNavBar></OjNavBar>
-      </el-affix>
+    <div ref="affix" style="top:0">
+        <OjNavBar  v-if="isRefresh"></OjNavBar>
     </div>
-    <div id="oj-content">
-      <router-view></router-view>
-    </div>
+    <el-scrollbar class="oj-scroll">
+      <div id="oj-content">
+        <router-view></router-view>
+      </div>
+    </el-scrollbar>
   </div>
   <div v-else>
     <div id="admin-content">
-        <router-view></router-view>
+      <router-view></router-view>
     </div>
   </div>
 
@@ -38,7 +38,7 @@ const isRefresh = ref(false)
 const role = computed(
     mapGetters(['getRole']).getRole.bind({$store: store})
 )
-const route =useRoute()
+const route = useRoute()
 
 /**
  * 初始化
@@ -51,21 +51,21 @@ onMounted(() => {
       isRefresh.value = true  //渲染后又展示 实现刷新组件
     })
   })
-  if(route.path.split('/')[1]==='admin')
-  {
-    store.dispatch("changeRole",'admin')
+  if (route.path.split('/')[1] === 'admin') {
+    store.dispatch("changeRole", 'admin')
   }
 })
 </script>
 
 <style>
 #admin-content {
-  background-color: #1e9fff;
+  background-image: linear-gradient(to top, #00c6fb 0%, #005bea 100%);
   position: absolute;
   top: 0;
   bottom: 0;
   width: 100%;
 }
+
 #particles-js {
   position: fixed;
   z-index: 0;
@@ -73,15 +73,6 @@ onMounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-}
-/**
-屏幕宽度大于 768
- */
-@media screen and (min-width: 768px) {
-  #oj-content {
-    margin-top: 20px;
-    padding: 0 3%;
-  }
 }
 
 /**
@@ -92,8 +83,9 @@ el-row去除margin
   #oj-content {
     margin-top: 20px;
     padding: 0 5px;
-    min-width: 300px;
+    min-width: 700px;
   }
+
   #admin-content {
     background-color: #1e9fff;
     position: absolute;
@@ -102,6 +94,17 @@ el-row去除margin
     width: 100%;
     min-width: 700px;
   }
+
+  .oj-scroll {
+    position: fixed;
+    background-color: #4e4e4e;
+    bottom: 0;
+    top: 45px;
+    right: 0;
+    left: 0;
+    height: calc(100% - 45px);
+  }
+
   .el-row {
     margin-left: 0 !important;
     margin-right: 0 !important;
@@ -110,6 +113,46 @@ el-row去除margin
   .el-col {
     padding-left: 0 !important;
     padding-right: 0 !important;
+  }
+}
+
+/**
+屏幕宽度大于 768
+ */
+@media screen and (min-width: 768px) {
+  #oj-content {
+    margin-top: 20px;
+    padding: 0 3%;
+
+  }
+  .oj-scroll {
+    position: fixed;
+    background-color: #4e4e4e;
+    bottom: 0;
+    top: 60px;
+    right: 0;
+    left: 0;
+
+    height: calc(100% - 60px);
+  }
+}
+
+/**
+屏幕宽度大于 2100
+ */
+@media screen and (min-width: 2100px) {
+  #oj-content {
+    margin-top: 20px;
+    padding: 0 10%;
+  }
+  .oj-scroll {
+    position: fixed;
+    background-color: #4e4e4e;
+    bottom: 0;
+    top: 60px;
+    right: 0;
+    left: 0;
+    height: calc(100% - 60px);
   }
 }
 </style>

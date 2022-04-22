@@ -8,6 +8,13 @@
       </el-col>
       <el-col :xs="0" :sm="24">
         <el-aside width="200px">
+          <router-link to="/admin/home">
+            <el-image
+                style="width: 190px; height: 50px"
+                fit="scale-down"
+                :src="require('@/assets/acmLogo.png')"
+            ></el-image>
+          </router-link>
           <AdminNavBar :is-collapse="false"></AdminNavBar>
         </el-aside>
 
@@ -18,7 +25,10 @@
         <div class="breadcrumb-container">
           <el-breadcrumb :separator-icon="ArrowRight">
             <el-breadcrumb-item :to="{ path: '/admin/home' }">主页</el-breadcrumb-item>
-            <el-breadcrumb-item v-for="(item,index) in routerPathList" :key="index">{{ item.meta.title }}</el-breadcrumb-item>
+            <el-breadcrumb-item v-for="(item,index) in routerPathList" :key="index">{{
+                item.meta.title
+              }}
+            </el-breadcrumb-item>
           </el-breadcrumb>
         </div>
       </el-header>
@@ -39,7 +49,7 @@ import {onMounted, ref, watch} from "vue";
 
 const route = useRoute()
 const routerPathList = ref()
-onMounted(()=>{
+onMounted(() => {
   getRoutePath()
 })
 
@@ -47,14 +57,14 @@ onMounted(()=>{
  * 获取路由路径
  */
 const getRoutePath = () => {
-  routerPathList.value= route.matched.filter((item) => item.meta.title)
+  routerPathList.value = route.matched.filter((item) => item.meta.title)
 }
 
 /**
  * 监听路由变化
  * 响应式监听
  */
-watch(()=>route.path,()=>{
+watch(() => route.path, () => {
   getRoutePath()
 })
 
@@ -69,6 +79,7 @@ watch(()=>route.path,()=>{
   -webkit-font-smoothing: antialiased;
   background-color: #eff3f5;
 }
+
 .breadcrumb-container {
   padding: 17px;
   background-color: #fff;

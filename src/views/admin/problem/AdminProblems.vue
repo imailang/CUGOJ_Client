@@ -29,6 +29,11 @@
         <vxe-column field="SubmitACNumber" title="AC"></vxe-column>
         <vxe-column title="操作" width="100" show-overflow>
           <template #default="{row}">
+            <el-button type="text" @click="editCases(row)">
+              <el-icon>
+                <Files></Files>
+              </el-icon>
+            </el-button>
             <el-button type="text" @click="editProblem(row)">
               <el-icon>
                 <edit></edit>
@@ -48,7 +53,7 @@
             perfect
             v-model:current-page="pageBody.offset"
             v-model:page-size="pageBody.pageSize"
-            :total="pageBody.total"
+            :total="pageBody.totalPage"
             @page-change="handleSizeChange"
             :page-sizes="[5,10, 20, 50]"
             :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
@@ -61,9 +66,10 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import api from "@/api/api";
-import {Delete, Edit, Plus} from "@element-plus/icons-vue";
+import {Delete, Edit, Files, Plus} from "@element-plus/icons-vue";
 import {VXETable} from "vxe-table";
 import router from "@/router";
+import {ElMessage} from "element-plus";
 
 
 /**
@@ -80,7 +86,7 @@ const problemListRef = ref()
 const pageBody = ref({
   pageSize: 10,
   offset: 1,
-  total: 0,
+  totalPage: 0,
 })
 
 /**
@@ -92,18 +98,41 @@ const editProblem = (row) => {
   })
 }
 /**
+ * 编辑测试用例
+ */
+const editCases = (row) => {
+  router.push({
+    path: '/admin/problem/cases/' + row.ID
+  })
+}
+/**
  * 删除题目
  */
 const removeProblem = async (row) => {
   const type = await VXETable.modal.confirm('确定要删除吗？')
   if (type === 'confirm') {
-    problemListRef.value.remove(row)
+    api.problem.deleteProblem(row.ID)
+    .then(res=>{
+      if(res.Statu==='000')
+      {
+        ElMessage({
+          type:'success',
+          message:'删除成功'
+        })
+        getListTotal()
+        getProblemList()
+      }
+      else {
+        ElMessage.error('删除失败')
+      }
+    })
   }
 }
 /**
  * 初始化
  */
 onMounted(() => {
+  getListTotal()
   getProblemList()
 })
 /**
@@ -117,9 +146,17 @@ const getProblemList = () => {
     }
   }).then(response => {
     problemList.value = JSON.parse(response.Info)
-    pageBody.value.total = problemList.value.length
     console.log('题目列表', problemList.value)
   })
+}
+/**
+ * 获取题目总数
+ */
+const getListTotal = () => {
+  api.problem.getProblemCount({})
+      .then(res => {
+        pageBody.value.totalPage = res.Info
+      })
 }
 /**
  * 翻页

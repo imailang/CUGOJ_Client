@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from "@/store";
 //import qs from 'qs'
 
 // // 根据环境变量区分接口默认地址这里看自己需求配
@@ -40,7 +41,8 @@ axios.defaults.withCredentials = false;
 // 存储到vuex/本地存储中，每一次发请求我们应该吧token带上
 axios.interceptors.request.use((config) => {
     // 携带上token
-    let token = localStorage.getItem('token')
+
+    let token = store.getters.getToken
     token && (config.headers.Authorization = token)
     return config
 }, error => {
@@ -57,7 +59,7 @@ axios.interceptors.response.use(response => {
     return response.data;
     //看项目实际情况，这样写返回的数据就只有主体内容
 }, error => {
-    let { response } = error;
+    let {response} = error;
     if (response) {
         //服务器最起码返回结果
         switch (response.status) {

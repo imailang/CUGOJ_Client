@@ -56,7 +56,7 @@
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
-            <el-avatar style="margin-right: 5px"></el-avatar>
+            <el-avatar style="margin-right: 5px" @click="clickUserHome"></el-avatar>
             <el-dropdown trigger="click" size="large" style="margin-top: 8px">
                 <span style="font-size: 18px" class="el-dropdown-link">
                   Dropdown List
@@ -93,6 +93,14 @@ import NavBar from "@/components/oj/basic/BaseNavBar";
 import OjLogin from "@/components/oj/common/OjLogin";
 import OjRegister from "@/components/oj/common/OjRegister";
 import OjLeftDrawer from "@/components/oj/common/OjLeftDrawer";
+import router from "@/router";
+
+/**
+ * 跳转用户主页
+ */
+const clickUserHome = () => {
+  router.push('/user-home')
+}
 /**
  * 打开左弹窗
  */

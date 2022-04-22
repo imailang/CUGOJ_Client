@@ -40,7 +40,6 @@
               </template>
             </vxe-column>
             <vxe-column field="SubmitNumber" title="提交数"></vxe-column>
-            <vxe-column field="SubmitNumber" title="提交数"></vxe-column>
             <vxe-column field="SubmitACNumber" title="AC">
               <template v-slot="{row}">
                 <el-tooltip
@@ -62,7 +61,7 @@
               perfect
               v-model:current-page="pageBody.offset"
               v-model:page-size="pageBody.pageSize"
-              :total="pageBody.total"
+              :total="pageBody.totalPage"
               @page-change="handleSizeChange"
               :page-sizes="[5,10, 20, 50]"
               :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
@@ -117,7 +116,7 @@ const problemList = ref([])
 const pageBody = ref({
   pageSize: 10,
   offset: 1,
-  total: 0,
+  totalPage: 0,
 })
 
 /**
@@ -139,6 +138,7 @@ const handleSizeChange = () => {
  * 初始化
  */
 onMounted(() => {
+  getListTotal()
   getProblemList()
 })
 /**
@@ -152,9 +152,17 @@ const getProblemList = () => {
     }
   }).then(response => {
     problemList.value = JSON.parse(response.Info)
-    pageBody.value.total = problemList.value.length
     console.log('题目列表', problemList.value)
   })
+}
+/**
+ * 获取题目总数
+ */
+const getListTotal = () => {
+  api.problem.getProblemCount({})
+      .then(res => {
+        pageBody.value.totalPage = res.Info
+      })
 }
 
 /**

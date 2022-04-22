@@ -90,10 +90,14 @@ const clickRegister = () => {
       api.user.register(formRegister)
       .then(res=>{
         console.log(res)
-        ElMessage({
-          message:'注册成功',
-          type:'success',
-        })
+        if(res.code==='000')
+        {
+          ElMessage({
+            message:'注册成功',
+            type:'success',
+          })
+        }
+        ElMessage.error('验证码错误')
       })
     }
   })
@@ -138,20 +142,37 @@ const openLogin = () => {
 const resetForm = () => {
   formRegisterRef.value.resetFields()
 }
-
 /**
  * 检查用户是否已经存在
  * @constructor
  */
 const checkUsernameNotExist = (rule, value, callback) => {
-  return callback()
+  api.user.checkUserName(value)
+  .then(res=>{
+    if(res.Info==='0')
+    {
+      return callback()
+    }
+    else {
+      callback('')
+    }
+  })
 }
 /**
  * 检查邮箱是否存在
  * @constructor
  */
 const checkEmailNotExist = (rule, value, callback) => {
-  return callback()
+  api.user.checkEmail(value)
+      .then(res=>{
+        if(res.Info==='0')
+        {
+          return callback()
+        }
+        else {
+          callback('')
+        }
+      })
 }
 /**
  * 检查密码

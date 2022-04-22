@@ -53,18 +53,34 @@ import {computed, reactive, ref} from "vue";
 import {ElMessage} from 'element-plus'
 import store from "@/store";
 import {mapGetters} from "vuex";
+import api from "@/api/api";
+import Md5 from 'js-md5'
 
 /**
  * 登录
  */
 const clickLogin = () => {
-  ElMessage({
-    type: 'success',
-    message: '欢迎回来~',
-    duration:3000
+  api.user.login({
+    username:formLogin.username,
+    password:Md5(formLogin.password)
+  }).then(res=>{
+    console.log(res)
+    if(res.code===200)
+    {
+      console.log(res)
+      ElMessage({
+        type: 'success',
+        message: '欢迎回来~',
+        duration:3000
+      })
+      store.dispatch("changeIsLogin",'true')
+      store.dispatch("changeLoginVisible",false)
+    }
+    else {
+      ElMessage.error('用户名或密码错误')
+    }
   })
-  store.dispatch("changeIsLogin",'true')
-  store.dispatch("changeLoginVisible",false)
+
 }
 /**
  * 关闭登录

@@ -1,27 +1,33 @@
 <template>
   <el-card style="text-align: left">
-    <el-select :model-value="language" filterable placeholder="Select" @change="changeLanguage">
-      <el-option
-          v-for="item in languages"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-      />
-    </el-select>
-    <el-select v-model="theme" filterable placeholder="Select" @change="changeTheme">
-      <el-option label="solarized" value="solarized"></el-option>
-      <el-option label="monokai" value="monokai"></el-option>
-      <el-option label="material" value="material"></el-option>
-    </el-select>
-    <div >
-      <codemirror
-          :value="code"
-          :options="options"
-          ref="container"
-          @change="codeChange"
-      >
-      </codemirror>
-    </div>
+    <el-row>
+      <el-col :span="12">
+        <el-select :model-value="language" filterable placeholder="Select" @change="changeLanguage">
+          <el-option
+              v-for="item in languages"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+          />
+        </el-select>
+      </el-col>
+      <el-col :span="12">
+        <el-select v-model="theme" filterable placeholder="Select" @change="changeTheme">
+          <el-option label="solarized" value="solarized"></el-option>
+          <el-option label="monokai" value="monokai"></el-option>
+          <el-option label="material" value="material"></el-option>
+        </el-select>
+      </el-col>
+    </el-row>
+
+
+    <codemirror
+        :value="code"
+        :options="options"
+        ref="container"
+        @change="codeChange"
+    >
+    </codemirror>
   </el-card>
 </template>
 
@@ -71,7 +77,7 @@ import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/addon/hint/show-hint.js';
 import 'codemirror/addon/hint/anyword-hint.js';
 import 'codemirror/addon/selection/mark-selection.js';
-import { onMounted, ref, toRaw} from "vue";
+import {onMounted, ref, toRaw} from "vue";
 
 const container = ref()
 const editor = ref()
@@ -154,34 +160,34 @@ const languages = ref([
 ])
 const theme = ref('solarized')
 
-const editorLanguage =ref({
-  'gnu c99':'text/x-csrc',
-  'gnu c11':'text/x-csrc',
-  'gnu cpp11':'text/x-c++src',
-  'gnu cpp14':'text/x-c++src',
-  'gnu cpp17':'text/x-c++src',
-  'gnu cpp20':'text/x-c++src',
+const editorLanguage = ref({
+  'gnu c99': 'text/x-csrc',
+  'gnu c11': 'text/x-csrc',
+  'gnu cpp11': 'text/x-c++src',
+  'gnu cpp14': 'text/x-c++src',
+  'gnu cpp17': 'text/x-c++src',
+  'gnu cpp20': 'text/x-c++src',
 })
 // eslint-disable-next-line no-undef,no-unused-vars
-const props=defineProps({
-  code:{
-    type:String,
-    default:'',
+const props = defineProps({
+  code: {
+    type: String,
+    default: '',
   },
-  language:{
-    type:String,
-    default:'c++11'
+  language: {
+    type: String,
+    default: 'c++11'
   }
 })
 // eslint-disable-next-line no-undef
-const emits =defineEmits(['update:code','update:language'])
+const emits = defineEmits(['update:code', 'update:language'])
 
 /**
  * 代码改变
  */
-const codeChange=()=>{
+const codeChange = () => {
   let tmp = editor.value.getValue()
-  emits('update:code',tmp)
+  emits('update:code', tmp)
 }
 /**
  * 初始化
@@ -202,16 +208,15 @@ const changeTheme = (val) => {
 const changeLanguage = (val) => {
   console.log(val)
   toRaw(editor.value).setOption('mode', calLanguage(val))
-  emits('update:language',val)
+  emits('update:language', val)
 }
 
 /**
  * 适配编辑器语言
  */
 const calLanguage = (val) => {
-  if(typeof editorLanguage.value[val]!=='undefined')
-  {
-    val=editorLanguage.value[val]
+  if (typeof editorLanguage.value[val] !== 'undefined') {
+    val = editorLanguage.value[val]
   }
   return val;
 }
