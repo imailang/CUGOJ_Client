@@ -2,7 +2,7 @@
   <div v-if="role==='user'">
     <!-- 顶部导航栏 -->
     <div ref="affix" style="top:0">
-        <OjNavBar  v-if="isRefresh"></OjNavBar>
+      <OjNavBar v-if="isRefresh"></OjNavBar>
     </div>
     <el-scrollbar class="oj-scroll">
       <div id="oj-content">
@@ -27,6 +27,8 @@ import store from "@/store";
 import {mapGetters} from "vuex";
 import OjNavBar from "@/components/oj/common/OjNavBar";
 import {useRoute} from "vue-router";
+import api from "@/api/api";
+import cookie from "js-cookie";
 
 //顶部导航栏容器
 const affix = ref()
@@ -54,7 +56,28 @@ onMounted(() => {
   if (route.path.split('/')[1] === 'admin') {
     store.dispatch("changeRole", 'admin')
   }
+  isLogin();
 })
+
+/**
+ * 是否登录
+ */
+const isLogin = () => {
+  api.user.getLoginIdByToken({
+    cugtoken: store.getters.getToken
+  }).then(res => {
+    if (res.data === null) {
+      cookie.remove('cugtoken')
+
+    } else {
+      api.user.getUserByUsername(res.data)
+          .then(response => {
+            store.dispatch('changeUserInfo',response)
+            console.log(response)
+          })
+    }
+  })
+}
 </script>
 
 <style>
@@ -125,6 +148,7 @@ el-row去除margin
     padding: 0 3%;
 
   }
+
   .oj-scroll {
     position: fixed;
     background-color: #4e4e4e;
@@ -145,6 +169,7 @@ el-row去除margin
     margin-top: 20px;
     padding: 0 10%;
   }
+
   .oj-scroll {
     position: fixed;
     background-color: #4e4e4e;

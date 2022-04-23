@@ -11,13 +11,13 @@ let store = new Vuex.Store({
      * 类似存储全局变量的数据
      */
     state:{
-        isLogin:false,   //是否登录标识
+        isLogin:Cookies.get('cugtoken') !== undefined,   //是否登录标识
         role:'user',   //用户身份
+        userInfo:undefined,     //用户信息
         loginVisible:false,   //登录窗口显示
         registerVisible:false,   //注册窗口显示
         leftDrawerVisible:false,   //左弹窗显示
-        // token:Cookies.get('token')  //token  持久登录
-        token:null,                            //刷新消失
+        token:Cookies.get('cugtoken')  //token  持久登录
     },
     /**
      * 提供用来获取state数据的方法
@@ -41,6 +41,9 @@ let store = new Vuex.Store({
         getToken:(state)=>{
             return state.token
         },
+        getUserInfo:(state)=>{
+            return state.userInfo
+        }
     },
     /**
      * 提供跟后台接口打交道的方法，并调用mutations提供的方法
@@ -68,6 +71,10 @@ let store = new Vuex.Store({
         changeUserToken({commit},val)
         {
             commit('changeUserToken',val)
+        },
+        changeUserInfo({commit},val)
+        {
+            commit('changeUserInfo',val)
         }
     },
     /**
@@ -97,7 +104,11 @@ let store = new Vuex.Store({
         changeUserToken(state,val)
         {
             state.token=val
-            Cookies.set('token',val,{ expires: 15 })
+            Cookies.set('cugtoken',val,{ expires: 15 })
+        },
+        changeUserInfo(state,val)
+        {
+            state.userInfo=val;
         }
     }
 })

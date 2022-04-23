@@ -26,6 +26,22 @@ function login(params)
 }
 
 /**
+ * 注销
+ */
+function logout(params)
+{
+    return axios.post('/ojLogin/userInfo/logout',params)
+}
+
+/**
+ * 根据token查询用户名
+ */
+function getLoginIdByToken(params)
+{
+    return axios.post('/ojLogin/userInfo/getLoginIdByToken',params)
+}
+
+/**
  * 检查用户名可用性
  */
 function checkUserName(params)
@@ -57,6 +73,15 @@ function getUserCount(params)
     return axios.post('/user/getusercount',params)
 }
 
+/**
+ * 根据用户查询信息
+ */
+function getUserByUsername(params)
+{
+    return axios.post('/user/getuserbyusername',params)
+}
+
+
 export default {
     emailVerification,
     register,
@@ -64,5 +89,8 @@ export default {
     checkEmail,
     getUserList,
     getUserCount,
-    login
+    login,
+    logout,
+    getLoginIdByToken,
+    getUserByUsername
 }

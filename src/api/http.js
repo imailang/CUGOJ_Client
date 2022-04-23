@@ -1,5 +1,4 @@
 import axios from 'axios'
-import store from "@/store";
 //import qs from 'qs'
 
 // // 根据环境变量区分接口默认地址这里看自己需求配
@@ -21,8 +20,8 @@ axios.defaults.baseURL = "/api"
 
 //设置超时时间和跨域是否携带凭证
 axios.defaults.timeout = 10000;
-//设置CORS跨域允许携带凭证 不FALSE 跨域问题
-axios.defaults.withCredentials = false;
+//设置CORS跨域允许携带凭证
+// axios.defaults.withCredentials = false;
 
 //axios.defaults.headers['Content-Type']='application/x-www-form-urlencoded'
 //axios.defaults.transformRequest=data=>qs.stringify(data)
@@ -39,15 +38,15 @@ axios.defaults.withCredentials = false;
 //客户端发送请求=》请求拦截器=》服务器
 // TOKEN校验（JWT）接收服务器返回的token
 // 存储到vuex/本地存储中，每一次发请求我们应该吧token带上
-axios.interceptors.request.use((config) => {
-    // 携带上token
 
-    let token = store.getters.getToken
-    token && (config.headers.Authorization = token)
-    return config
-}, error => {
-    return Promise.reject(error)
-})
+// axios.interceptors.request.use((config) => {
+//     // 携带上token
+//     let token = store.getters.getToken
+//     token && (config.headers.Authorization = token)
+//     return config
+// }, error => {
+//     return Promise.reject(error)
+// })
 
 //响应拦截器
 //服务器返回信息=》拦截的统一处理=》客户端js获取到信息

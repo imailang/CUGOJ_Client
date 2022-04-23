@@ -68,7 +68,7 @@
                 <el-dropdown-menu>
                   <el-dropdown-item>Action 1</el-dropdown-item>
                   <el-dropdown-item>Action 2</el-dropdown-item>
-                  <el-dropdown-item divided>Action 5</el-dropdown-item>
+                  <el-dropdown-item style="color: red" divided @click="logout">退出</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -94,6 +94,31 @@ import OjLogin from "@/components/oj/common/OjLogin";
 import OjRegister from "@/components/oj/common/OjRegister";
 import OjLeftDrawer from "@/components/oj/common/OjLeftDrawer";
 import router from "@/router";
+import api from "@/api/api";
+import cookie from "js-cookie";
+import {ElMessage} from "element-plus";
+
+const userInfo = computed(
+    mapGetters(['getUserInfo']).getUserInfo.bind({$store:store})
+)
+
+/**
+ * 退出
+ */
+const logout = () => {
+  console.log(store.getters.getUserInfo)
+  api.user.logout({
+    username:userInfo.value.Username
+  }).then(res => {
+    if(res.code===200)
+    {
+      cookie.remove('cugtoken')
+      ElMessage.success(res.msg)
+      store.dispatch('changeIsLogin',false)
+    }
+
+  })
+}
 
 /**
  * 跳转用户主页

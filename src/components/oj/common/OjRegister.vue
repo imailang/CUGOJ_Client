@@ -84,21 +84,20 @@ import {ElMessage} from "element-plus";
  * 注册
  */
 const clickRegister = () => {
-  formRegisterRef.value.validate((valid)=>{
-    if(valid)
-    {
+  formRegisterRef.value.validate((valid) => {
+    if (valid) {
       api.user.register(formRegister)
-      .then(res=>{
-        console.log(res)
-        if(res.code==='000')
-        {
-          ElMessage({
-            message:'注册成功',
-            type:'success',
+          .then(res => {
+            console.log(res)
+            if (res.code === '000') {
+              ElMessage({
+                message: '注册成功',
+                type: 'success',
+              })
+            } else {
+              ElMessage.error('验证码错误')
+            }
           })
-        }
-        ElMessage.error('验证码错误')
-      })
     }
   })
 }
@@ -113,11 +112,15 @@ const emailVerification = () => {
       }
       api.user.emailVerification(tmp)
           .then(res => {
-            ElMessage({
-              message: '验证码已发送!',
-              type: 'success',
-            })
-            console.log(res)
+            if (res.code === '200') {
+              ElMessage({
+                message: '验证码已发送!',
+                type: 'success',
+              })
+            } else if (res.code === '500') {
+              ElMessage.warning('验证码已经发送，十分钟内有效')
+            }
+
           })
     }
   })
@@ -148,15 +151,13 @@ const resetForm = () => {
  */
 const checkUsernameNotExist = (rule, value, callback) => {
   api.user.checkUserName(value)
-  .then(res=>{
-    if(res.Info==='0')
-    {
-      return callback()
-    }
-    else {
-      callback('')
-    }
-  })
+      .then(res => {
+        if (res.Info === '0') {
+          return callback()
+        } else {
+          callback('')
+        }
+      })
 }
 /**
  * 检查邮箱是否存在
@@ -164,12 +165,10 @@ const checkUsernameNotExist = (rule, value, callback) => {
  */
 const checkEmailNotExist = (rule, value, callback) => {
   api.user.checkEmail(value)
-      .then(res=>{
-        if(res.Info==='0')
-        {
+      .then(res => {
+        if (res.Info === '0') {
           return callback()
-        }
-        else {
+        } else {
           callback('')
         }
       })
@@ -276,7 +275,7 @@ const rules = reactive({
     },
     {validator: checkAgainPassword, trigger: 'change'},
   ],
-  code:[
+  code: [
     {
       required: true,
       message: '验证码不能为空',
@@ -284,7 +283,7 @@ const rules = reactive({
     },
     {
       min: 6,
-      max:6,
+      max: 6,
       message: '验证码长度为6',
       trigger: 'blur',
     },

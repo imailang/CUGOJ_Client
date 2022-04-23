@@ -55,6 +55,7 @@ import store from "@/store";
 import {mapGetters} from "vuex";
 import api from "@/api/api";
 import Md5 from 'js-md5'
+import cookie from "js-cookie";
 
 /**
  * 登录
@@ -67,12 +68,17 @@ const clickLogin = () => {
     console.log(res)
     if(res.code===200)
     {
-      console.log(res)
       ElMessage({
         type: 'success',
         message: '欢迎回来~',
         duration:3000
       })
+      api.user.getUserByUsername(res.data)
+          .then(response => {
+            store.dispatch('changeUserInfo',response)
+            console.log(response)
+          })
+      store.dispatch('changeUserToken',cookie.get('cugtoken'))
       store.dispatch("changeIsLogin",'true')
       store.dispatch("changeLoginVisible",false)
     }

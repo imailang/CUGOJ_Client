@@ -23,9 +23,7 @@
             <el-button type="primary" @click="jumpProblem">跳转</el-button>
             <el-button type="danger">随机跳转</el-button>
           </el-col>
-
         </el-row>
-
       </el-card>
       <div class="card-top">
         <el-card shadow="always"> 公告</el-card>
@@ -56,23 +54,32 @@ import api from "@/api/api";
 import {ElMessage} from "element-plus";
 
 const nowDate = ref(new Date())
-const problemId = ref()
+const problemId = ref('')
 
 /**
  * 题目跳转
  */
 const jumpProblem = () => {
-  api.problem.getProblem(problemId.value)
-      .then(res => {
-        if (res.Statu === '000') {
-          router.push({
-            path: '/problem/' + problemId.value
-          })
-        } else {
-          ElMessage.warning('当前题目不存在，请重新选择')
-          problemId.value = ''
-        }
-      })
+  console.log(problemId.value)
+  if(problemId.value==='')
+  {
+    ElMessage.error('题目编号不能为空')
+  }
+  else{
+
+    api.problem.getProblem(problemId.value)
+        .then(res => {
+          if (res.Statu === '000') {
+            router.push({
+              path: '/problem/' + problemId.value
+            })
+          } else {
+            ElMessage.warning('当前题目不存在，请重新选择')
+            problemId.value = ''
+          }
+        })
+  }
+
 }
 /**
  * 打卡
