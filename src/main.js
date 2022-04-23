@@ -2,7 +2,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 import ElementPlus from 'element-plus'
-import zhCn from "element-plus/es/locale/lang/zh-cn";
+import locale from "element-plus/lib/locale/lang/zh-cn";
+
 import 'element-plus/dist/index.css'
 import router from "@/router";
 import store from '@/router'
@@ -12,16 +13,18 @@ import 'vxe-table/lib/style.css'
 import VueParticles from 'vue-particles'
 import mavonEditor from 'mavon-editor'
 import "mavon-editor/dist/css/index.css";
+import mock from '/mock'
 
 const app = createApp(App)
 
 app
+    .use(mock)
     .use(mavonEditor)
     .use(VueParticles)
     .use(VXETable)
     .use(store)
     .use(router)
-    .use(ElementPlus,{local:zhCn})
+    .use(ElementPlus,{locale})
     .mount('#app')
 
 
