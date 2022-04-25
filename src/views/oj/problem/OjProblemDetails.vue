@@ -94,9 +94,9 @@
         <!--提交页-->
         <el-scrollbar class="problem-right">
           <OjCodeEditor v-model:code="code" v-model:language="language"></OjCodeEditor>
-          <el-row justify="end" style="position: absolute;right: 30px;bottom: 25px">
-            <el-button round type="warning" @click="reset" style="margin-right: 10px">重置</el-button>
-            <el-button round type="primary" @click="submitCode" style="margin-right: 10px">提交</el-button>
+          <el-row justify="end" style="position: absolute;right: 30px;bottom: 25px" @click="click">
+            <el-button :disabled="!isLogin" round type="warning" @click="reset" style="margin-right: 10px">重置</el-button>
+            <el-button :disabled="!isLogin" round type="primary" @click="submitCode" style="margin-right: 10px">提交</el-button>
           </el-row>
         </el-scrollbar>
       </pane>
@@ -107,7 +107,7 @@
 
 <script setup>
 
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {Clock, CopyDocument, Notebook} from "@element-plus/icons-vue";
 import api from "@/api/api";
@@ -118,6 +118,7 @@ import {marked} from 'marked'
 import {ElMessage} from "element-plus";
 import useClipboard from 'vue-clipboard3'
 import store from "@/store";
+import {mapGetters} from "vuex";
 
 const {toClipboard} = useClipboard()
 
@@ -141,6 +142,13 @@ const submitLanguage = ref({
   'c++17': 'gnu cpp17',
   'c++20': 'gnu cpp20'
 })
+
+/**
+ * 获取store 是否登录字段
+ */
+const isLogin = computed(
+    mapGetters(['getIsLogin']).getIsLogin.bind({$store: store})
+)
 /**
  * 适配后端语言
  */
@@ -150,20 +158,28 @@ const calLanguage = (val) => {
   }
   return val
 }
+
+const click = () => {
+  if (!isLogin.value) {
+
+    ElMessage.error('请先登录')
+    store.dispatch('changeLoginVisible', true)
+  }
+}
 /**
  * 提交代码
  */
 const submitCode = () => {
   api.judge.getBaseJudge()
       .then(response => {
-        console.log('模板',response)
+        console.log('模板', response)
         const tmp = response
         tmp.PID = problemInfo.value.ID;
-        tmp.PTitle=problemInfo.value.Title
+        tmp.PTitle = problemInfo.value.Title
         tmp.Language = calLanguage(language.value);
         tmp.UID = store.getters.getUserInfo.ID
         tmp.Code = code.value
-        console.log('填充',tmp)
+        console.log('填充', tmp)
         api.judge.addJudge(tmp)
             .then(response => {
               if (response.Statu === '000') {
