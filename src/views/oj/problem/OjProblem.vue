@@ -130,7 +130,12 @@ const calAcRate = (num, acNum) => {
  * 翻页
  */
 const handleSizeChange = () => {
-  console.log('页面变化pageBody', pageBody)
+  let pages =Math.floor(pageBody.value.totalPage/pageBody.value.pageSize)+1;
+  console.log(pages)
+  if(pageBody.value.offset>=pages)
+  {
+    pageBody.value.offset=pages
+  }
   getProblemList()
 }
 /**

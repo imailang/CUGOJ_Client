@@ -22,7 +22,7 @@ app
     .use(VXETable)
     .use(store)
     .use(router)
-    .use(ElementPlus, { locale })
+    .use(ElementPlus,{locale})
     .mount('#app')
 
 
