@@ -5,9 +5,18 @@
         <template #header>
           <b style="font-size: 30px;color: #308ff1">欢迎来到CUGOJ</b>
         </template>
-        <el-carousel :interval="5000" arrow="always">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <h3>{{ item }}</h3>
+        <el-carousel :interval="1000" arrow="always" height="600px">
+          <el-carousel-item>
+            <el-image
+                src="https://img14.360buyimg.com/pop/jfs/t1/174086/38/25421/123679/61cfd23eEad2850f2/245b204eb519851b.jpg"></el-image>
+          </el-carousel-item>
+          <el-carousel-item>
+            <el-image
+                src="https://img14.360buyimg.com/pop/jfs/t1/120947/29/18644/69926/616651caE22e7719a/ada55dd670aec9c8.jpg"></el-image>
+          </el-carousel-item>
+          <el-carousel-item>
+            <el-image
+                src="https://img14.360buyimg.com/pop/jfs/t1/142451/23/25535/182699/61cfd245Ef54789d4/f798f1cd6f6c5b01.jpg"></el-image>
           </el-carousel-item>
         </el-carousel>
       </el-card>
@@ -36,13 +45,14 @@
           点击打卡
         </el-button>
       </el-card>
+      <el-card style="margin-top: 20px"> 近期比赛</el-card>
     </el-col>
   </el-row>
   <el-row :gutter="30">
     <el-col :sm="15" :xs="24">
     </el-col>
     <el-col :sm="9" :xs="24">
-      <el-card style="margin-top: 20px"> 近期比赛</el-card>
+
     </el-col>
   </el-row>
 </template>
@@ -61,12 +71,9 @@ const problemId = ref('')
  */
 const jumpProblem = () => {
   console.log(problemId.value)
-  if(problemId.value==='')
-  {
+  if (problemId.value === '') {
     ElMessage.error('题目编号不能为空')
-  }
-  else{
-
+  } else {
     api.problem.getProblem(problemId.value)
         .then(res => {
           if (res.Statu === '000') {

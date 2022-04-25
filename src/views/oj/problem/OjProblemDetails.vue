@@ -117,6 +117,7 @@ import 'splitpanes/dist/splitpanes.css'
 import {marked} from 'marked'
 import {ElMessage} from "element-plus";
 import useClipboard from 'vue-clipboard3'
+import store from "@/store";
 
 const {toClipboard} = useClipboard()
 
@@ -155,11 +156,14 @@ const calLanguage = (val) => {
 const submitCode = () => {
   api.judge.getBaseJudge()
       .then(response => {
+        console.log('模板',response)
         const tmp = response
-        tmp.PID = 1;
+        tmp.PID = problemInfo.value.ID;
+        tmp.PTitle=problemInfo.value.Title
         tmp.Language = calLanguage(language.value);
-        tmp.UID = 1
+        tmp.UID = store.getters.getUserInfo.ID
         tmp.Code = code.value
+        console.log('填充',tmp)
         api.judge.addJudge(tmp)
             .then(response => {
               if (response.Statu === '000') {
@@ -193,14 +197,13 @@ const copy = async (val) => {
 const getProblem = () => {
   api.problem.getProblem(problemInfo.value.problemId)
       .then(response => {
-        console.log(response)
         problemInfo.value = JSON.parse(response.Info)
         problemStatus.value = response.Statu
         description.value = problemInfo.value.Description
         description.value.Examples = JSON.parse(description.value.Examples)
-        console.log('problemInfo', problemInfo.value)
-        console.log('description', description.value)
-        console.log('problemStatus', problemStatus.value)
+        // console.log('problemInfo', problemInfo.value)
+        // console.log('description', description.value)
+        // console.log('problemStatus', problemStatus.value)
       })
 }
 </script>

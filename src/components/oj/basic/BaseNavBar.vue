@@ -75,7 +75,7 @@ import {
   TrendCharts,
 } from "@element-plus/icons-vue";
 import store from "@/store";
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 
 /**
@@ -94,9 +94,19 @@ const active=ref()
  */
 const route =useRoute()
 
+/**
+ * 监听路由
+ */
+watch(route,()=>{
+  active.value="/"+route.path.split('/')[1]
+})
+/**
+ * 渲染前
+ */
 onBeforeMount(()=>{
   active.value="/"+route.path.split('/')[1]
 })
+
 /**
  * 关闭左弹窗
  */

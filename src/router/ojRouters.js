@@ -76,6 +76,7 @@ const ojRouters = [
             {
                 path:'/user-home',
                 component:OjUserHome,
+                meta: { requireAuth:true},
             }
         ],
         redirect:'/home'

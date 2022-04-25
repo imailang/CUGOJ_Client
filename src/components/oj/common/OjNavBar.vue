@@ -42,37 +42,36 @@
             </el-button>
           </div>
           <!-- 登录显示-->
-          <div v-else class="btn-menu">
-            <el-dropdown size="large" type="primary" style="margin-right: 5px;margin-top: 8px">
-              <el-icon :size="25" color="#409EFC">
+          <el-row v-else class="btn-menu" align="middle">
+            <el-tooltip
+                class="box-item"
+                effect="dark"
+                content="通知中心">
+              <el-icon :size="25" style="margin-right: 5px;">
                 <BellFilled></BellFilled>
               </el-icon>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item>Action 1</el-dropdown-item>
-                  <el-dropdown-item>Action 2</el-dropdown-item>
-                  <el-dropdown-item>Action 3</el-dropdown-item>
-                  <el-dropdown-item>Action 4</el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
-            <el-avatar style="margin-right: 5px" @click="clickUserHome"></el-avatar>
+            </el-tooltip>
+            <el-link style="--el-link-hover-text-color: none">
+              <el-avatar
+                  src="https://assets.leetcode-cn.com/aliyun-lc-upload/users/mrwesleyfoxmailcom/avatar_1585403468.png?x-oss-process=image%2Fformat%2Cwebp"
+                  style="margin-right: 5px" @click="clickUserHome"></el-avatar>
+            </el-link>
             <el-dropdown trigger="click" size="large" style="margin-top: 8px">
                 <span style="font-size: 18px" class="el-dropdown-link">
-                  Dropdown List
+                  {{ userInfo.Username }}
                 <el-icon>
                   <ArrowDown></ArrowDown>
                 </el-icon>
                     </span>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item>Action 1</el-dropdown-item>
-                  <el-dropdown-item>Action 2</el-dropdown-item>
+                  <el-dropdown-item>个人主页</el-dropdown-item>
+                  <el-dropdown-item>账户设置</el-dropdown-item>
                   <el-dropdown-item style="color: red" divided @click="logout">退出</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
-          </div>
+          </el-row>
         </el-col>
       </el-row>
     </div>
@@ -95,28 +94,21 @@ import OjRegister from "@/components/oj/common/OjRegister";
 import OjLeftDrawer from "@/components/oj/common/OjLeftDrawer";
 import router from "@/router";
 import api from "@/api/api";
-import cookie from "js-cookie";
-import {ElMessage} from "element-plus";
 
-const userInfo = computed(
-    mapGetters(['getUserInfo']).getUserInfo.bind({$store:store})
-)
 
 /**
  * 退出
  */
 const logout = () => {
-  console.log(store.getters.getUserInfo)
   api.user.logout({
-    username:userInfo.value.Username
+    username: userInfo.value.ID
   }).then(res => {
-    if(res.code===200)
-    {
-      cookie.remove('cugtoken')
-      ElMessage.success(res.msg)
-      store.dispatch('changeIsLogin',false)
+    if (res.code === 200) {
+      router.push('/home')
+      store.dispatch('changeUserToken', undefined)
+      store.dispatch('changeUserInfo', undefined)
+      store.dispatch('changeIsLogin', false)
     }
-
   })
 }
 
@@ -151,7 +143,12 @@ const openRegister = () => {
 const isLogin = computed(
     mapGetters(['getIsLogin']).getIsLogin.bind({$store: store})
 )
-
+/**
+ * 用户信息
+ */
+const userInfo =  computed(
+    mapGetters(['getUserInfo']).getUserInfo.bind({$store: store})
+)
 
 </script>
 

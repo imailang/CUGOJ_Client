@@ -58,10 +58,9 @@
         <!-- 分页-->
         <div style="float: right">
           <vxe-pager
-              perfect
               v-model:current-page="pageBody.offset"
               v-model:page-size="pageBody.pageSize"
-              :total="pageBody.totalPage"
+              :total="Number(pageBody.totalPage)"
               @page-change="handleSizeChange"
               :page-sizes="[5,10, 20, 50]"
               :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
@@ -116,7 +115,7 @@ const problemList = ref([])
 const pageBody = ref({
   pageSize: 10,
   offset: 1,
-  totalPage: 0,
+  totalPage: null,
 })
 
 /**

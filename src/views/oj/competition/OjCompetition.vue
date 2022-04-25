@@ -159,7 +159,8 @@ onMounted(() => {
  * 计算剩余时间
  */
 const calTime = (start) => {
-  const now = moment().format('YYYY-MM-DD HH:mm:ss')
+  moment.suppressDeprecationWarnings = true;
+  const now = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
   const day = moment(start).diff(now, "days")
   if (day <= 2) {
     return moment(start).diff(now, 'hours') + '小时'

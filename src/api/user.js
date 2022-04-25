@@ -81,6 +81,10 @@ function getUserByUsername(params)
     return axios.post('/user/getuserbyusername',params)
 }
 
+function getUserById(params)
+{
+    return axios.post('/user/getuser',params)
+}
 
 export default {
     emailVerification,
@@ -92,5 +96,6 @@ export default {
     login,
     logout,
     getLoginIdByToken,
-    getUserByUsername
+    getUserByUsername,
+    getUserById,
 }

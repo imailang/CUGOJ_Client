@@ -62,27 +62,24 @@ import cookie from "js-cookie";
  */
 const clickLogin = () => {
   api.user.login({
-    username:formLogin.username,
-    password:Md5(formLogin.password)
-  }).then(res=>{
-    console.log(res)
-    if(res.code===200)
-    {
+    username: formLogin.username,
+    password: Md5(formLogin.password)
+  }).then(res => {
+    if (res.code === 200) {
       ElMessage({
         type: 'success',
         message: '欢迎回来~',
-        duration:3000
+        duration: 3000
       })
-      api.user.getUserByUsername(res.data)
+      api.user.getUserByUsername(formLogin.username)
           .then(response => {
-            store.dispatch('changeUserInfo',response)
-            console.log(response)
+            store.dispatch('changeUserInfo', JSON.stringify(response))
+            store.dispatch("changeLoginVisible", false)
+            store.dispatch('changeUserToken', cookie.get('cugtoken'))
+            store.dispatch("changeIsLogin", true)
+
           })
-      store.dispatch('changeUserToken',cookie.get('cugtoken'))
-      store.dispatch("changeIsLogin",'true')
-      store.dispatch("changeLoginVisible",false)
-    }
-    else {
+    } else {
       ElMessage.error('用户名或密码错误')
     }
   })
@@ -92,7 +89,7 @@ const clickLogin = () => {
  * 关闭登录
  */
 const closeLogin = () => {
-  store.dispatch("changeLoginVisible",false)
+  store.dispatch("changeLoginVisible", false)
   resetForm();
 }
 /**
@@ -100,7 +97,7 @@ const closeLogin = () => {
  */
 const openRegister = () => {
   closeLogin()
-  store.dispatch("changeRegisterVisible",true)
+  store.dispatch("changeRegisterVisible", true)
 }
 
 
@@ -115,7 +112,7 @@ const resetForm = () => {
  * 登录窗口显示
  */
 const loginVisible = computed(
-    mapGetters(['getLoginVisible']).getLoginVisible.bind({$store:store})
+    mapGetters(['getLoginVisible']).getLoginVisible.bind({$store: store})
 )
 /**
  * 登录表单容器
@@ -193,7 +190,7 @@ const rules = reactive({
 
 </style>
 <style>
-.el-message{
+.el-message {
   min-width: 0 !important;
 }
 </style>
