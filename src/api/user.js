@@ -77,6 +77,11 @@ function getSubmitCount(params) {
     return axios.post('/user/getsubmitcount', params)
 }
 
+function getUserById(params)
+{
+    return axios.post('/user/getuser',params)
+}
+
 export default {
     emailVerification,
     register,
@@ -89,4 +94,5 @@ export default {
     getLoginIdByToken,
     getUserByUsername,
     getSubmitCount,
+    getUserById,
 }

@@ -10,105 +10,94 @@ let store = new Vuex.Store({
     /**
      * 类似存储全局变量的数据
      */
-    state:{
-        isLogin:Cookies.get('cugtoken') !== undefined,   //是否登录标识
-        role:'user',   //用户身份
-        userInfo:undefined,     //用户信息
-        loginVisible:false,   //登录窗口显示
-        registerVisible:false,   //注册窗口显示
-        leftDrawerVisible:false,   //左弹窗显示
-        token:Cookies.get('cugtoken')  //token  持久登录
+    state: {
+        isLogin: Cookies.get('cugtoken') !== 'undefined',   //是否登录标识
+        role: 'user',   //用户身份
+        userInfo: localStorage.getItem('userInfo'),     //用户信息
+        loginVisible: false,   //登录窗口显示
+        registerVisible: false,   //注册窗口显示
+        leftDrawerVisible: false,   //左弹窗显示
+        token: Cookies.get('cugtoken')  //token  持久登录
     },
     /**
      * 提供用来获取state数据的方法
      */
-    getters:{
-        getIsLogin:(state) =>{
+    getters: {
+        getIsLogin: (state) => {
             return state.isLogin
         },
-        getRole:(state)=>{
+        getRole: (state) => {
             return state.role
         },
-        getLoginVisible:(state)=>{
+        getLoginVisible: (state) => {
             return state.loginVisible
         },
-        getRegisterVisible:(state)=>{
+        getRegisterVisible: (state) => {
             return state.registerVisible
         },
-        getLeftDrawerVisible:(state)=>{
+        getLeftDrawerVisible: (state) => {
             return state.leftDrawerVisible
         },
-        getToken:(state)=>{
+        getToken: (state) => {
             return state.token
         },
-        getUserInfo:(state)=>{
-            return state.userInfo
+        getUserInfo: (state) => {
+            if(state.userInfo===undefined)return null
+            return JSON.parse(state.userInfo)||{}
         }
     },
     /**
      * 提供跟后台接口打交道的方法，并调用mutations提供的方法
      */
-    actions:{
-        changeIsLogin({commit},val){
-            commit("changeIsLogin",val)
+    actions: {
+        changeIsLogin({commit}, val) {
+            commit("changeIsLogin", val)
         },
-        changeRole({commit},val)
-        {
-            commit("changeRole",val)
+        changeRole({commit}, val) {
+            commit("changeRole", val)
         },
-        changeLoginVisible({commit},val)
-        {
-            commit("changeLoginVisible",val)
+        changeLoginVisible({commit}, val) {
+            commit("changeLoginVisible", val)
         },
-        changeRegisterVisible({commit},val)
-        {
-            commit("changeRegisterVisible",val)
+        changeRegisterVisible({commit}, val) {
+            commit("changeRegisterVisible", val)
         },
-        changeLeftDrawerVisible({commit},val)
-        {
-            commit("changeLeftDrawerVisible",val)
+        changeLeftDrawerVisible({commit}, val) {
+            commit("changeLeftDrawerVisible", val)
         },
-        changeUserToken({commit},val)
-        {
-            commit('changeUserToken',val)
+        changeUserToken({commit}, val) {
+            commit('changeUserToken', val)
         },
-        changeUserInfo({commit},val)
-        {
-            commit('changeUserInfo',val)
+        changeUserInfo({commit}, val) {
+            commit('changeUserInfo', val)
         }
     },
     /**
      * 提供存储设置state数据的方法
      */
-    mutations:{
-        changeIsLogin(state,val)
-        {
-            state.isLogin=val
+    mutations: {
+        changeIsLogin(state, val) {
+            state.isLogin = val
         },
-        changeRole(state,val)
-        {
-            state.role=val
+        changeRole(state, val) {
+            state.role = val
         },
-        changeLoginVisible(state,val)
-        {
-            state.loginVisible=val
+        changeLoginVisible(state, val) {
+            state.loginVisible = val
         },
-        changeRegisterVisible(state,val)
-        {
-            state.registerVisible=val
+        changeRegisterVisible(state, val) {
+            state.registerVisible = val
         },
-        changeLeftDrawerVisible(state,val)
-        {
-            state.leftDrawerVisible=val
+        changeLeftDrawerVisible(state, val) {
+            state.leftDrawerVisible = val
         },
-        changeUserToken(state,val)
-        {
-            state.token=val
-            Cookies.set('cugtoken',val,{ expires: 15 })
+        changeUserToken(state, val) {
+            state.token = val
+            Cookies.set('cugtoken', val, {expires: 15})
         },
-        changeUserInfo(state,val)
-        {
-            state.userInfo=val;
+        changeUserInfo(state, val) {
+            localStorage.setItem('userInfo', val)
+            state.userInfo = val;
         }
     }
 })

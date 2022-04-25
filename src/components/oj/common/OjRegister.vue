@@ -40,7 +40,7 @@
                   size="large"
               ></el-input>
             </el-form-item>
-            <el-form-item prop="email">
+            <el-form-item prop="email" >
               <el-input
                   size="large"
                   v-model="formRegister.email"
@@ -48,7 +48,9 @@
                   :placeholder="'请输入邮箱,点击右侧获取验证码'"
               >
                 <template #append>
-                  <el-button size="small" @click="emailVerification" :icon="Message" class="iconSize"/>
+                  <div class="email-style">
+                    <el-button size="small" @click="emailVerification" :icon="Message" class="iconSize"/>
+                  </div>
                 </template>
               </el-input>
             </el-form-item>
@@ -326,4 +328,10 @@ const rules = reactive({
   margin-bottom: -15px;
   text-align: left;
 }
+
+.email-style :active{
+
+  background-color: #bdb4b4;
+}
+
 </style>

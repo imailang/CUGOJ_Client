@@ -15,7 +15,6 @@
       <router-view></router-view>
     </div>
   </div>
-
   <!-- 回到顶部-->
   <el-backtop/>
 </template>
@@ -27,8 +26,6 @@ import store from "@/store";
 import {mapGetters} from "vuex";
 import OjNavBar from "@/components/oj/common/OjNavBar";
 import {useRoute} from "vue-router";
-import api from "@/api/api";
-import cookie from "js-cookie";
 
 //顶部导航栏容器
 const affix = ref()
@@ -48,36 +45,24 @@ const route = useRoute()
  */
 onMounted(() => {
   erd.listenTo(affix.value, () => {
-    isRefresh.value = false  //不展示
-    nextTick(() => {
-      isRefresh.value = true  //渲染后又展示 实现刷新组件
-    })
+    reloadNavBar()
   })
+  //路由 角色
   if (route.path.split('/')[1] === 'admin') {
     store.dispatch("changeRole", 'admin')
   }
-  isLogin();
 })
 
 /**
- * 是否登录
+ * NavBar组件刷新
  */
-const isLogin = () => {
-  api.user.getLoginIdByToken({
-    cugtoken: store.getters.getToken
-  }).then(res => {
-    if (res.data === null) {
-      cookie.remove('cugtoken')
-
-    } else {
-      api.user.getUserByUsername(res.data)
-          .then(response => {
-            store.dispatch('changeUserInfo',response)
-            console.log(response)
-          })
-    }
+const reloadNavBar = () => {
+  isRefresh.value = false  //不展示
+  nextTick(() => {
+    isRefresh.value = true  //渲染后又展示 实现刷新组件
   })
 }
+
 </script>
 
 <style>
@@ -120,7 +105,7 @@ el-row去除margin
 
   .oj-scroll {
     position: fixed;
-    background-color: #4e4e4e;
+    background-color: #f6f6f6;
     bottom: 0;
     top: 45px;
     right: 0;
@@ -145,13 +130,13 @@ el-row去除margin
 @media screen and (min-width: 768px) {
   #oj-content {
     margin-top: 20px;
-    padding: 0 3%;
+    padding: 0 6%;
 
   }
 
   .oj-scroll {
     position: fixed;
-    background-color: #4e4e4e;
+    background-color: #f6f6f6;
     bottom: 0;
     top: 60px;
     right: 0;
