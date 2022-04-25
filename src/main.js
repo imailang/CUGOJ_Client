@@ -13,18 +13,16 @@ import 'vxe-table/lib/style.css'
 import VueParticles from 'vue-particles'
 import mavonEditor from 'mavon-editor'
 import "mavon-editor/dist/css/index.css";
-import mock from '/mock'
 
 const app = createApp(App)
 
 app
-    .use(mock)
     .use(mavonEditor)
     .use(VueParticles)
     .use(VXETable)
     .use(store)
     .use(router)
-    .use(ElementPlus,{locale})
+    .use(ElementPlus, { locale })
     .mount('#app')
 
 
