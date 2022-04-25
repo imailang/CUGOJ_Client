@@ -94,6 +94,7 @@ import OjRegister from "@/components/oj/common/OjRegister";
 import OjLeftDrawer from "@/components/oj/common/OjLeftDrawer";
 import router from "@/router";
 import api from "@/api/api";
+import {ElMessage} from "element-plus";
 
 
 /**
@@ -108,6 +109,7 @@ const logout = () => {
       store.dispatch('changeUserToken', undefined)
       store.dispatch('changeUserInfo', undefined)
       store.dispatch('changeIsLogin', false)
+      ElMessage.success('注销成功')
     }
   })
 }
