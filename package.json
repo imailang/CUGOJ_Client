@@ -17,7 +17,7 @@
     "js-cookie": "^3.0.1",
     "js-md5": "^0.7.3",
     "marked": "^4.0.14",
-    "mavon-editor": "^3.0.0-beta",
+    "mavon-editor": "^2.10.4",
     "mockjs": "^1.1.0",
     "moment": "^2.29.2",
     "splitpanes": "^3.1.0",
