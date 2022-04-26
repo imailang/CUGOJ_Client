@@ -105,4 +105,5 @@ export default {
     getLoginIdByToken,
     getUserByUsername,
     getUserById,
+    getSubmitCount
 }

@@ -9,30 +9,30 @@
               class="mb-2"
               active-text="全部"
               inactive-text="我的"
+              v-model="isAllKey"
+              @change="getEvaluationList"
           />
         </el-col>
         <el-col :xs="9" :sm="6">
-          <el-input
-              placeholder="请输入关键字"
-              :suffix-icon="Search"
-          />
+          <vxe-input v-model="searchKey" placeholder="请输入关键字" type="search" @search-click="getEvaluationList"></vxe-input>
         </el-col>
+
         <el-col :xs="6" :sm="5">
-          <el-dropdown trigger="click">
+          <el-dropdown trigger="click"
+                       @command="selectStatus"
+          >
         <span class="el-dropdown-link">
-          状态<el-icon class="el-icon--right"><arrow-down/></el-icon>
+          {{ statusKey }}<el-icon class="el-icon--right"><arrow-down/></el-icon>
         </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item>Action 3</el-dropdown-item>
-                <el-dropdown-item>Action 4</el-dropdown-item>
-                <el-dropdown-item>Action 5</el-dropdown-item>
+                <el-dropdown-item :command="item.value" v-for="(item,index) in statusList" :key="index" >{{item.label}}</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
         </el-col>
         <el-col :xs="6" :sm="4">
-          <el-button round :icon="Refresh" type="primary">刷新</el-button>
+          <el-button round :icon="Refresh" type="primary" @click="getEvaluationList">刷新</el-button>
         </el-col>
       </el-row>
     </template>
@@ -42,7 +42,7 @@
                  :row-config="{height: 35}">
         <vxe-column field="ID" title="评测编号"></vxe-column>
         <vxe-column field="PTitle" title="题目"></vxe-column>
-        <vxe-column field="User_info.Nickname" title="用户昵称"></vxe-column>
+        <vxe-column field="UserInfo.Nickname" title="用户昵称"></vxe-column>
         <vxe-column field="Status" title="评测状态" width="90px">
           <template v-slot="{row}">
             <el-tag :style="'background-color:'+colorList[row.Status]+';color: white;font-size:14px;width:80px'">
@@ -52,20 +52,20 @@
         </vxe-column>
         <vxe-column field="Time_use" title="耗时">
           <template v-slot="{row}">
-            {{ row.Time_use }} ms
+            {{ row.TimeUse }} ms
           </template>
         </vxe-column>
         <vxe-column field="Memory_use" title="内存">
           <template v-slot="{row}">
-            {{ row.Memory_use }} KB
+            {{ row.MemoryUse }} KB
           </template>
         </vxe-column>
-        <vxe-column field="SuLength" title="代码长度"></vxe-column>
+        <vxe-column field="Length" title="代码长度"></vxe-column>
         <vxe-column field="Language" title="语言"></vxe-column>
         <vxe-column field="Judger" title="评测机"></vxe-column>
-        <vxe-column field="Submit_time" title="提交时间" width="200px">
+        <vxe-column field="SubmitTime" title="提交时间" width="200px">
           <template v-slot="{row}">
-            {{ updateTime(row.Submit_time) }}
+            {{ updateTime(row.SubmitTime) }}
           </template>
         </vxe-column>
       </vxe-table>
@@ -86,11 +86,69 @@
 </template>
 
 <script setup>
-import {Search, Refresh, ArrowDown} from "@element-plus/icons-vue";
+import { Refresh, ArrowDown} from "@element-plus/icons-vue";
 import {onMounted, ref} from "vue";
 import api from "@/api/api";
 import moment from "moment";
+import store from "@/store";
 
+/**
+ * 是否全部
+ */
+const isAllKey=ref(true)
+/**
+ * 选择查看状态
+ */
+const statusKey =ref('状态')
+/**
+ * 关键字
+ */
+const searchKey =ref('')
+/**
+ * 状态列表
+ */
+const statusList =ref([
+  {
+    label:'全部',
+    value:'全部',
+  },
+  {
+    label:'Pending',
+    value:'Pending',
+  },
+  {
+    label:'Compiling',
+    value:'Compiling',
+  },
+  {
+    label:'Running',
+    value:'Running',
+  },
+  {
+    label:'AC',
+    value:'AC',
+  },
+  {
+    label:'CE',
+    value:'CE',
+  },
+  {
+    label:'WA',
+    value:'WA',
+  },
+  {
+    label:'TLE',
+    value:'TLE',
+  },
+  {
+    label:'MLE',
+    value:'MLE',
+  },
+  {
+    label:'OLE',
+    value:'OLE',
+  },
+])
 /**
  * 评测列表
  */
@@ -99,7 +157,9 @@ const evaluationList = ref()
  * 列表容器
  */
 const evaluationListRef = ref()
-// eslint-disable-next-line no-unused-vars
+/**
+ * 颜色列表
+ */
 const colorList = ref({
   Pending: '#7c7c7c',
   Compiling: '#fd8387',
@@ -114,9 +174,17 @@ const colorList = ref({
 })
 
 onMounted(() => {
-  getListTotal()
   getEvaluationList()
 })
+
+/**
+ *
+ */
+const selectStatus =(val)=>{
+  if(val==='全部') val='状态'
+  statusKey.value=val
+  getEvaluationList()
+}
 
 /**
  * 分页
@@ -129,13 +197,38 @@ const pageBody = ref({
 /**
  * 获取评测列表
  */
-const getEvaluationList = () => {
-  api.judge.getJudgeList({
-    "pagequery": {
-      "offset": pageBody.value.offset - 1,
-      "pagesize": pageBody.value.pageSize
+const getEvaluationList =  () => {
+  getListTotal()
+  let params = {
+    pagequery: {
+      offset: pageBody.value.offset - 1,
+      pagesize: pageBody.value.pageSize
+    },
+    odd1:{},   //odd1   用户  状态
+    odd2:{},   //编号
+    odd3:{},   //题目
+  }
+  //odd1   用户  状态
+  {
+    if(!isAllKey.value)
+    {
+      params.odd1.UID=store.getters.getUserInfo.ID
     }
-  })
+    if(statusKey.value!=='状态')
+    {
+      params.odd1.status=statusKey.value
+    }
+  }
+  if(searchKey.value!=='')
+  {
+    params.odd2=JSON.parse(JSON.stringify( params.odd1))
+    params.odd2.ID=searchKey.value
+    params.odd3=JSON.parse(JSON.stringify( params.odd1))
+    params.odd3.p_title=searchKey.value
+    params.odd1={}
+  }
+
+  api.judge.getJudgeList(params)
       .then(res => {
         evaluationList.value = JSON.parse(res.Info)
         console.log(evaluationList.value)
@@ -145,7 +238,31 @@ const getEvaluationList = () => {
  * 获取评测总数
  */
 const getListTotal = () => {
-  api.judge.getJudgeCount({})
+  let params = {
+    odd1:{},   //odd1   用户  状态
+    odd2:{},   //编号
+    odd3:{},   //题目
+  }
+  //odd1   用户  状态
+  {
+    if(!isAllKey.value)
+    {
+      params.odd1.UID=store.getters.getUserInfo.ID
+    }
+    if(statusKey.value!=='状态')
+    {
+      params.odd1.status=statusKey.value
+    }
+  }
+  if(searchKey.value!=='')
+  {
+    params.odd2=JSON.parse(JSON.stringify( params.odd1))
+    params.odd2.ID=searchKey.value
+    params.odd3=JSON.parse(JSON.stringify( params.odd1))
+    params.odd3.p_title=searchKey.value
+    params.odd1={}
+  }
+  api.judge.getJudgeCount(params)
       .then(res => {
         pageBody.value.totalPage = res.Info
       })

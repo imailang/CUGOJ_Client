@@ -62,6 +62,7 @@ import router from "@/router";
  * 登录
  */
 const clickLogin = () => {
+  console.log('管理员登录')
   router.push('/admin/home')
 }
 </script>
@@ -80,7 +81,7 @@ const clickLogin = () => {
   box-shadow: 0 0 25px #cac6c6;
 }
 .login-container .title {
-  margin: 0px auto 40px auto;
+  margin: 0 auto 40px auto;
   text-align: center;
   color: #1e9fff;
   font-size: 25px;
