@@ -171,6 +171,7 @@ const colorList = ref({
   TLE: '#2d468c',
   MLE: '#2d468a',
   OLE: '#10efc6',
+  SE: '#ff8000'
 })
 
 onMounted(() => {

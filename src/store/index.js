@@ -42,8 +42,8 @@ let store = new Vuex.Store({
             return state.token
         },
         getUserInfo: (state) => {
-            if(state.userInfo===undefined)return null
-            return JSON.parse(state.userInfo)||{}
+            if(state.userInfo==='undefined')return {}
+            return JSON.parse(state.userInfo)
         }
     },
     /**

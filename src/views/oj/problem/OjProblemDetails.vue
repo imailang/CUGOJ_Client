@@ -11,7 +11,7 @@
             <el-tab-pane>
               <template #label>
                 <div>
-                  <el-icon>
+                  <el-icon style="vertical-align: -2px">
                     <Notebook></Notebook>
                   </el-icon>
                   题目描述
@@ -81,7 +81,7 @@
             <el-tab-pane>
               <template #label>
                 <div>
-                  <el-icon>
+                  <el-icon style="vertical-align: -2px">
                     <Clock></Clock>
                   </el-icon>
                   我的提交
@@ -139,12 +139,14 @@
       <pane>
         <!--提交页-->
         <el-scrollbar class="problem-right">
-          <OjCodeEditor v-model:code="code" v-model:language="language"></OjCodeEditor>
+          <OjCodeEditor v-loading="loading" v-model:code="code" v-model:language="language"></OjCodeEditor>
           <el-row justify="end" style="position: absolute;right: 30px;bottom: 25px" @click="Loginfirst">
             <el-button :disabled="!isLogin" round type="warning" @click="reset" style="margin-right: 10px">重置
             </el-button>
-            <el-button :disabled="!isLogin" round type="primary" @click="submitCode" style="margin-right: 10px">提交
+            <el-button :loading="loading" :disabled="!isLogin" round type="primary" @click="submitCode"
+                       style="margin-right: 10px">提交
             </el-button>
+
           </el-row>
         </el-scrollbar>
       </pane>
@@ -185,6 +187,7 @@ const submitLanguage = ref({
   'c++17': 'gnu cpp17',
   'c++20': 'gnu cpp20'
 })
+const loading = ref(false)
 /**
  * 颜色列表
  */
@@ -199,6 +202,7 @@ const colorList = ref({
   TLE: '#2d468c',
   MLE: '#2d468a',
   OLE: '#10efc6',
+  SE: '#ff8000'
 })
 /**
  * 评测列表
@@ -232,6 +236,8 @@ const handleSizeChange = () => {
   }
   getMyEvaluation()
 }
+
+
 /**
  * 左边标签页更换前钩子
  */
@@ -278,7 +284,6 @@ const getMyListTotal = () => {
       UID: store.getters.getUserInfo.ID,
       p_id: problemInfo.value.ID
     }
-
   })
       .then(res => {
         pageBody.value.totalPage = res.Info
@@ -312,26 +317,38 @@ const Loginfirst = () => {
 /**
  * 提交代码
  */
-const submitCode = () => {
-  api.judge.getBaseJudge()
+const submitCode = async () => {
+  await api.judge.getBaseJudge()
       .then(response => {
-        console.log('模板', response)
         const tmp = response
         tmp.PID = problemInfo.value.ID;
         tmp.PTitle = problemInfo.value.Title
         tmp.Language = calLanguage(language.value);
         tmp.UID = store.getters.getUserInfo.ID
         tmp.Code = code.value
-        console.log('填充', tmp)
         api.judge.addJudge(tmp)
             .then(response => {
               if (response.Statu === '000') {
                 ElMessage.success('提交成功')
-                console.log(response)
+                loading.value = true
+                const timer = setInterval(() => {
+                  api.judge.getJudge(response.Info)
+                      .then(res => {
+                        res = JSON.parse(res.Info)
+                        console.log(res)
+                        if (res.Status !== 'Pending' && res.Status !== 'Compiling' && res.Status !== 'Running') {
+                          loading.value = false
+                          ElMessage.success(res.Status)
+                          clearInterval(timer)
+                        }
+                      })
+                }, 500)
               }
             })
       })
 }
+
+
 /**
  * 重置代码
  */
