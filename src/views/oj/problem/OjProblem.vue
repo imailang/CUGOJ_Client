@@ -10,10 +10,12 @@
               <el-input
                   placeholder="请输入关键字"
                   :suffix-icon="Search"
+                  @keyup.enter="getProblemList"
+                  v-model="searchKey"
               />
             </el-col>
             <el-col :xs="4" :sm="4" style="text-align: right">
-              <el-button round :icon="Refresh" type="primary">重置</el-button>
+              <el-button round :icon="Refresh" type="primary" @click="resetKey">重置</el-button>
             </el-col>
           </el-row>
         </div>
@@ -21,11 +23,6 @@
         <div>
           <el-row align="middle" style="margin-bottom: 10px">
             <div>题库
-              <el-check-tag effect="plain">全部</el-check-tag>
-            </div>
-          </el-row>
-          <el-row align="middle">
-            <div>难度
               <el-check-tag effect="plain">全部</el-check-tag>
             </div>
           </el-row>
@@ -119,6 +116,10 @@ const pageBody = ref({
 })
 
 /**
+ * 关键字
+ */
+const searchKey =ref('')
+/**
  * 计算AC率
  */
 const calAcRate = (num, acNum) => {
@@ -130,11 +131,10 @@ const calAcRate = (num, acNum) => {
  * 翻页
  */
 const handleSizeChange = () => {
-  let pages =Math.floor(pageBody.value.totalPage/pageBody.value.pageSize)+1;
+  let pages = Math.floor(pageBody.value.totalPage / pageBody.value.pageSize) + 1;
   console.log(pages)
-  if(pageBody.value.offset>=pages)
-  {
-    pageBody.value.offset=pages
+  if (pageBody.value.offset >= pages) {
+    pageBody.value.offset = pages
   }
   getProblemList()
 }
@@ -142,19 +142,40 @@ const handleSizeChange = () => {
  * 初始化
  */
 onMounted(() => {
-  getListTotal()
   getProblemList()
 })
+
+/**
+ * 重置筛选
+ */
+const resetKey = () => {
+  searchKey.value=''
+  getProblemList()
+}
 /**
  * 获取题目列表
  */
 const getProblemList = () => {
-  api.problem.getProblemList({
-    "pagequery": {
-      "offset": pageBody.value.offset - 1,
-      "pagesize": pageBody.value.pageSize
-    }
-  }).then(response => {
+  getListTotal
+  let params = {
+    pagequery: {
+      offset: pageBody.value.offset - 1,
+      pagesize: pageBody.value.pageSize
+    },
+    odd1:{},  //题库
+    odd2:{},  //ID
+    odd3:{}   //题目
+  }
+
+  if(searchKey.value!=='')
+  {
+    params.odd2=JSON.parse(JSON.stringify( params.odd1))
+    params.odd2.ID=searchKey.value
+    params.odd3=JSON.parse(JSON.stringify( params.odd1))
+    params.odd3.title=searchKey.value
+    params.odd1={}
+  }
+  api.problem.getProblemList(params).then(response => {
     problemList.value = JSON.parse(response.Info)
     console.log('题目列表', problemList.value)
   })
@@ -163,7 +184,20 @@ const getProblemList = () => {
  * 获取题目总数
  */
 const getListTotal = () => {
-  api.problem.getProblemCount({})
+  let params = {
+    odd1:{},  //题库
+    odd2:{},  //ID
+    odd3:{}   //题目
+  }
+  if(searchKey.value!=='')
+  {
+    params.odd2=JSON.parse(JSON.stringify( params.odd1))
+    params.odd2.ID=searchKey.value
+    params.odd3=JSON.parse(JSON.stringify( params.odd1))
+    params.odd3.title=searchKey.value
+    params.odd1={}
+  }
+  api.problem.getProblemCount(params)
       .then(res => {
         pageBody.value.totalPage = res.Info
       })

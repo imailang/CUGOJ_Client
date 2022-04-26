@@ -4,11 +4,11 @@
       <el-col :span="12">
         <div>
           <el-row>
-            <el-col :sm="8" :lg="6">
+            <el-col :xs="10" :sm="8" :lg="6">
               <el-avatar style="--el-avatar-size: 120px"
                          src="https://assets.leetcode-cn.com/aliyun-lc-upload/users/mrwesleyfoxmailcom/avatar_1585403468.png?x-oss-process=image%2Fformat%2Cwebp"></el-avatar>
             </el-col>
-            <el-col :sm="16" :lg="18">
+            <el-col :xs="14" :sm="16" :lg="18">
               <el-row style="text-align: left;">
                 <el-col :span="24">
                   <el-row align="middle" justify="space-between">
@@ -29,7 +29,8 @@
                 class="box-item"
                 effect="dark"
                 :content="moment(userInfo.UpdatedAt).format('YYYY-MM-DD HH:mm:ss')">
-            <el-tag type="success">最近上线时间:{{ calTime(userInfo.UpdatedAt) }}</el-tag></el-tooltip>
+              <el-tag type="success">最近上线时间:{{ calTime(userInfo.UpdatedAt) }}</el-tag>
+            </el-tooltip>
           </el-col>
           <el-col :span="4">
             <div style="text-align: center">
@@ -51,17 +52,17 @@
 
 <script setup>
 
-import { onMounted,ref} from "vue";
+import {onMounted, ref} from "vue";
 import moment from "moment";
 import store from "@/store";
 
 
-const userInfo =ref({
-  Username:'',
-  UpdatedAt:'',
+const userInfo = ref({
+  Username: '',
+  UpdatedAt: '',
 })
 
-onMounted(()=>{
+onMounted(() => {
   /**
    * 用户信息
    */

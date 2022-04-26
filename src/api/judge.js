@@ -26,8 +26,8 @@ function getBaseJudge() {
  */
 function addJudge(params) {
     return axios.post('/judge/addjudge', params)
-
 }
+
 
 export default {
     getBaseJudge,
