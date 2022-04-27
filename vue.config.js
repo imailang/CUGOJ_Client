@@ -25,7 +25,7 @@ module.exports = defineConfig({
                 }
             },
             '/api': {
-                target: 'http://localhost:13000',
+              target:'http://xsyd.zxlong.love:13000',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': '/'
