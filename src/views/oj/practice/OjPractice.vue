@@ -89,7 +89,7 @@
             <el-row justify="start" align="middle">
               <el-col :span="6" style="text-align: left"> AC率: </el-col>
               <el-col :span="18">
-                <el-progress :percentage="submitCount.sevenRate" />
+                <el-progress :percentage="submitCount.sevenRate.toFixed(2)" />
               </el-col>
             </el-row>
             <el-row justify="start" style="text-align: left">
@@ -101,7 +101,7 @@
             <el-row justify="start" align="middle">
               <el-col :span="6" style="text-align: left"> AC率: </el-col>
               <el-col :span="18">
-                <el-progress :percentage="submitCount.thirtyRate" />
+                <el-progress :percentage="submitCount.thirtyRate.toFixed(2)" />
               </el-col>
             </el-row>
             <el-row justify="start" style="text-align: left">
@@ -113,7 +113,7 @@
             <el-row justify="start" align="middle">
               <el-col :span="6" style="text-align: left"> AC率: </el-col
               ><el-col :span="18">
-                <el-progress :percentage="submitCount.allRate" />
+                <el-progress :percentage="submitCount.allRate.toFixed(2)" />
               </el-col>
             </el-row>
           </el-col>
@@ -162,11 +162,12 @@ const getSubmitCount = () => {
       submitCount.sevenAC = tmp.sevenAC;
       submitCount.thirty = tmp.thirty;
       submitCount.thirtyAC = tmp.thirtyAC;
-      submitCount.allRate = submitCount.all / Math.max(1, submitCount.allAC);
+      submitCount.allRate =
+        (submitCount.allAC * 100) / Math.max(1, submitCount.all);
       submitCount.sevenRate =
-        submitCount.seven / Math.max(1, submitCount.sevenAC);
+        (submitCount.sevenAC * 100) / Math.max(1, submitCount.seven);
       submitCount.thirtyRate =
-        submitCount.thirty / Math.max(1, submitCount.thirtyAC);
+        (submitCount.thirtyAC * 100) / Math.max(1, submitCount.thirty);
       submitCount.loading = false;
       console.log(submitCount);
     } else {

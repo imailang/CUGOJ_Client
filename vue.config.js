@@ -1,4 +1,4 @@
-const {defineConfig} = require('@vue/cli-service')
+const { defineConfig } = require('@vue/cli-service')
 const CompressionPlugin = require("compression-webpack-plugin")
 const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i;
 module.exports = defineConfig({
@@ -16,19 +16,19 @@ module.exports = defineConfig({
         }
     },
     devServer: {
-        proxy:{
-            '/api/ojLogin':{
-                target:'http://1.14.68.184:9999',
-                changeOrigin:true,
-                pathRewrite:{
-                    '^/api':'/'
+        proxy: {
+            '/api/ojLogin': {
+                target: 'http://1.14.68.184:9999',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/api': '/'
                 }
             },
-            '/api':{
-                target:'http://xsyd.zxlong.love:13000',
-                changeOrigin:true,
-                pathRewrite:{
-                    '^/api':'/'
+            '/api': {
+              target:'http://xsyd.zxlong.love:13000',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/api': '/'
                 }
             }
 
