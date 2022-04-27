@@ -70,6 +70,7 @@ function getUserCount(params) {
 function getUserByUsername(params) {
     return axios.post('/user/getuserbyusername', params)
 }
+
 /**
  * 根据用户ID获取用户近七日、三十日以及全部提交数
  */
@@ -77,9 +78,8 @@ function getSubmitCount(params) {
     return axios.post('/user/getsubmitcount', params)
 }
 
-function getUserById(params)
-{
-    return axios.post('/user/getuser',params)
+function getUserById(params) {
+    return axios.post('/user/getuser', params)
 }
 
 export default {
@@ -93,6 +93,6 @@ export default {
     logout,
     getLoginIdByToken,
     getUserByUsername,
-    getSubmitCount,
     getUserById,
+    getSubmitCount,
 }

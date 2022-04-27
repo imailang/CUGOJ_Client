@@ -162,6 +162,12 @@ const getListTotal = () => {
  * 翻页
  */
 const handleSizeChange = () => {
+  let pages =Math.floor(pageBody.value.totalPage/pageBody.value.pageSize)+1;
+  console.log(pages)
+  if(pageBody.value.offset>=pages)
+  {
+    pageBody.value.offset=pages
+  }
   getProblemList()
 }
 

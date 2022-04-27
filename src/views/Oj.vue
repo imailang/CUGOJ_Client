@@ -52,7 +52,6 @@ onMounted(() => {
     store.dispatch("changeRole", 'admin')
   }
 })
-
 /**
  * NavBar组件刷新
  */
@@ -157,7 +156,7 @@ el-row去除margin
 
   .oj-scroll {
     position: fixed;
-    background-color: #4e4e4e;
+    background-color: #f6f6f6;
     bottom: 0;
     top: 60px;
     right: 0;
