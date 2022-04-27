@@ -26,12 +26,21 @@ function getBaseJudge() {
  */
 function addJudge(params) {
     return axios.post('/judge/addjudge', params)
-
 }
+
+/**
+ * 获取评测
+ */
+function getJudge(params)
+{
+    return axios.post('/judge/getjudge',params)
+}
+
 
 export default {
     getBaseJudge,
     addJudge,
     getJudgeList,
-    getJudgeCount
+    getJudgeCount,
+    getJudge
 }

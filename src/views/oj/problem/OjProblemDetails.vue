@@ -5,12 +5,13 @@
         <el-scrollbar class="problem-left">
           <el-tabs
               type="border-card"
+              :before-leave="beforeChangeTab"
           >
             <!--题目描述 -->
             <el-tab-pane>
               <template #label>
                 <div>
-                  <el-icon>
+                  <el-icon style="vertical-align: -2px">
                     <Notebook></Notebook>
                   </el-icon>
                   题目描述
@@ -80,12 +81,57 @@
             <el-tab-pane>
               <template #label>
                 <div>
-                  <el-icon>
+                  <el-icon style="vertical-align: -2px">
                     <Clock></Clock>
                   </el-icon>
                   我的提交
                 </div>
               </template>
+              <!-- 评测列表-->
+              <div>
+                <vxe-table :data="evaluationList" ref="evaluationListRef" stripe align="center" show-overflow
+                           :row-config="{height: 35}">
+                  <vxe-column field="ID" title="评测编号" width="50px"></vxe-column>
+                  <vxe-column field="Status" title="评测状态" width="92">
+                    <template v-slot="{row}">
+                      <el-tag
+                          :style="'background-color:'+colorList[row.Status]+';color: white;font-size:14px;width:80px'">
+                        {{ row.Status }}
+                      </el-tag>
+                    </template>
+                  </vxe-column>
+                  <vxe-column field="Time_use" title="耗时">
+                    <template v-slot="{row}">
+                      {{ row.TimeUse }} ms
+                    </template>
+                  </vxe-column>
+                  <vxe-column field="Memory_use" title="内存">
+                    <template v-slot="{row}">
+                      {{ row.MemoryUse }} KB
+                    </template>
+                  </vxe-column>
+                  <vxe-column field="Length" title="代码长度" width="50px"></vxe-column>
+                  <vxe-column field="Language" title="语言"></vxe-column>
+                  <vxe-column field="Judger" title="评测机"></vxe-column>
+                  <vxe-column field="SubmitTime" title="提交时间" width="50px">
+                    <template v-slot="{row}">
+                      {{ updateTime(row.SubmitTime) }}
+                    </template>
+                  </vxe-column>
+                </vxe-table>
+              </div>
+              <!-- 分页-->
+              <div>
+                <vxe-pager
+                    perfect
+                    v-model:current-page="pageBody.offset"
+                    v-model:page-size="pageBody.pageSize"
+                    :total="Number(pageBody.totalPage)"
+                    @page-change="handleSizeChange"
+                    :page-sizes="[5,10, 20, 50]"
+                    :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+                </vxe-pager>
+              </div>
             </el-tab-pane>
           </el-tabs>
         </el-scrollbar>
@@ -93,10 +139,14 @@
       <pane>
         <!--提交页-->
         <el-scrollbar class="problem-right">
-          <OjCodeEditor v-model:code="code" v-model:language="language"></OjCodeEditor>
-          <el-row justify="end" style="position: absolute;right: 30px;bottom: 25px" @click="click">
-            <el-button :disabled="!isLogin" round type="warning" @click="reset" style="margin-right: 10px">重置</el-button>
-            <el-button :disabled="!isLogin" round type="primary" @click="submitCode" style="margin-right: 10px">提交</el-button>
+          <OjCodeEditor v-loading="loading" v-model:code="code" v-model:language="language"></OjCodeEditor>
+          <el-row justify="end" style="position: absolute;right: 30px;bottom: 25px" @click="Loginfirst">
+            <el-button :disabled="!isLogin" round type="warning" @click="reset" style="margin-right: 10px">重置
+            </el-button>
+            <el-button :loading="loading" :disabled="!isLogin" round type="primary" @click="submitCode"
+                       style="margin-right: 10px">提交
+            </el-button>
+
           </el-row>
         </el-scrollbar>
       </pane>
@@ -119,16 +169,11 @@ import {ElMessage} from "element-plus";
 import useClipboard from 'vue-clipboard3'
 import store from "@/store";
 import {mapGetters} from "vuex";
+import moment from "moment";
+
 
 const {toClipboard} = useClipboard()
-
-/**
- * 路由
- */
 const route = useRoute();
-/**
- * 题目信息
- */
 const problemStatus = ref('')
 const problemInfo = ref({})
 const description = ref({})
@@ -142,13 +187,114 @@ const submitLanguage = ref({
   'c++17': 'gnu cpp17',
   'c++20': 'gnu cpp20'
 })
-
+const loading = ref(false)
+/**
+ * 颜色列表
+ */
+const colorList = ref({
+  Pending: '#7c7c7c',
+  Compiling: '#fd8387',
+  Running: '#5db75e',
+  AC: '#00b23e',
+  CE: '#efc110',
+  RE: '#8d43af',
+  WA: '#e74b3d',
+  TLE: '#2d468c',
+  MLE: '#2d468a',
+  OLE: '#10efc6',
+  SE: '#ff8000'
+})
+/**
+ * 评测列表
+ */
+const evaluationList = ref()
+/**
+ * 列表容器
+ */
+const evaluationListRef = ref()
 /**
  * 获取store 是否登录字段
  */
 const isLogin = computed(
     mapGetters(['getIsLogin']).getIsLogin.bind({$store: store})
 )
+/**
+ * 分页
+ */
+const pageBody = ref({
+  pageSize: 10,
+  offset: 1,
+  totalPage: null,
+})
+/**
+ * 翻页
+ */
+const handleSizeChange = () => {
+  let pages = Math.floor(pageBody.value.totalPage / pageBody.value.pageSize) + 1;
+  if (pageBody.value.offset >= pages) {
+    pageBody.value.offset = pages
+  }
+  getMyEvaluation()
+}
+
+
+/**
+ * 左边标签页更换前钩子
+ */
+const beforeChangeTab = (activeName) => {
+  if (Number(activeName) === 1) {
+    if (isLogin.value) {
+      getMyListTotal()
+      getMyEvaluation()
+    } else {
+      ElMessage.error('请先登录')
+      store.dispatch('changeLoginVisible', true)
+      return false
+    }
+  }
+
+
+}
+/**
+ * 获取我的评测
+ */
+const getMyEvaluation = () => {
+  api.judge.getJudgeList({
+    pagequery: {
+      offset: pageBody.value.offset - 1,
+      pagesize: pageBody.value.pageSize
+    },
+    odd1: {
+      UID: store.getters.getUserInfo.ID,
+      p_id: problemInfo.value.ID
+    }
+  })
+      .then(res => {
+        console.log(res)
+        evaluationList.value = JSON.parse(res.Info)
+
+      })
+}
+/**
+ * 获取我的评测总数
+ */
+const getMyListTotal = () => {
+  api.judge.getJudgeCount({
+    odd1: {
+      UID: store.getters.getUserInfo.ID,
+      p_id: problemInfo.value.ID
+    }
+  })
+      .then(res => {
+        pageBody.value.totalPage = res.Info
+      })
+}
+/**
+ * 修改时间格式
+ */
+const updateTime = (val) => {
+  return moment(val).format('YYYY-MM-DD HH:mm:ss')
+}
 /**
  * 适配后端语言
  */
@@ -159,9 +305,11 @@ const calLanguage = (val) => {
   return val
 }
 
-const click = () => {
+/**
+ * 登录判断
+ */
+const Loginfirst = () => {
   if (!isLogin.value) {
-
     ElMessage.error('请先登录')
     store.dispatch('changeLoginVisible', true)
   }
@@ -169,27 +317,41 @@ const click = () => {
 /**
  * 提交代码
  */
-const submitCode = () => {
-  api.judge.getBaseJudge()
+const submitCode = async () => {
+  await api.judge.getBaseJudge()
       .then(response => {
-        console.log('模板', response)
         const tmp = response
         tmp.PID = problemInfo.value.ID;
         tmp.PTitle = problemInfo.value.Title
         tmp.Language = calLanguage(language.value);
         tmp.UID = store.getters.getUserInfo.ID
         tmp.Code = code.value
-        console.log('填充', tmp)
         api.judge.addJudge(tmp)
             .then(response => {
               if (response.Statu === '000') {
                 ElMessage.success('提交成功')
-                console.log(response)
+                loading.value = true
+                const timer = setInterval(() => {
+                  api.judge.getJudge(response.Info)
+                      .then(res => {
+                        res = JSON.parse(res.Info)
+                        console.log(res)
+                        if (res.Status !== 'Pending' && res.Status !== 'Compiling' && res.Status !== 'Running') {
+                          loading.value = false
+                          ElMessage.success(res.Status)
+                          clearInterval(timer)
+                        }
+                      })
+                }, 500)
               }
             })
       })
-
 }
+
+
+/**
+ * 重置代码
+ */
 const reset = () => {
   code.value = ''
 }
