@@ -91,7 +91,7 @@ const clickRegister = () => {
       api.user.register(formRegister)
           .then(res => {
             console.log(res)
-            if (res.code === '000') {
+            if (res.code === '200') {
               ElMessage({
                 message: '注册成功',
                 type: 'success',
