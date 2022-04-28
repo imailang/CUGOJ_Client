@@ -93,17 +93,18 @@ import { ElMessage } from "element-plus";
 const clickRegister = () => {
   formRegisterRef.value.validate((valid) => {
     if (valid) {
-      api.user.register(formRegister).then((res) => {
-        console.log(res);
-        if (res.code === "000") {
-          ElMessage({
-            message: "注册成功",
-            type: "success",
-          });
-        } else {
-          ElMessage.error("验证码错误");
-        }
-      });
+      api.user.register(formRegister)
+          .then(res => {
+            console.log(res)
+            if (res.code === '200') {
+              ElMessage({
+                message: '注册成功',
+                type: 'success',
+              })
+            } else {
+              ElMessage.error('验证码错误')
+            }
+          })
     }
   });
 };
