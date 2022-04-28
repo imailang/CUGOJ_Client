@@ -11,8 +11,13 @@ function getUserContestCount(params) {
 function registerContest(params) {
     return axios.post('/contest/registercontest', params)
 }
+
+function getContestDetail(params) {
+    return axios.post('/contest/getcontestdetail', params)
+}
 export default {
     getUserContestList,
     registerContest,
     getUserContestCount,
+    getContestDetail,
 }
