@@ -1,9 +1,9 @@
 <template>
   <el-menu
-      default-active="/admin/home"
-      class="el-menu-demo"
-      router
-      :collapse="isCollapse"
+    default-active="/admin/home"
+    class="el-menu-demo"
+    router
+    :collapse="isCollapse"
   >
     <el-menu-item index="/admin/home">
       <el-icon>
@@ -41,20 +41,20 @@
         <span>题目列表</span>
       </el-menu-item>
     </el-sub-menu>
-    <el-sub-menu index="/admin/competitions">
+    <el-sub-menu index="/admin/contests">
       <template #title>
         <el-icon>
           <Grid></Grid>
         </el-icon>
         <span>竞赛管理</span>
       </template>
-      <el-menu-item index="/admin/competitions">
+      <el-menu-item index="/admin/contests">
         <el-icon>
           <Grid></Grid>
         </el-icon>
         <span>竞赛列表</span>
       </el-menu-item>
-      <el-menu-item index="/admin/competition/create">
+      <el-menu-item index="/admin/contest/create">
         <el-icon>
           <Grid></Grid>
         </el-icon>
@@ -65,21 +65,16 @@
 </template>
 
 <script setup>
-import {
-  Grid,
-  HomeFilled,
-} from "@element-plus/icons-vue";
+import { Grid, HomeFilled } from "@element-plus/icons-vue";
 
 // eslint-disable-next-line no-undef,no-unused-vars
 const props = defineProps({
   isCollapse: {
     type: Boolean,
-    default: false
-  }
-})
-
+    default: false,
+  },
+});
 </script>
 
 <style scoped>
-
 </style>

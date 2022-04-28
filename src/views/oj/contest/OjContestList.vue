@@ -65,7 +65,7 @@
                 ></el-image>
               </el-col>
               <el-col :xs="10" :sm="16" :md="19" :lg="19" class="contest-main">
-                <el-link class="contest-title" @click="getCompetitionUri(item)">
+                <el-link class="contest-title" @click="getContestURI(item)">
                   {{ item.title }}
                 </el-link>
 
@@ -439,10 +439,10 @@ const updateContestList = () => {
 /**
  * 点击跳转比赛
  */
-const getCompetitionUri = (item) => {
+const getContestURI = (item) => {
   if (item.owner > 1 || item.visible == 0 || item.permission == 1) {
     router.push({
-      path: "/competition/" + item.id,
+      path: "/contest/" + item.id,
     });
   } else {
     ElMessage.info("请先报名再查看比赛详情");
@@ -457,12 +457,12 @@ const getCompetitionUri = (item) => {
   line-height: 0;
 }
 
-/deep/ .el-card__header {
+::v-deep .el-card__header {
   border-bottom: 0;
   padding-bottom: 0;
 }
 
-/deep/ .el-card__body {
+::v-deep .el-card__body {
   padding: 50px;
 }
 
