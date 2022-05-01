@@ -5,9 +5,10 @@
       <OjNavBar v-if="isRefresh"></OjNavBar>
     </div>
     <el-scrollbar class="oj-scroll">
-      <div id="oj-content">
+      <div ref="main" id="oj-content">
         <router-view></router-view>
       </div>
+      <oj-footer :style="'margin-top:'+footerTopMargin+'px'"></oj-footer>
     </el-scrollbar>
   </div>
   <div v-else>
@@ -15,6 +16,7 @@
       <router-view></router-view>
     </div>
   </div>
+
   <!-- 回到顶部-->
   <el-backtop/>
 </template>
@@ -26,9 +28,12 @@ import store from "@/store";
 import {mapGetters} from "vuex";
 import OjNavBar from "@/components/oj/common/OjNavBar";
 import {useRoute} from "vue-router";
+import OjFooter from "@/components/oj/common/OjFooter";
 
 //顶部导航栏容器
 const affix = ref()
+//主要窗口容器
+const main=ref()
 //监听页面大小变化
 const erd = elementResizeDetectorMaker()
 //是否刷新
@@ -40,12 +45,29 @@ const role = computed(
 const route = useRoute()
 
 /**
+ * 底部距离
+ */
+const footerTopMargin= ref()
+
+
+/**
  * 初始化
  * 解决顶部导航组件响应变化
  */
 onMounted(() => {
   erd.listenTo(affix.value, () => {
     reloadNavBar()
+  })
+  erd.listenTo(main.value, (ele) => {
+    // console.log('屏幕高度',document.documentElement.clientHeight)
+    // console.log('主窗口高度',ele.offsetHeight)
+    if(document.documentElement.clientHeight-233<ele.offsetHeight)
+    {
+      footerTopMargin.value=80
+    }
+    else {
+      footerTopMargin.value=document.documentElement.clientHeight-ele.offsetHeight-233
+    }
   })
   //路由 角色
   if (route.path.split('/')[1] === 'admin') {
@@ -140,7 +162,6 @@ el-row去除margin
     top: 60px;
     right: 0;
     left: 0;
-
     height: calc(100% - 60px);
   }
 }

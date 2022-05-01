@@ -14,9 +14,15 @@ import VueParticles from 'vue-particles'
 import mavonEditor from 'mavon-editor'
 import "mavon-editor/dist/css/index.css";
 
+import 'highlight.js/styles/atom-one-light.css'
+import 'highlight.js/lib/common'
+import hljsVuePlugin from '@highlightjs/vue-plugin'
+
+
 const app = createApp(App)
 
 app
+    .use(hljsVuePlugin)
     .use(mavonEditor)
     .use(VueParticles)
     .use(VXETable)

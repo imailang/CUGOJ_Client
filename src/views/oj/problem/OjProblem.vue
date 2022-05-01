@@ -33,7 +33,7 @@
             <vxe-column field="ID" title="题目ID"></vxe-column>
             <vxe-column field="Title" title="题目">
               <template v-slot="{row}">
-                <el-link @click="getProblemUri(row.ID)">{{ row.Title }}</el-link>
+                <el-link @click="getProblemUri(row.ID)" style="color: #308ff1">{{ row.Title }}</el-link>
               </template>
             </vxe-column>
             <vxe-column field="SubmitNumber" title="提交数"></vxe-column>
@@ -166,14 +166,13 @@ const getProblemList = () => {
     odd2:{},  //ID
     odd3:{}   //题目
   }
-
   if(searchKey.value!=='')
   {
-    params.odd2=JSON.parse(JSON.stringify( params.odd1))
-    params.odd2.ID=searchKey.value
-    params.odd3=JSON.parse(JSON.stringify( params.odd1))
-    params.odd3.title=searchKey.value
-    params.odd1={}
+    params.odd2 = JSON.parse(JSON.stringify(params.odd1))
+    params.odd2['ID like ?'] = '%' + searchKey.value + '%'
+    params.odd3 = JSON.parse(JSON.stringify(params.odd1))
+    params.odd3['title like ?'] = '%' + searchKey.value + '%'
+    params.odd1 = {}
   }
   api.problem.getProblemList(params).then(response => {
     problemList.value = JSON.parse(response.Info)
