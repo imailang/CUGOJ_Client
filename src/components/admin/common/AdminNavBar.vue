@@ -54,12 +54,6 @@
         </el-icon>
         <span>竞赛列表</span>
       </el-menu-item>
-      <el-menu-item index="/admin/contest/create">
-        <el-icon>
-          <Grid></Grid>
-        </el-icon>
-        <span>创建竞赛</span>
-      </el-menu-item>
     </el-sub-menu>
   </el-menu>
 </template>
