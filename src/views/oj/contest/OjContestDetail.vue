@@ -42,7 +42,7 @@
     <el-slider v-model="curVal" size="large" disabled="true" />
   </el-card>
 
-  <el-card>
+  <el-card style="margin-top: 10px">
     <el-row justify="space-around">
       <el-col :span="22">
         <el-tabs
@@ -82,9 +82,46 @@
                 </el-col>
               </el-row>
             </div>
-            <div v-else></div>
+            <div v-else>
+              <vxe-table :data="contestProblems" ref="Xtable">
+                <vxe-column field="showID" title="#" width="90px"></vxe-column>
+                <vxe-column field="title" title="题目">
+                  <template v-slot="{ row }">
+                    <el-link @click="getProblemURI(row.pID)">{{
+                      row.title
+                    }}</el-link>
+                  </template>
+                </vxe-column>
+                <vxe-column
+                  field="submitCount"
+                  title="提交数"
+                  width="120px"
+                ></vxe-column>
+                <vxe-column title="通过率" width="200px">
+                  <template v-slot="{ row }">
+                    <el-tooltip
+                      class="box-item"
+                      effect="dark"
+                      :content="row.submitACCount + '/' + row.submitCount"
+                      placement="top"
+                    >
+                      <el-progress
+                        :text-inside="true"
+                        :percentage="
+                          (row.submitACCount * 100) /
+                          Math.max(1, row.submitCount)
+                        "
+                        :stroke-width="24"
+                      />
+                    </el-tooltip>
+                  </template>
+                </vxe-column>
+              </vxe-table>
+            </div>
           </el-tab-pane>
-          <el-tab-pane label="状态">状态</el-tab-pane>
+          <el-tab-pane label="状态">
+            <OjJudgerList :CID="contestID"> </OjJudgerList>
+          </el-tab-pane>
           <el-tab-pane label="排名">排名</el-tab-pane>
           <el-tab-pane label="公告">公告</el-tab-pane>
         </el-tabs>
@@ -102,7 +139,8 @@ import { Calendar, Goblet, User } from "@element-plus/icons-vue";
 import moment from "moment";
 import { ElMessage } from "element-plus";
 import api from "@/api/api";
-
+import router from "@/router";
+import OjJudgerList from "@/components/oj/common/OjJudgerList.vue";
 /**
  * 路由
  */
@@ -114,17 +152,31 @@ const curVal = ref(0);
 
 const contestInfo = reactive({});
 
+const contestID = ref(0);
+
+const contestProblems = ref([]);
+
 /**
  * 初始化
  */
 onMounted(() => {
+  contestID.value = route.params.contestId;
   updateContest();
 });
 
+const getProblemURI = (id) => {
+  router.push({
+    path: "/contest/problem/" + id,
+  });
+};
+
 const updateContest = () => {
-  api.contest.getContestDetail(route.params.contestId).then((response) => {
-    if (typeof response === "undefined" || response.Statu != "000") {
+  api.contest.getContestDetail(contestID.value).then((response) => {
+    if (typeof response === "undefined") {
       ElMessage.error("请求出错");
+      return;
+    } else if (response.Statu != "000") {
+      ElMessage.error(response.Info);
       return;
     }
     var element = JSON.parse(response.Info);
@@ -159,6 +211,28 @@ const updateContest = () => {
     contestInfo.problems = element.Problems;
     contestInfo.profile = element.Profile;
     contestInfo.description = element.Description;
+  });
+  api.contest.getRunningContestProblems(contestID.value).then((response) => {
+    if (typeof response === "undefined") {
+      ElMessage.error("请求出错");
+      return;
+    } else if (response.Statu != "000") {
+      contestProblems.value = [];
+      return;
+    }
+    var tmp = JSON.parse(response.Info);
+    contestProblems.value = [];
+    tmp.forEach((item) => {
+      contestProblems.value.push({
+        showID: item.ShowID,
+        pID: item.PID,
+        title: item.Title,
+        color: item.Color,
+        score: item.Score,
+        submitCount: item.SubmitCount,
+        submitACCount: item.SubmitACCount,
+      });
+    });
   });
 };
 </script>

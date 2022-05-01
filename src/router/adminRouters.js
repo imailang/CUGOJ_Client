@@ -6,6 +6,7 @@ const Oj = () => import('@/views/Oj')
 const AdminUsers = () => import('@/views/admin/user/AdminUsers')
 const AdminContestList = () => import('@/views/admin/contest/AdminContestList')
 const AdminContestCreate = () => import('@/views/admin/contest/AdminContestCreate')
+const AdminContestEdit = () => import('@/views/admin/contest/AdminContestEdit')
 const AdminProblemEdit = () => import('@/views/admin/problem/AdminProblemEdit')
 const AdminCasesEdit = () => import('@/views/admin/problem/AdminCasesEdit')
 const adminRouters = [
@@ -55,9 +56,14 @@ const adminRouters = [
                         meta: { title: '创建竞赛', requireAuth: true },
                     },
                     {
+                        path: '/admin/contest/edit/:contestId',
+                        component: AdminContestEdit,
+                        meta: { title: '编辑竞赛', requireAuth: true }
+                    },
+                    {
                         path: '/admin/problem/cases/:problemId',
                         component: AdminCasesEdit,
-                        meta: { title: '测试用例编辑' }
+                        meta: { title: '测试用例编辑', requireAuth: true }
                     },
                 ]
             }
