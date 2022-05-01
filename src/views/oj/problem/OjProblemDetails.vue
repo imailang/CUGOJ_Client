@@ -19,15 +19,15 @@
                 <div v-show="description.BackGround !== ''">
                   <div style="color: #3090f2">题目背景 ：</div>
                   <p
-                    style="margin-left: 30px"
-                    v-html="description.BackGround"
+                      style="margin-left: 30px"
+                      v-html="description.BackGround"
                   ></p>
                 </div>
                 <div v-show="description.Description !== ''">
                   <div style="color: #3090f2">题目描述 ：</div>
                   <p
-                    style="margin-left: 30px"
-                    v-html="description.Description"
+                      style="margin-left: 30px"
+                      v-html="description.Description"
                   ></p>
                 </div>
                 <div v-show="description.Input !== ''">
@@ -40,10 +40,10 @@
                 </div>
                 <div>
                   <el-row
-                    v-for="(item, index) in description.Examples"
-                    :key="index"
-                    justify="space-between"
-                    :gutter="20"
+                      v-for="(item, index) in description.Examples"
+                      :key="index"
+                      justify="space-between"
+                      :gutter="20"
                   >
                     <el-col :span="12">
                       <div style="color: #3090f2">
@@ -72,13 +72,13 @@
                       </el-card>
                     </el-col>
                     <el-col
-                      :span="24"
-                      style="margin-top: 10px; font-size: 14px"
+                        :span="24"
+                        style="margin-top: 10px; font-size: 14px"
                     >
                       <i>用例提示：</i>
                       <p
-                        style="margin-left: 30px"
-                        v-html="marked(item.tips)"
+                          style="margin-left: 30px"
+                          v-html="marked(item.tips)"
                       ></p>
                     </el-col>
                   </el-row>
@@ -86,8 +86,8 @@
                 <div v-show="description.Hint !== ''">
                   <div style="color: #3090f2">提示 ：</div>
                   <p
-                    style="margin-left: 30px; font-size: 14px"
-                    v-html="description.Hint"
+                      style="margin-left: 30px; font-size: 14px"
+                      v-html="description.Hint"
                   ></p>
                 </div>
               </div>
@@ -105,22 +105,22 @@
               <!-- 评测列表-->
               <div>
                 <vxe-table
-                  :data="evaluationList"
-                  ref="evaluationListRef"
-                  stripe
-                  align="center"
-                  show-overflow
-                  :row-config="{ height: 35 }"
+                    :data="evaluationList"
+                    ref="evaluationListRef"
+                    stripe
+                    align="center"
+                    show-overflow
+                    :row-config="{ height: 35 }"
                 >
                   <vxe-column
-                    field="ID"
-                    title="评测编号"
-                    width="50px"
+                      field="ID"
+                      title="评测编号"
+                      width="50px"
                   ></vxe-column>
                   <vxe-column field="Status" title="评测状态" width="92">
                     <template v-slot="{ row }">
                       <el-tag
-                        :style="
+                          :style="
                           'background-color:' +
                           colorList[row.Status] +
                           ';color: white;font-size:14px;width:80px'
@@ -131,7 +131,7 @@
                     </template>
                   </vxe-column>
                   <vxe-column field="Time_use" title="耗时">
-                    <template v-slot="{ row }"> {{ row.TimeUse }} ms </template>
+                    <template v-slot="{ row }"> {{ row.TimeUse }} ms</template>
                   </vxe-column>
                   <vxe-column field="Memory_use" title="内存">
                     <template v-slot="{ row }">
@@ -139,13 +139,13 @@
                     </template>
                   </vxe-column>
                   <vxe-column
-                    field="Length"
-                    title="代码长度"
-                    width="50px"
+                      field="Length"
+                      title="代码长度"
+                      width="50px"
                   ></vxe-column>
                   <vxe-column field="Language" title="语言"></vxe-column>
                   <vxe-column field="Judger" title="评测机"></vxe-column>
-                  <vxe-column field="SubmitTime" title="提交时间" width="50px">
+                  <vxe-column field="SubmitTime" title="提交时间">
                     <template v-slot="{ row }">
                       {{ updateTime(row.SubmitTime) }}
                     </template>
@@ -155,13 +155,13 @@
               <!-- 分页-->
               <div>
                 <vxe-pager
-                  perfect
-                  v-model:current-page="pageBody.offset"
-                  v-model:page-size="pageBody.pageSize"
-                  :total="Number(pageBody.totalPage)"
-                  @page-change="handleSizeChange"
-                  :page-sizes="[5, 10, 20, 50]"
-                  :layouts="[
+                    perfect
+                    v-model:current-page="pageBody.offset"
+                    v-model:page-size="pageBody.pageSize"
+                    :total="Number(pageBody.totalPage)"
+                    @page-change="handleSizeChange"
+                    :page-sizes="[5, 10, 20, 50]"
+                    :layouts="[
                     'PrevJump',
                     'PrevPage',
                     'JumpNumber',
@@ -175,6 +175,41 @@
                 </vxe-pager>
               </div>
             </el-tab-pane>
+            <!-- 测试点-->
+            <el-tab-pane>
+              <template #label>
+                <div>
+                  <el-icon style="vertical-align: -2px">
+                    <Cpu></Cpu>
+                  </el-icon>
+                  测试点信息
+                </div>
+              </template>
+              测试点信息
+            </el-tab-pane>
+            <!-- 源代码-->
+            <el-tab-pane>
+              <template #label>
+                <div>
+                  <el-icon style="vertical-align: -2px">
+                    <Coin></Coin>
+                  </el-icon>
+                  源代码
+                </div>
+              </template>
+              <el-row style="text-align: left;font-size: 20px;border-left: 2px solid #19bc6b;">
+                <el-col :span="24">
+                  <el-button style="position: absolute;right: 0;top:20px" type="text"
+                             @click="copy(lastEvaluation.Code)">
+                    <el-icon size="large">
+                      <CopyDocument></CopyDocument>
+                    </el-icon>
+                    复制
+                  </el-button>
+                  <highlightjs :code="lastEvaluation.Code"></highlightjs>
+                </el-col>
+              </el-row>
+            </el-tab-pane>
           </el-tabs>
         </el-scrollbar>
       </pane>
@@ -182,31 +217,32 @@
         <!--提交页-->
         <el-scrollbar class="problem-right">
           <OjCodeEditor
-            v-loading="loading"
-            v-model:code="code"
-            v-model:language="language"
+              v-loading="loading"
+              v-model:code="code"
+              v-model:language="language"
           ></OjCodeEditor>
           <el-row
-            justify="end"
-            style="position: absolute; right: 30px; bottom: 25px"
-            @click="Loginfirst"
+              justify="end"
+              style="position: absolute; right: 30px; bottom: 25px"
+              @click="Loginfirst"
           >
             <el-button
-              :disabled="!isLogin"
-              round
-              type="warning"
-              @click="reset"
-              style="margin-right: 10px"
-              >重置
+                :disabled="!isLogin"
+                round
+                type="warning"
+                @click="reset"
+                style="margin-right: 10px"
+            >重置
             </el-button>
             <el-button
-              :loading="loading"
-              :disabled="!isLogin"
-              round
-              type="primary"
-              @click="submitCode"
-              style="margin-right: 10px"
-              >提交
+                :loading="loading"
+                :disabled="!isLogin"
+                round
+                type="primary"
+                @click="submitCode"
+                style="margin-right: 10px"
+            >提交
+
             </el-button>
           </el-row>
         </el-scrollbar>
@@ -216,27 +252,28 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
-import { Clock, CopyDocument, Notebook } from "@element-plus/icons-vue";
+import {computed, onMounted, reactive, ref} from "vue";
+import {useRoute} from "vue-router";
+import {Clock, Coin, CopyDocument, Cpu, Notebook} from "@element-plus/icons-vue";
 import api from "@/api/api";
 import OjCodeEditor from "@/components/oj/common/OjCodeEditor";
-import { Splitpanes, Pane } from "splitpanes";
+import {Splitpanes, Pane} from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
-import { marked } from "marked";
-import { ElMessage } from "element-plus";
+import {marked} from "marked";
+import {ElMessage} from "element-plus";
 import useClipboard from "vue-clipboard3";
 import store from "@/store";
 import { mapGetters } from "vuex";
 import moment from "moment";
 
-const { toClipboard } = useClipboard();
+
+const {toClipboard} = useClipboard();
 const route = useRoute();
 const problemStatus = ref("");
 const problemInfo = ref({});
 const description = ref({});
 const code = ref(
-  '#include<iostream>\nusing namespace std;\nint main(){\n    cout<<"hello";\n}'
+    '#include<iostream>\nusing namespace std;\nint main(){\n    cout<<"hello";\n}'
 );
 const language = ref("c++11");
 const submitLanguage = ref({
@@ -273,15 +310,21 @@ const evaluationList = ref();
  */
 const evaluationListRef = ref();
 /**
+ * 最近评测
+ */
+const lastEvaluation = ref({
+  Code: ''
+})
+/**
  * 获取store 是否登录字段
  */
 const isLogin = computed(
-  mapGetters(["getIsLogin"]).getIsLogin.bind({ $store: store })
+    mapGetters(["getIsLogin"]).getIsLogin.bind({$store: store})
 );
 /**
  * 分页
  */
-const pageBody = ref({
+const pageBody = reactive({
   pageSize: 10,
   offset: 1,
   totalPage: null,
@@ -291,9 +334,9 @@ const pageBody = ref({
  */
 const handleSizeChange = () => {
   let pages =
-    Math.floor(pageBody.value.totalPage / pageBody.value.pageSize) + 1;
-  if (pageBody.value.offset >= pages) {
-    pageBody.value.offset = pages;
+      Math.floor(pageBody.totalPage / pageBody.pageSize) + 1;
+  if (pageBody.offset >= pages) {
+    pageBody.offset = pages;
   }
   getMyEvaluation();
 };
@@ -302,10 +345,14 @@ const handleSizeChange = () => {
  * 左边标签页更换前钩子
  */
 const beforeChangeTab = (activeName) => {
-  if (Number(activeName) === 1) {
+  if (Number(activeName) !== 0) {
     if (isLogin.value) {
-      getMyListTotal();
-      getMyEvaluation();
+      if (Number(activeName) === 1) {
+        getMyListTotal();
+        getMyEvaluation();
+      } else {
+        getLastEvaluation()
+      }
     } else {
       ElMessage.error("请先登录");
       store.dispatch("changeLoginVisible", true);
@@ -314,39 +361,64 @@ const beforeChangeTab = (activeName) => {
   }
 };
 /**
+ * 获取最新的评测
+ */
+const getLastEvaluation = () => {
+  api.judge
+      .getJudgeList({
+        pagequery: {
+          offset: 0,
+          pagesize: 1,
+        },
+        odd1: {
+          UID: store.getters.getUserInfo.ID,
+          p_id: problemInfo.value.ID,
+        },
+      })
+      .then(res => {
+        if (res.Statu === '000') {
+          api.judge.getJudgeFull(JSON.parse(res.Info)[0].ID)
+              .then(res => {
+                lastEvaluation.value = JSON.parse(res.Info)
+              })
+        }
+      })
+
+}
+/**
  * 获取我的评测
  */
 const getMyEvaluation = () => {
   api.judge
-    .getJudgeList({
-      pagequery: {
-        offset: pageBody.value.offset - 1,
-        pagesize: pageBody.value.pageSize,
-      },
-      odd1: {
-        UID: store.getters.getUserInfo.ID,
-        p_id: problemInfo.value.ID,
-      },
-    })
-    .then((res) => {
-      console.log(res);
-      evaluationList.value = JSON.parse(res.Info);
-    });
+      .getJudgeList({
+        pagequery: {
+          offset: pageBody.offset - 1,
+          pagesize: pageBody.pageSize,
+        },
+        odd1: {
+          UID: store.getters.getUserInfo.ID,
+          p_id: problemInfo.value.ID,
+        },
+      })
+      .then((res) => {
+        evaluationList.value = JSON.parse(res.Info);
+        console.log(evaluationList.value)
+      });
 };
 /**
  * 获取我的评测总数
  */
 const getMyListTotal = () => {
   api.judge
-    .getJudgeCount({
-      odd1: {
-        UID: store.getters.getUserInfo.ID,
-        p_id: problemInfo.value.ID,
-      },
-    })
-    .then((res) => {
-      pageBody.value.totalPage = res.Info;
-    });
+      .getJudgeCount({
+        odd1: {
+          UID: store.getters.getUserInfo.ID,
+          p_id: problemInfo.value.ID,
+        },
+      })
+      .then((res) => {
+        pageBody.totalPage = res.Info;
+      });
 };
 /**
  * 修改时间格式
@@ -393,9 +465,9 @@ const submitCode = async () => {
             res = JSON.parse(res.Info);
             console.log(res);
             if (
-              res.Status !== "Pending" &&
-              res.Status !== "Compiling" &&
-              res.Status !== "Running"
+                res.Status !== "Pending" &&
+                res.Status !== "Compiling" &&
+                res.Status !== "Running"
             ) {
               loading.value = false;
               ElMessage.success(res.Status);
@@ -452,11 +524,9 @@ const getProblem = () => {
 
 .problem-right {
   background-color: #ffffff;
-  width: calc(100% - 5px);
 }
 
 .problem-left {
-  width: calc(100% - 5px);
   height: 100%;
   background-color: #ffffff;
 }
@@ -465,31 +535,23 @@ const getProblem = () => {
   border-bottom: 0;
 }
 
-.problem-left ::v-deep .el-card__body {
-  padding: 5px;
-}
 
-.footer {
-  position: fixed;
-  bottom: 0;
-  right: 20px;
-}
 
 .main {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
-  top: calc(2% + 60px);
+  top: calc(1% + 60px);
 }
 
-::v-deep .el-card__header {
+>>> .el-card__header {
   padding: 0;
   background-color: #ffffff;
   border: 0;
 }
 
-::v-deep .CodeMirror {
+>>> .CodeMirror {
   height: 776px;
 }
 </style>

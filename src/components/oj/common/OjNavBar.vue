@@ -162,7 +162,7 @@ const userInfo = computed(
   height: auto;
   width: 100%;
   z-index: 2000;
-  background-color: #fff;
+  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
 }
 

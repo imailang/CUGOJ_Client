@@ -7,6 +7,7 @@ const OjRank = () => import('@/views/oj/rank/OjRank')
 const OjProblem = () => import('@/views/oj/problem/OjProblem')
 const OjPractice = () => import('@/views/oj/practice/OjPractice')
 const OjEvaluation = () => import('@/views/oj/evaluation/OjEvaluation')
+const OjEvaluationDetails = () => import('@/views/oj/evaluation/OjEvaluationDetails')
 const OjDiscuss = () => import("@/views/oj/discuss/OjDiscuss");
 const OjProblemDetails = () => import("@/views/oj/problem/OjProblemDetails")
 const OjNotFound = () => import("@/views/OjNotFound")
@@ -59,6 +60,11 @@ const ojRouters = [
             {
                 path: '/evaluation',
                 component: OjEvaluation,
+                meta: { requireAuth: true },
+            },
+            {
+                path: '/evaluation/:evaluationId',
+                component: OjEvaluationDetails,
                 meta: { requireAuth: true },
             },
             {

@@ -93,10 +93,11 @@ import { ElMessage } from "element-plus";
 const clickRegister = () => {
   formRegisterRef.value.validate((valid) => {
     if (valid) {
+      formRegister.nickname=formRegister.username
       api.user.register(formRegister)
           .then(res => {
             console.log(res)
-            if (res.code === '200') {
+            if (res.code === 200) {
               ElMessage({
                 message: '注册成功',
                 type: 'success',
@@ -118,12 +119,14 @@ const emailVerification = () => {
         email: formRegister.email,
       };
       api.user.emailVerification(tmp).then((res) => {
-        if (res.code === "200") {
+        if (res.code === 200) {
+
           ElMessage({
             message: "验证码已发送!",
             type: "success",
           });
-        } else if (res.code === "500") {
+
+        } else if (res.code === 500) {
           ElMessage.warning("验证码已经发送，十分钟内有效");
         }
       });

@@ -18,7 +18,6 @@ function getJudgeCount(params) {
  */
 function getBaseJudge() {
     return axios.post('/judge/getbasejudge');
-
 }
 /**
  * 添加评测
@@ -34,6 +33,15 @@ function getJudge(params) {
     return axios.post('/judge/getjudge', params)
 }
 
+/**
+ * 获取完整评测结果
+ * @param params 评测ID
+ * @returns {Promise<AxiosResponse<any>>} 完整评测结果
+ */
+function getJudgeFull(params)
+{
+    return axios.post('/judge/getjudgefull',params)
+}
 
 /**
  * 获取比赛评测
@@ -48,5 +56,6 @@ export default {
     getJudgeList,
     getJudgeCount,
     getJudge,
-    getContestJudgeList
+    getContestJudgeList，
+    getJudgeFull，
 }
