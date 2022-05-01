@@ -120,10 +120,12 @@ const emailVerification = () => {
       };
       api.user.emailVerification(tmp).then((res) => {
         if (res.code === 200) {
+
           ElMessage({
             message: "验证码已发送!",
             type: "success",
           });
+
         } else if (res.code === 500) {
           ElMessage.warning("验证码已经发送，十分钟内有效");
         }

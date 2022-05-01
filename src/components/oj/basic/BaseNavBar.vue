@@ -1,10 +1,10 @@
 <template>
   <el-menu
-      :default-active="active"
-      class="el-menu-demo"
-      :mode="props.mode"
-      router
-      @select="closeDrawer"
+    :default-active="active"
+    class="el-menu-demo"
+    :mode="props.mode"
+    router
+    @select="closeDrawer"
   >
     <el-menu-item index="/home">
       <el-icon>
@@ -24,7 +24,7 @@
       </el-icon>
       训练
     </el-menu-item>
-    <el-menu-item index="/competition">
+    <el-menu-item index="/contest">
       <el-icon>
         <Goblet></Goblet>
       </el-icon>
@@ -70,53 +70,51 @@ import {
   Grid,
   Histogram,
   HomeFilled,
-  List, MagicStick,
+  List,
+  MagicStick,
   QuestionFilled,
   TrendCharts,
 } from "@element-plus/icons-vue";
 import store from "@/store";
-import {onBeforeMount, ref, watch} from "vue";
-import {useRoute} from "vue-router";
+import { onBeforeMount, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 
 /**
  * 传入数据 选择 横 竖 模式
  */
 // eslint-disable-next-line no-undef
-const props= defineProps({
-  mode:String,
-})
+const props = defineProps({
+  mode: String,
+});
 /**
  * 当前页面
  */
-const active=ref()
+const active = ref();
 /**
  * 理由
  */
-const route =useRoute()
+const route = useRoute();
 
 /**
  * 监听路由
  */
-watch(route,()=>{
-  active.value="/"+route.path.split('/')[1]
-})
+watch(route, () => {
+  active.value = "/" + route.path.split("/")[1];
+});
 /**
  * 渲染前
  */
-onBeforeMount(()=>{
-  active.value="/"+route.path.split('/')[1]
-})
+onBeforeMount(() => {
+  active.value = "/" + route.path.split("/")[1];
+});
 
 /**
  * 关闭左弹窗
  */
-const closeDrawer =()=>{
-  store.dispatch("changeLeftDrawerVisible",false)
-}
-
-
+const closeDrawer = () => {
+  store.dispatch("changeLeftDrawerVisible", false);
+};
 </script>
 
 <style scoped>
-
 </style>

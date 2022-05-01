@@ -242,6 +242,7 @@
                 @click="submitCode"
                 style="margin-right: 10px"
             >提交
+
             </el-button>
           </el-row>
         </el-scrollbar>
@@ -262,7 +263,7 @@ import {marked} from "marked";
 import {ElMessage} from "element-plus";
 import useClipboard from "vue-clipboard3";
 import store from "@/store";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 import moment from "moment";
 
 
@@ -533,6 +534,7 @@ const getProblem = () => {
 .el-tabs--border-card {
   border-bottom: 0;
 }
+
 
 
 .main {

@@ -1,17 +1,17 @@
-const Oj  =()=>import ( '@/views/Oj')
-const OjHome  =()=>import ( '@/views/oj/OjHome')
-const OjAbout  =()=>import ( '@/views/oj/about/OjAbout')
-const OjCompetition  =()=>import ( '@/views/oj/competition/OjCompetition')
-const OjTeam  =()=>import ( '@/views/oj/team/OjTeam')
-const OjRank  =()=>import ( '@/views/oj/rank/OjRank')
-const OjProblem =()=>import ('@/views/oj/problem/OjProblem')
-const OjPractice =()=>import( '@/views/oj/practice/OjPractice')
-const OjEvaluation=()=> import('@/views/oj/evaluation/OjEvaluation')
-const OjDiscuss =()=>import("@/views/oj/discuss/OjDiscuss");
-const OjProblemDetails=()=>import("@/views/oj/problem/OjProblemDetails")
-const OjNotFound=()=>import("@/views/OjNotFound")
-const OjCompetitionDetails =() =>import("@/views/oj/competition/OjCompetitionDetails")
-const OjUserHome=()=>import('@/views/oj/user/OjUserHome')
+const Oj = () => import('@/views/Oj')
+const OjHome = () => import('@/views/oj/OjHome')
+const OjAbout = () => import('@/views/oj/about/OjAbout')
+const OjContestList = () => import('@/views/oj/contest/OjContestList')
+const OjTeam = () => import('@/views/oj/team/OjTeam')
+const OjRank = () => import('@/views/oj/rank/OjRank')
+const OjProblem = () => import('@/views/oj/problem/OjProblem')
+const OjPractice = () => import('@/views/oj/practice/OjPractice')
+const OjEvaluation = () => import('@/views/oj/evaluation/OjEvaluation')
+const OjDiscuss = () => import("@/views/oj/discuss/OjDiscuss");
+const OjProblemDetails = () => import("@/views/oj/problem/OjProblemDetails")
+const OjNotFound = () => import("@/views/OjNotFound")
+const OjContestDetail = () => import("@/views/oj/contest/OjContestDetail")
+const OjUserHome = () => import('@/views/oj/user/OjUserHome')
 
 const ojRouters = [
     {
@@ -26,60 +26,60 @@ const ojRouters = [
     {
         path: '/',
         component: Oj,
-        children:[
+        children: [
             {
-                path:'/home',
-                component:OjHome,
+                path: '/home',
+                component: OjHome,
             },
             {
-                path:'/about',
-                component:OjAbout,
+                path: '/about',
+                component: OjAbout,
             },
             {
-                path:'/team',
-                component:OjTeam,
+                path: '/team',
+                component: OjTeam,
             },
             {
-                path:'/rank',
-                component:OjRank
+                path: '/rank',
+                component: OjRank
             },
             {
-                path:'/problem',
-                component:OjProblem
+                path: '/problem',
+                component: OjProblem
 
             },
             {
-                path:'/problem/:problemId',
+                path: '/problem/:problemId',
                 component: OjProblemDetails,
             },
             {
-                path:'/practice',
+                path: '/practice',
                 component: OjPractice
             },
             {
                 path: '/evaluation',
                 component: OjEvaluation,
-                meta: { requireAuth:true},
+                meta: { requireAuth: true },
             },
             {
                 path: '/discuss',
                 component: OjDiscuss
             },
             {
-                path: '/competition',
-                component: OjCompetition
+                path: '/contest',
+                component: OjContestList
             },
             {
-                path:'/competition/:competitionId',
-                component:OjCompetitionDetails,
+                path: '/contest/:contestId',
+                component: OjContestDetail,
             },
             {
-                path:'/user-home',
-                component:OjUserHome,
-                meta: { requireAuth:true},
+                path: '/user-home',
+                component: OjUserHome,
+                meta: { requireAuth: true },
             }
         ],
-        redirect:'/home'
+        redirect: '/home'
     }
 ]
 export default ojRouters
