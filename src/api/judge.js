@@ -65,5 +65,5 @@ export default {
     getJudge,
     getContestJudgeList,
     getJudgeFull,
-    getJudgeCases，
+    getJudgeCases,
   }
