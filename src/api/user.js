@@ -82,6 +82,25 @@ function getUserById(params) {
     return axios.post('/user/getuser', params)
 }
 
+/**
+ * 根据昵称或者用户名查询用户
+ */
+function queryUser(queryString) {
+    var params = {
+        pagequery: {
+            pagesize: 10,
+            offset: 0
+        },
+        odd1: {
+            "username like ?": "%" + queryString + "%"
+        },
+        odd2: {
+            "nickname like ?": "%" + queryString + "%"
+        }
+    }
+    return axios.post('/user/getuserlist', params)
+}
+
 export default {
     emailVerification,
     register,
@@ -94,5 +113,6 @@ export default {
     getLoginIdByToken,
     getUserByUsername,
     getUserById,
-    getSubmitCount
+    getSubmitCount,
+    queryUser,
 }

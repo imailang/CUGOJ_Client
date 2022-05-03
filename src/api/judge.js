@@ -38,9 +38,8 @@ function getJudge(params) {
  * @param params 评测ID
  * @returns {Promise<AxiosResponse<any>>} 完整评测结果
  */
-function getJudgeFull(params)
-{
-    return axios.post('/judge/getjudgefull',params)
+function getJudgeFull(params) {
+    return axios.post('/judge/getjudgefull', params)
 }
 
 /**
@@ -66,5 +65,5 @@ export default {
     getJudge,
     getContestJudgeList,
     getJudgeFull,
-    getJudgeCases,
-}
+    getJudgeCases，
+  }
