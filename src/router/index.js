@@ -30,9 +30,9 @@ const isLogin = async () => {
 }
 
 router.beforeEach((to, from, next) => {
-    isLogin().then(() => {
-        const is = store.getters.getIsLogin
-        if (to.matched.some(record => record.meta.requireAuth)) { // 判断该路由是否需要登录权限
+    if (to.matched.some(record => record.meta.requireAuth)) { // 判断该路由是否需要登录权限
+        isLogin().then(() => {
+            const is = store.getters.getIsLogin
             if (!is) {
                 //管理
                 if (to.path.split('/')[1] === 'admin') {
@@ -50,11 +50,11 @@ router.beforeEach((to, from, next) => {
             } else {
                 next()
             }
-        } else {
-            next()
-        }
-    })
-
+        })
+    }
+    else {
+        next()
+    }
 })
 
 export default router

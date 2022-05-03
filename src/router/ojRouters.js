@@ -13,6 +13,7 @@ const OjProblemDetails = () => import("@/views/oj/problem/OjProblemDetails")
 const OjNotFound = () => import("@/views/OjNotFound")
 const OjContestDetail = () => import("@/views/oj/contest/OjContestDetail")
 const OjUserHome = () => import('@/views/oj/user/OjUserHome')
+const OjUserSet = () => import('@/views/oj/user/OjUserSet')
 
 const ojRouters = [
     {
@@ -82,6 +83,11 @@ const ojRouters = [
             {
                 path: '/user-home',
                 component: OjUserHome,
+                meta: { requireAuth: true },
+            },
+            {
+                path: '/user-set',
+                component: OjUserSet,
                 meta: { requireAuth: true },
             }
         ],

@@ -65,8 +65,8 @@
               </span>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item>个人主页</el-dropdown-item>
-                  <el-dropdown-item>账户设置</el-dropdown-item>
+                  <el-dropdown-item @click="clickUserHome">个人主页</el-dropdown-item>
+                  <el-dropdown-item @click="clickUserSet">账户设置</el-dropdown-item>
                   <el-dropdown-item style="color: red" divided @click="logout"
                     >退出</el-dropdown-item
                   >
@@ -116,6 +116,12 @@ const logout = () => {
 };
 
 /**
+ * 跳转账户设置
+ */
+const clickUserSet = () => {
+  router.push("/user-set");
+};
+/**
  * 跳转用户主页
  */
 const clickUserHome = () => {
@@ -162,7 +168,6 @@ const userInfo = computed(
   height: auto;
   width: 100%;
   z-index: 2000;
-  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
 }
 

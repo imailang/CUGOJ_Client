@@ -72,9 +72,10 @@
         <vxe-column field="Length" title="代码长度"></vxe-column>
         <vxe-column field="Language" title="语言">
           <template v-slot="{row}">
-            <el-tooltip class="box-item" effect="dark" content="查看提交详情">
-              <el-link @click="getEvaluationUri(row.ID)" style="color: #308ff1">{{ LanguageList[row.Language] }}</el-link>
+            <el-tooltip v-if="store.getters.getUserInfo.ID===row.UserInfo.ID" class="box-item" effect="dark" content="查看提交详情">
+              <el-link  @click="getEvaluationUri(row.ID)" style="color: #308ff1">{{ LanguageList[row.Language] }}</el-link>
             </el-tooltip>
+            <div v-else>{{ LanguageList[row.Language] }}</div>
           </template>
         </vxe-column>
         <vxe-column field="Judger" title="评测机"></vxe-column>
