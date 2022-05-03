@@ -111,7 +111,7 @@ el-row去除margin
 @media screen and (max-width: 768px) {
   #oj-content {
     margin-top: 20px;
-    padding: 0 5px;
+    padding: 0 3%;
     min-width: 700px;
   }
 

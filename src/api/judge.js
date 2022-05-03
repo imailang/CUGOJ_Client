@@ -49,6 +49,14 @@ function getContestJudgeList(params) {
     return axios.post('/judge/getcontestjudgelist', params)
 }
 
+/**
+ * 获取评测测试点信息
+ */
+function getJudgeCases(params)
+{
+    return axios.post('/judge/getjudgecases',params);
+}
+
 export default {
     getBaseJudge,
     addJudge,
@@ -57,4 +65,5 @@ export default {
     getJudge,
     getContestJudgeList,
     getJudgeFull,
-}
+    getJudgeCases，
+  }
