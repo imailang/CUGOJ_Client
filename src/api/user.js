@@ -78,6 +78,9 @@ function getSubmitCount(params) {
     return axios.post('/user/getsubmitcount', params)
 }
 
+/**
+ * 根据用户ID查询用户
+ */
 function getUserById(params) {
     return axios.post('/user/getuser', params)
 }
@@ -101,6 +104,22 @@ function queryUser(queryString) {
     return axios.post('/user/getuserlist', params)
 }
 
+/**
+ * 修改用户
+ */
+function changeUser(params)
+{
+    return axios.post('/user/changeuser',params)
+}
+
+/**
+ * 用户信息模板
+ */
+function getBaseUser()
+{
+    return axios.post('/user/getbaseuser')
+}
+
 export default {
     emailVerification,
     register,
@@ -115,4 +134,6 @@ export default {
     getUserById,
     getSubmitCount,
     queryUser,
+    changeUser,
+    getBaseUser,
 }

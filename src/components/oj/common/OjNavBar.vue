@@ -51,7 +51,7 @@
             </el-tooltip>
             <el-link style="--el-link-hover-text-color: none">
               <el-avatar
-                src="https://assets.leetcode-cn.com/aliyun-lc-upload/users/mrwesleyfoxmailcom/avatar_1585403468.png?x-oss-process=image%2Fformat%2Cwebp"
+                :src="userInfo.Avatar"
                 style="margin-right: 5px"
                 @click="clickUserHome"
               ></el-avatar>

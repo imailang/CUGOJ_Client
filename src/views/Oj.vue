@@ -55,8 +55,8 @@ const footerTopMargin= ref()
  * 解决顶部导航组件响应变化
  */
 onMounted(() => {
+  // localStorage.setItem('userInfo',undefined)
   erd.listenTo(affix.value, () => {
-
     reloadNavBar()
   })
   erd.listenTo(main.value, (ele) => {
@@ -111,7 +111,7 @@ el-row去除margin
 @media screen and (max-width: 768px) {
   #oj-content {
     margin-top: 20px;
-    padding: 0 3%;
+    padding: 0 8%;
     min-width: 700px;
   }
 
