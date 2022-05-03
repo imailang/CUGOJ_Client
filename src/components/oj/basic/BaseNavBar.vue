@@ -48,12 +48,6 @@
       </el-icon>
       讨论
     </el-menu-item>
-    <el-menu-item index="/team">
-      <el-icon>
-        <Flag></Flag>
-      </el-icon>
-      团队
-    </el-menu-item>
     <el-menu-item index="/about">
       <el-icon>
         <MagicStick></MagicStick>
@@ -65,7 +59,6 @@
 
 <script setup>
 import {
-  Flag,
   Goblet,
   Grid,
   Histogram,

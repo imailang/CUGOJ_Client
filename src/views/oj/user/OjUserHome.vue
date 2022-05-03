@@ -7,7 +7,7 @@
             <el-col :xs="10" :sm="8" :lg="6">
               <el-avatar
                 style="--el-avatar-size: 120px"
-                src="https://assets.leetcode-cn.com/aliyun-lc-upload/users/mrwesleyfoxmailcom/avatar_1585403468.png?x-oss-process=image%2Fformat%2Cwebp"
+                :src="userInfo.Avatar"
               ></el-avatar>
             </el-col>
             <el-col :xs="14" :sm="16" :lg="18">
