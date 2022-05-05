@@ -43,6 +43,10 @@ function deleteContest(params) {
 function getRunningContestProblems(params) {
     return axios.post('/contest/getrunningtimecontest', params)
 }
+
+function getRecords(params) {
+    return axios.post('/contest/getrecords', params);
+}
 export default {
     getUserContestList,
     registerContest,
@@ -55,4 +59,5 @@ export default {
     getFullContest,
     deleteContest,
     getRunningContestProblems,
+    getRecords,
 }

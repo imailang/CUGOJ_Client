@@ -199,9 +199,9 @@
             </el-descriptions>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col>
-            <el-button type="primary">邀请加入</el-button>
+        <el-row justify="space-around">
+          <el-col style="text-align: center">
+            <el-button type="primary" @click="inviteMember">邀请加入</el-button>
           </el-col>
         </el-row>
       </el-col>
@@ -229,6 +229,26 @@ const route = useRoute();
 const showInvite = ref(0);
 const showDelete = ref(0);
 const selectUserInfo = reactive({ ID: 0 });
+
+const inviteMember = () => {
+  api.team
+    .inviteMember({
+      TID: Number(TID.value),
+      UID: selectUserInfo.ID,
+      Authur: memberInfo.value[0].UserInfo.Nickname,
+      Avatar: memberInfo.value[0].UserInfo.Avatar,
+    })
+    .then((response) => {
+      if (!response) {
+        ElMessage.error("请求出错");
+      } else if (response.Statu != "000") {
+        ElMessage.error(response.Info);
+      } else {
+        ElMessage.success("已发送邀请");
+        inviteDialog.value = false;
+      }
+    });
+};
 
 onBeforeMount(() => {
   UID.value = store.getters.getUserInfo.ID;
@@ -275,6 +295,15 @@ const querySearch = (queryString, cb) => {
             School: item.School,
           });
         }
+        // else {
+        //   results.push({
+        //     ID: item.ID,
+        //     Username: item.Username,
+        //     Nickname: item.Nickname,
+        //     Avatar: item.Avatar,
+        //     School: item.School,
+        //   });
+        // }
       });
       cb(results);
     }

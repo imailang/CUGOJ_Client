@@ -45,11 +45,24 @@
           <!-- 登录显示-->
           <el-row v-else class="btn-menu" align="middle">
             <el-tooltip class="box-item" effect="dark" content="通知中心">
-              <el-icon :size="25" style="margin-right: 5px">
-                <BellFilled></BellFilled>
-              </el-icon>
+              <el-badge
+                :value="messageCount"
+                :max="99"
+                class="item"
+                type="primary"
+                style="margin-right: 25px"
+                :hidden="messageCount == 0"
+              >
+                <el-icon
+                  :size="25"
+                  @click="clickMessage"
+                  style="cursor: pointer"
+                >
+                  <BellFilled></BellFilled>
+                </el-icon>
+              </el-badge>
             </el-tooltip>
-            <el-link style="--el-link-hover-text-color: none">
+            <el-link style="--el-link-hover-text-color: none; cursor: pointer">
               <el-avatar
                 src="https://assets.leetcode-cn.com/aliyun-lc-upload/users/mrwesleyfoxmailcom/avatar_1585403468.png?x-oss-process=image%2Fformat%2Cwebp"
                 style="margin-right: 5px"
@@ -65,8 +78,12 @@
               </span>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item @click="clickUserHome">个人主页</el-dropdown-item>
-                  <el-dropdown-item @click="clickUserSet">账户设置</el-dropdown-item>
+                  <el-dropdown-item @click="clickUserHome"
+                    >个人主页</el-dropdown-item
+                  >
+                  <el-dropdown-item @click="clickUserSet"
+                    >账户设置</el-dropdown-item
+                  >
                   <el-dropdown-item style="color: red" divided @click="logout"
                     >退出</el-dropdown-item
                   >
@@ -85,7 +102,7 @@
 
 <script setup>
 import { ArrowDown, BellFilled, Expand } from "@element-plus/icons-vue";
-import { computed } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import store from "@/store";
 import { mapGetters } from "vuex";
 import NavBar from "@/components/oj/basic/BaseNavBar";
@@ -95,6 +112,12 @@ import OjLeftDrawer from "@/components/oj/common/OjLeftDrawer";
 import router from "@/router";
 import api from "@/api/api";
 import { ElMessage } from "element-plus";
+
+const messageCount = ref(0);
+
+onBeforeMount(() => {
+  loadMessageCount();
+});
 
 /**
  * 退出
@@ -128,6 +151,12 @@ const clickUserHome = () => {
   router.push("/user-home");
 };
 /**
+ * 跳转消息中心
+ */
+const clickMessage = () => {
+  router.push("/message");
+};
+/**
  * 打开左弹窗
  */
 const openLeftDrawer = () => {
@@ -158,6 +187,21 @@ const isLogin = computed(
 const userInfo = computed(
   mapGetters(["getUserInfo"]).getUserInfo.bind({ $store: store })
 );
+
+/**
+ * 加载消息数
+ */
+const loadMessageCount = () => {
+  api.message.getUserMessageCount().then((response) => {
+    if (!response) {
+      ElMessage.error("请求出错");
+    } else if (response.Statu != "000") {
+      ElMessage.error(response.Info);
+    } else {
+      messageCount.value = Number(response.Info);
+    }
+  });
+};
 </script>
 
 <style scoped>

@@ -9,7 +9,7 @@
       <div ref="main" id="oj-content">
         <router-view></router-view>
       </div>
-      <oj-footer :style="'margin-top:'+footerTopMargin+'px'"></oj-footer>
+      <oj-footer :style="'margin-top:' + footerTopMargin + 'px'"></oj-footer>
     </el-scrollbar>
   </div>
   <div v-else>
@@ -29,13 +29,13 @@ import store from "@/store";
 import { mapGetters } from "vuex";
 import OjNavBar from "@/components/oj/common/OjNavBar";
 
-import {useRoute} from "vue-router";
+import { useRoute } from "vue-router";
 import OjFooter from "@/components/oj/common/OjFooter";
 
 //顶部导航栏容器
-const affix = ref()
+const affix = ref();
 //主要窗口容器
-const main=ref()
+const main = ref();
 //监听页面大小变化
 const erd = elementResizeDetectorMaker();
 //是否刷新
@@ -47,8 +47,7 @@ const route = useRoute();
 /**
  * 底部距离
  */
-const footerTopMargin= ref()
-
+const footerTopMargin = ref();
 
 /**
  * 初始化
@@ -56,20 +55,18 @@ const footerTopMargin= ref()
  */
 onMounted(() => {
   erd.listenTo(affix.value, () => {
-
-    reloadNavBar()
-  })
+    reloadNavBar();
+  });
   erd.listenTo(main.value, (ele) => {
     // console.log('屏幕高度',document.documentElement.clientHeight)
     // console.log('主窗口高度',ele.offsetHeight)
-    if(document.documentElement.clientHeight-233<ele.offsetHeight)
-    {
-      footerTopMargin.value=80
+    if (document.documentElement.clientHeight - 233 < ele.offsetHeight) {
+      footerTopMargin.value = 80;
+    } else {
+      footerTopMargin.value =
+        document.documentElement.clientHeight - ele.offsetHeight - 233;
     }
-    else {
-      footerTopMargin.value=document.documentElement.clientHeight-ele.offsetHeight-233
-    }
-  })
+  });
   //路由 角色
   if (route.path.split("/")[1] === "admin") {
     store.dispatch("changeRole", "admin");

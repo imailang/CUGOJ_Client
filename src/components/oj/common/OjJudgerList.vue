@@ -25,7 +25,12 @@
           </el-dropdown>
         </el-col>
         <el-col :xs="6" :sm="4">
-          <el-button round :icon="Refresh" type="primary" @click="getjudgerList"
+          <el-button
+            round
+            :icon="Refresh"
+            type="primary"
+            @click="getjudgerList"
+            v-loading="loading"
             >刷新</el-button
           >
         </el-col>
@@ -43,7 +48,6 @@
       >
         <vxe-column field="ID" title="评测编号"></vxe-column>
         <vxe-column field="PTitle" title="题目"></vxe-column>
-        <vxe-column field="UserInfo.Nickname" title="用户昵称"></vxe-column>
         <vxe-column field="Status" title="评测状态" width="90px">
           <template v-slot="{ row }">
             <el-tag
@@ -101,7 +105,9 @@
 <script setup>
 // eslint-disable-next-line no-undef,no-unused-vars
 const props = defineProps({
-  CID: Number,
+  CID: {
+    default: 0,
+  },
 });
 
 import { Refresh, ArrowDown } from "@element-plus/icons-vue";
@@ -189,6 +195,8 @@ const colorList = ref({
   SE: "#ff8000",
 });
 
+const loading = ref(false);
+
 onMounted(() => {
   getjudgerList();
 });
@@ -214,7 +222,9 @@ const pageBody = ref({
  * 获取评测列表
  */
 const getjudgerList = () => {
-  api.judge.getContestJudgeList(props.CID).then((res) => {
+  loading.value = true;
+  api.judge.getContestJudgeList(Number(props.CID)).then((res) => {
+    loading.value = false;
     if (typeof res == "undefined") {
       ElMessage.error("请求出错");
       return;
@@ -222,19 +232,23 @@ const getjudgerList = () => {
       return;
     }
     judgerData.value = JSON.parse(res.Info);
-    pageBody.value.totalPage = judgerData.value.length();
+    pageBody.value.totalPage = judgerData.value.length;
     filterData();
+    console.log(judgerList.value);
   });
 };
 
 const filterData = () => {
-  if (statusKey.value == "全部") {
+  if (statusKey.value == "状态") {
     judgerList.value = judgerData.value;
   } else {
     judgerList.value = judgerData.value.filter((item) => {
-      return item.Statu == statusKey.value;
+      return item.Status == statusKey.value;
     });
   }
+  judgerList.value.sort((a, b) => {
+    return -(new Date(a.SubmitTime) - new Date(b.SubmitTime));
+  });
 };
 
 /**
@@ -255,6 +269,8 @@ const handleSizeChange = () => {
 const updateTime = (val) => {
   return moment(val).format("YYYY-MM-DD HH:mm:ss");
 };
+
+defineExpose({ getjudgerList });
 </script>
 
 <style scoped>
