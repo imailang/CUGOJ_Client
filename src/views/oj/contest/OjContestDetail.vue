@@ -75,54 +75,80 @@
             </el-row>
           </el-tab-pane>
           <el-tab-pane label="题目">
-            <div v-if="contestInfo.status == '未开始'">
-              <el-row justify="space-around">
-                <el-col :span="20">
-                  <h1>比赛尚未开始</h1>
-                </el-col>
-              </el-row>
+            <div v-if="CPID == 0">
+              <div v-if="contestInfo.status == '未开始'">
+                <el-row justify="space-around">
+                  <el-col :span="20">
+                    <h1>比赛尚未开始</h1>
+                  </el-col>
+                </el-row>
+              </div>
+              <div v-else>
+                <vxe-table :data="contestProblems" ref="Xtable">
+                  <vxe-column
+                    field="showID"
+                    title="#"
+                    width="90px"
+                  ></vxe-column>
+                  <vxe-column field="title" title="题目">
+                    <template v-slot="{ row }">
+                      <el-link @click="getProblemURI(row.ID)">{{
+                        row.title
+                      }}</el-link>
+                    </template>
+                  </vxe-column>
+                  <vxe-column
+                    field="submitCount"
+                    title="提交数"
+                    width="120px"
+                  ></vxe-column>
+                  <vxe-column title="通过率" width="200px">
+                    <template v-slot="{ row }">
+                      <el-tooltip
+                        class="box-item"
+                        effect="dark"
+                        :content="row.submitACCount + '/' + row.submitCount"
+                        placement="top"
+                      >
+                        <el-progress
+                          :text-inside="true"
+                          :percentage="
+                            (
+                              (row.submitACCount * 100) /
+                              Math.max(1, row.submitCount)
+                            ).toFixed(2)
+                          "
+                          :stroke-width="24"
+                        />
+                      </el-tooltip>
+                    </template>
+                  </vxe-column>
+                </vxe-table>
+              </div>
             </div>
             <div v-else>
-              <vxe-table :data="contestProblems" ref="Xtable">
-                <vxe-column field="showID" title="#" width="90px"></vxe-column>
-                <vxe-column field="title" title="题目">
-                  <template v-slot="{ row }">
-                    <el-link @click="getProblemURI(row.pID)">{{
-                      row.title
-                    }}</el-link>
-                  </template>
-                </vxe-column>
-                <vxe-column
-                  field="submitCount"
-                  title="提交数"
-                  width="120px"
-                ></vxe-column>
-                <vxe-column title="通过率" width="200px">
-                  <template v-slot="{ row }">
-                    <el-tooltip
-                      class="box-item"
-                      effect="dark"
-                      :content="row.submitACCount + '/' + row.submitCount"
-                      placement="top"
-                    >
-                      <el-progress
-                        :text-inside="true"
-                        :percentage="
-                          (row.submitACCount * 100) /
-                          Math.max(1, row.submitCount)
-                        "
-                        :stroke-width="24"
-                      />
-                    </el-tooltip>
-                  </template>
-                </vxe-column>
-              </vxe-table>
+              <ContestProblem
+                :CPID="CPID"
+                :CID="contestID"
+                @back="
+                  () => {
+                    CPID = 0;
+                  }
+                "
+                @submited="submited"
+              ></ContestProblem>
             </div>
           </el-tab-pane>
           <el-tab-pane label="状态">
-            <OjJudgerList :CID="contestID"> </OjJudgerList>
+            <OjJudgerList ref="judgerList" :CID="contestID"> </OjJudgerList>
           </el-tab-pane>
-          <el-tab-pane label="排名">排名</el-tab-pane>
+          <el-tab-pane label="排名">
+            <OjStandings
+              ref="standings"
+              :CID="contestID"
+              :problems="contestProblems"
+            ></OjStandings>
+          </el-tab-pane>
           <el-tab-pane label="公告">公告</el-tab-pane>
         </el-tabs>
       </el-col>
@@ -133,14 +159,15 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from "vue";
+import { onBeforeMount, onMounted, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { Calendar, Goblet, User } from "@element-plus/icons-vue";
 import moment from "moment";
 import { ElMessage } from "element-plus";
 import api from "@/api/api";
-import router from "@/router";
 import OjJudgerList from "@/components/oj/common/OjJudgerList.vue";
+import ContestProblem from "@/components/oj/common/OjContestProblem.vue";
+import OjStandings from "@/components/oj/common/OjStandings.vue";
 /**
  * 路由
  */
@@ -156,18 +183,29 @@ const contestID = ref(0);
 
 const contestProblems = ref([]);
 
+const CPID = ref(0);
+
+const judgerList = ref();
+
+const standings = ref();
+
+onBeforeMount(() => {
+  contestID.value = route.params.contestId;
+});
 /**
  * 初始化
  */
 onMounted(() => {
-  contestID.value = route.params.contestId;
   updateContest();
 });
 
+const submited = () => {
+  judgerList.value.getjudgerList();
+  standings.value.updateRecords();
+};
+
 const getProblemURI = (id) => {
-  router.push({
-    path: "/contest/problem/" + id,
-  });
+  CPID.value = id;
 };
 
 const updateContest = () => {
@@ -211,6 +249,8 @@ const updateContest = () => {
     contestInfo.problems = element.Problems;
     contestInfo.profile = element.Profile;
     contestInfo.description = element.Description;
+    console.log(contestInfo);
+    console.log(element);
   });
   api.contest.getRunningContestProblems(contestID.value).then((response) => {
     if (typeof response === "undefined") {
@@ -224,6 +264,7 @@ const updateContest = () => {
     contestProblems.value = [];
     tmp.forEach((item) => {
       contestProblems.value.push({
+        ID: item.ID,
         showID: item.ShowID,
         pID: item.PID,
         title: item.Title,

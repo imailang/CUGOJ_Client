@@ -56,6 +56,12 @@ function getTitleByID(params) {
     return axios.post('/problem/gettitlebyid', params)
 }
 
+/**
+ * 获取比赛题目
+ */
+function getContestProblem(parmas) {
+    return axios.post('/problem/getcontestproblem', parmas)
+}
 
 export default {
     getProblemList,
@@ -66,4 +72,5 @@ export default {
     changeProblem,
     deleteProblem,
     getTitleByID,
+    getContestProblem
 }

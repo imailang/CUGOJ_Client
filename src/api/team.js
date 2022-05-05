@@ -28,6 +28,18 @@ function deleteTeam(params) {
     return axios.post('team/deleteTeam', params)
 }
 
+function inviteMember(params) {
+    return axios.post('team/invitemember', params)
+}
+
+function acceptInvite(params) {
+    return axios.post('team/acceptinvite', params)
+}
+
+function deniedInvite(params) {
+    return axios.post('team/deniedinvite', params)
+}
+
 export default {
     getTeamList,
     getSelfTeamList,
@@ -36,4 +48,7 @@ export default {
     changeTeam,
     getMember,
     deleteTeam,
+    inviteMember,
+    acceptInvite,
+    deniedInvite,
 }

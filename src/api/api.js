@@ -5,6 +5,7 @@ import cases from '@/api/case';
 import practice from '@/api/practice'
 import contest from '@/api/contest'
 import team from '@/api/team'
+import message from '@/api/message'
 
 export default {
     problem,
@@ -13,5 +14,6 @@ export default {
     cases,
     practice,
     contest,
-    team
+    team,
+    message
 }
