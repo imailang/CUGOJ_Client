@@ -89,6 +89,7 @@ const uploadSuccess = (response) => {
   }
   imgUrl.value = response.Info;
   teamInfo.Avatar = response.Info;
+  console.log(imgUrl.value)
 };
 
 const updateTeamInfo = () => {

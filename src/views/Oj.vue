@@ -1,4 +1,3 @@
-
 <template>
   <div v-if="role === 'user'">
     <!-- 顶部导航栏 -->
@@ -17,7 +16,6 @@
       <router-view></router-view>
     </div>
   </div>
-
   <!-- 回到顶部-->
   <el-backtop />
 </template>
@@ -29,8 +27,10 @@ import store from "@/store";
 import { mapGetters } from "vuex";
 import OjNavBar from "@/components/oj/common/OjNavBar";
 
-import { useRoute } from "vue-router";
+import {useRoute} from "vue-router";
+
 import OjFooter from "@/components/oj/common/OjFooter";
+
 
 //顶部导航栏容器
 const affix = ref();
@@ -47,16 +47,20 @@ const route = useRoute();
 /**
  * 底部距离
  */
-const footerTopMargin = ref();
+
+const footerTopMargin= ref()
 
 /**
  * 初始化
  * 解决顶部导航组件响应变化
  */
 onMounted(() => {
+  // localStorage.setItem('userInfo',undefined)
   erd.listenTo(affix.value, () => {
+
     reloadNavBar();
   });
+
   erd.listenTo(main.value, (ele) => {
     // console.log('屏幕高度',document.documentElement.clientHeight)
     // console.log('主窗口高度',ele.offsetHeight)
@@ -108,7 +112,7 @@ el-row去除margin
 @media screen and (max-width: 768px) {
   #oj-content {
     margin-top: 20px;
-    padding: 0 3%;
+    padding: 0 8%;
     min-width: 700px;
   }
 

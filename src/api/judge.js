@@ -99,5 +99,4 @@ export default {
     getContestJudgeList,
     getJudgeFull,
     getJudgeCases,
-
-}
+  }

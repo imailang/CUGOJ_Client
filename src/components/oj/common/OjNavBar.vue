@@ -15,9 +15,9 @@
           <div class="logo">
             <router-link to="/home">
               <el-image
-                style="width: 120px; height: 42px"
-                fit="scale-down"
-                :src="require('@/assets/logo.png')"
+                  style="width: 120px; height: 42px"
+                  fit="scale-down"
+                  :src="require('@/assets/logo.png')"
               ></el-image>
             </router-link>
           </div>
@@ -33,11 +33,11 @@
               登录
             </el-button>
             <el-button
-              round
-              type="danger"
-              @click="openRegister"
-              style="margin-left: 5px"
-              size="large"
+                round
+                type="danger"
+                @click="openRegister"
+                style="margin-left: 5px"
+                size="large"
             >
               注册
             </el-button>
@@ -64,9 +64,9 @@
             </el-tooltip>
             <el-link style="--el-link-hover-text-color: none; cursor: pointer">
               <el-avatar
-                src="https://assets.leetcode-cn.com/aliyun-lc-upload/users/mrwesleyfoxmailcom/avatar_1585403468.png?x-oss-process=image%2Fformat%2Cwebp"
-                style="margin-right: 5px"
-                @click="clickUserHome"
+                  :src="userInfo.Avatar"
+                  style="margin-right: 5px"
+                  @click="clickUserHome"
               ></el-avatar>
             </el-link>
             <el-dropdown trigger="click" size="large" style="margin-top: 8px">
@@ -104,14 +104,14 @@
 import { ArrowDown, BellFilled, Expand } from "@element-plus/icons-vue";
 import { computed, onBeforeMount, ref } from "vue";
 import store from "@/store";
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 import NavBar from "@/components/oj/basic/BaseNavBar";
 import OjLogin from "@/components/oj/common/OjLogin";
 import OjRegister from "@/components/oj/common/OjRegister";
 import OjLeftDrawer from "@/components/oj/common/OjLeftDrawer";
 import router from "@/router";
 import api from "@/api/api";
-import { ElMessage } from "element-plus";
+import {ElMessage} from "element-plus";
 
 const messageCount = ref(0);
 
@@ -124,20 +124,25 @@ onBeforeMount(() => {
  */
 const logout = () => {
   api.user
-    .logout({
-      username: userInfo.value.ID,
-    })
-    .then((res) => {
-      if (res.code === 200) {
-        router.push("/home");
-        store.dispatch("changeUserToken", undefined);
-        store.dispatch("changeUserInfo", undefined);
-        store.dispatch("changeIsLogin", false);
-        ElMessage.success("注销成功");
-      }
-    });
+      .logout()
+      .then((res) => {
+        if (res.code === 200) {
+          router.push("/home");
+          store.dispatch("changeUserToken", undefined);
+          store.dispatch("changeUserInfo", undefined);
+          store.dispatch("changeIsLogin", false);
+          ElMessage.success("注销成功");
+        }
+      });
 };
 
+/**
+ * 跳转管理员入口
+ */
+const clickAdminHome = () => {
+  console.log(userInfo.value)
+  window.open('/admin/home', '_blank');
+}
 /**
  * 跳转账户设置
  */
@@ -179,13 +184,13 @@ const openRegister = () => {
  * 获取store 是否登录字段
  */
 const isLogin = computed(
-  mapGetters(["getIsLogin"]).getIsLogin.bind({ $store: store })
+    mapGetters(["getIsLogin"]).getIsLogin.bind({$store: store})
 );
 /**
  * 用户信息
  */
 const userInfo = computed(
-  mapGetters(["getUserInfo"]).getUserInfo.bind({ $store: store })
+    mapGetters(["getUserInfo"]).getUserInfo.bind({$store: store})
 );
 
 /**
