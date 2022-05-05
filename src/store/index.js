@@ -51,6 +51,7 @@ let store = new Vuex.Store({
      */
     actions: {
         changeIsLogin({commit}, val) {
+            console.log(3)
             commit("changeIsLogin", val)
         },
         changeRole({commit}, val) {
@@ -77,6 +78,7 @@ let store = new Vuex.Store({
      */
     mutations: {
         changeIsLogin(state, val) {
+            console.log(1)
             state.isLogin = val
         },
         changeRole(state, val) {

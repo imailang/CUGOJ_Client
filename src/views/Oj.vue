@@ -1,4 +1,3 @@
-
 <template>
   <div v-if="role === 'user'">
     <!-- 顶部导航栏 -->
@@ -17,7 +16,6 @@
       <router-view></router-view>
     </div>
   </div>
-
   <!-- 回到顶部-->
   <el-backtop />
 </template>
@@ -28,9 +26,9 @@ import { computed, nextTick, onMounted, ref } from "vue";
 import store from "@/store";
 import { mapGetters } from "vuex";
 import OjNavBar from "@/components/oj/common/OjNavBar";
-
 import {useRoute} from "vue-router";
 import OjFooter from "@/components/oj/common/OjFooter";
+
 
 //顶部导航栏容器
 const affix = ref()
@@ -48,8 +46,6 @@ const route = useRoute();
  * 底部距离
  */
 const footerTopMargin= ref()
-
-
 /**
  * 初始化
  * 解决顶部导航组件响应变化

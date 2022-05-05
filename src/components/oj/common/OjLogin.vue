@@ -49,22 +49,36 @@
 
 <script setup>
 import { User, Lock } from "@element-plus/icons-vue";
-import { computed, reactive, ref } from "vue";
+import {computed, reactive, ref} from "vue";
 import { ElMessage } from "element-plus";
 import store from "@/store";
 import { mapGetters } from "vuex";
 import api from "@/api/api";
 import Md5 from "js-md5";
 import cookie from "js-cookie";
+import utils from "@/utils";
+const qiaoIP =require('qiao-get-ip')
+
+const IP= ref()
+
+const getIP= () => {
+  qiaoIP.getIpByIcanhazip()
+      .then(res=>{
+        IP.value=res
+      })
+}
 
 /**
  * 登录
  */
 const clickLogin = () => {
+  getIP()
+  console.log(utils.getDeviceType())
   api.user
     .login({
       username: formLogin.username,
       password: Md5(formLogin.password),
+      deviceType:utils.getDeviceType()
     })
     .then((res) => {
       if (res.code === 200) {

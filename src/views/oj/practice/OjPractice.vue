@@ -134,6 +134,7 @@ const submitCount = reactive({ loading: true });
 
 onBeforeMount(() => {
   api.practice.checkPermission().then((response) => {
+    console.log(response)
     if (typeof response == "undefined") {
       permission.value = false;
       ElMessage.error("请求出错");
