@@ -8,15 +8,16 @@
             <el-col :xs="6" :sm="5"><p class="panel-title">题目列表</p></el-col>
             <el-col :xs="7" :sm="8">
               <el-input
-                placeholder="请输入关键字"
-                :suffix-icon="Search"
-                @keyup.enter="getProblemList"
-                v-model="searchKey"
+                  placeholder="请输入关键字"
+                  :suffix-icon="Search"
+                  @keyup.enter="getProblemList"
+                  v-model="searchKey"
               />
             </el-col>
             <el-col :xs="4" :sm="4" style="text-align: right">
               <el-button round :icon="Refresh" type="primary" @click="resetKey"
-                >重置</el-button
+              >重置
+              </el-button
               >
             </el-col>
           </el-row>
@@ -45,17 +46,18 @@
             <vxe-column field="SubmitACNumber" title="AC">
               <template v-slot="{ row }">
                 <el-tooltip
-                  class="box-item"
-                  effect="dark"
-                  :content="row.SubmitACNumber + '/' + row.SubmitNumber"
-                  placement="top"
+                    class="box-item"
+                    effect="dark"
+                    :content="row.SubmitACNumber + '/' + row.SubmitNumber"
+                    placement="top"
                 >
                   <el-progress
-                    :text-inside="true"
-                    :percentage="
-                      calAcRate(row.SubmitNumber, row.SubmitACNumber)
-                    "
-                    :stroke-width="24"
+                      :text-inside="true"
+                      :percentage="
+                      calAcRate(row.SubmitNumber, row.SubmitACNumber)"
+                      :status="calAcStatus(calAcRate(row.SubmitNumber, row.SubmitACNumber))"
+                      :stroke-width="24"
+
                   />
                 </el-tooltip>
               </template>
@@ -65,12 +67,12 @@
         <!-- 分页-->
         <div style="float: right">
           <vxe-pager
-            v-model:current-page="pageBody.offset"
-            v-model:page-size="pageBody.pageSize"
-            :total="Number(pageBody.totalPage)"
-            @page-change="handleSizeChange"
-            :page-sizes="[5, 10, 20, 50]"
-            :layouts="[
+              v-model:current-page="pageBody.offset"
+              v-model:page-size="pageBody.pageSize"
+              :total="Number(pageBody.totalPage)"
+              @page-change="handleSizeChange"
+              :page-sizes="[5, 10, 20, 50]"
+              :layouts="[
               'PrevJump',
               'PrevPage',
               'JumpNumber',
@@ -90,52 +92,41 @@
         <!-- 进度条-->
         <div class="demo-progress">
           <el-progress
-            :text-inside="true"
-            :stroke-width="26"
-            :percentage="70"
+              :text-inside="true"
+              :stroke-width="26"
+              :percentage="70"
           />
           <el-progress
-            :text-inside="true"
-            :stroke-width="24"
-            :percentage="100"
-            status="success"
+              :text-inside="true"
+              :stroke-width="24"
+              :percentage="100"
+              status="success"
           />
           <el-progress
-            :text-inside="true"
-            :stroke-width="22"
-            :percentage="80"
-            status="warning"
+              :text-inside="true"
+              :stroke-width="22"
+              :percentage="80"
+              status="warning"
           />
           <el-progress
-            :text-inside="true"
-            :stroke-width="20"
-            :percentage="50"
-            status="exception"
+              :text-inside="true"
+              :stroke-width="20"
+              :percentage="50"
+              status="exception"
           />
         </div>
-        <el-button @click="test()"> fuck </el-button>
       </el-card>
     </el-col>
   </el-row>
 </template>
 
 <script setup>
-import { Search } from "@element-plus/icons-vue";
-import { Refresh } from "@element-plus/icons-vue";
-import { onMounted, ref } from "vue";
+import {Search} from "@element-plus/icons-vue";
+import {Refresh} from "@element-plus/icons-vue";
+import {onMounted, ref} from "vue";
 import router from "@/router";
 import api from "@/api/api";
-import axios from "@/api/http";
 
-const test = () => {
-  axios.post("/problem/getproblemlist", {
-    odd1: {},
-    odd2: { ID: "测试" },
-    odd3: {
-      "Title like ?": "%测试%",
-    },
-  });
-};
 
 /**
  * 题目列表
@@ -146,7 +137,7 @@ const problemList = ref([]);
  * 分页
  */
 const pageBody = ref({
-  pageSize: 10,
+  pageSize: 20,
   offset: 1,
   totalPage: null,
 });
@@ -162,13 +153,30 @@ const calAcRate = (num, acNum) => {
   if (num === 0) return 0;
   return (acNum / num).toFixed(2) * 100;
 };
+/**
+ * 计算进度条颜色
+ */
+const calAcStatus = (rate) => {
+  if (rate <= 20) {
+    return 'exception'
+  } else if (rate <= 40) {
+    return 'warning'
+  }
+  else if(rate<=80)
+  {
+    return 'primary'
+  }
+  else{
+    return 'success'
+  }
+}
 
 /**
  * 翻页
  */
 const handleSizeChange = () => {
   let pages =
-    Math.floor(pageBody.value.totalPage / pageBody.value.pageSize) + 1;
+      Math.floor(pageBody.value.totalPage / pageBody.value.pageSize) + 1;
   console.log(pages);
   if (pageBody.value.offset >= pages) {
     pageBody.value.offset = pages;
@@ -193,19 +201,18 @@ const resetKey = () => {
  * 获取题目列表
  */
 const getProblemList = () => {
-  getListTotal;
+  getListTotal();
   let params = {
     pagequery: {
       offset: pageBody.value.offset - 1,
       pagesize: pageBody.value.pageSize,
     },
 
-    odd1:{},  //题库
-    odd2:{},  //ID
-    odd3:{}   //题目
+    odd1: {},  //题库
+    odd2: {},  //ID
+    odd3: {}   //题目
   }
-  if(searchKey.value!=='')
-  {
+  if (searchKey.value !== '') {
     params.odd2 = JSON.parse(JSON.stringify(params.odd1))
     params.odd2['ID like ?'] = '%' + searchKey.value + '%'
     params.odd3 = JSON.parse(JSON.stringify(params.odd1))

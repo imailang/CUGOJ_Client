@@ -121,7 +121,7 @@
                 </el-col>
               </el-row>
             </el-form>
-            <el-button @click="submit" style="width: 60%" type="primary">提交</el-button>
+            <el-button @click="submitUserInfo" style="width: 60%" type="primary">提交</el-button>
           </el-col>
         </el-row>
       </el-card>
@@ -151,7 +151,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="13">
-                  <el-button type="primary" style="width: 60%">修改密码</el-button>
+                  <el-button type="primary" style="width: 60%" @click="submitPassword">修改密码</el-button>
                 </el-col>
               </el-row>
             </el-form>
@@ -192,7 +192,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="13">
-                  <el-button type="primary" style="width: 60%">修改邮箱</el-button>
+                  <el-button type="primary" style="width: 60%" @click="submitEmail">修改邮箱</el-button>
                 </el-col>
               </el-row>
             </el-form>
@@ -282,10 +282,17 @@ const checkAgainPassword = (rule, value, callback) => {
   callback();
 };
 
+
+const submitEmail=()=>{
+  ElMessage.error('暂不支持修改')
+}
+const submitPassword=()=>{
+  ElMessage.error('暂不支持修改')
+}
 /**
- * 提交
+ * 提交用户信息
  */
-const submit = () => {
+const submitUserInfo = () => {
   api.user.changeUser(userInfo)
       .then(res => {
         console.log(res)

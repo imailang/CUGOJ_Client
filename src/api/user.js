@@ -25,8 +25,8 @@ function login(params) {
 /**
  * 注销
  */
-function logout(params) {
-    return axios.post('/ojLogin/userInfo/logout', params)
+function logout() {
+    return axios.post('/ojLogin/userInfo/logout',{})
 }
 
 /**
