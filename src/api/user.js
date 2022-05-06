@@ -120,6 +120,40 @@ function getBaseUser()
     return axios.post('/user/getbaseuser')
 }
 
+/**
+ * session会话检查
+ */
+function checkSession()
+{
+    return axios.post('/ojLogin/userInfo/checkSession',{})
+}
+
+/**
+ * 踢人下线
+ * @param params 用户ID
+ */
+function kickout(params)
+{
+    return axios.post('/ojLogin/userInfo/kickout',params)
+}
+
+/**
+ * 封禁账号
+ * @param params  用户ID  封时间s
+ */
+function disable(params)
+{
+    return axios.post('/ojLogin/userInfo/disable',params)
+}
+
+/**
+ * 解封账号
+ * @param params  用户ID
+ */
+function untieDisable(params)
+{
+    return axios.post('/ojLogin/userInfo/untieDisable',params)
+}
 export default {
     emailVerification,
     register,
@@ -136,4 +170,8 @@ export default {
     queryUser,
     changeUser,
     getBaseUser,
+    checkSession,
+    kickout,
+    disable,
+    untieDisable
 }

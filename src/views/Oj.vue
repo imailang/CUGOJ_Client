@@ -17,19 +17,18 @@
     </div>
   </div>
   <!-- 回到顶部-->
-  <el-backtop />
+  <el-backtop/>
 </template>
 
 <script setup>
 import elementResizeDetectorMaker from "element-resize-detector";
-import { computed, nextTick, onMounted, ref } from "vue";
+import {computed, nextTick, onMounted, ref} from "vue";
 import store from "@/store";
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 import OjNavBar from "@/components/oj/common/OjNavBar";
-
 import {useRoute} from "vue-router";
-
 import OjFooter from "@/components/oj/common/OjFooter";
+
 
 
 //顶部导航栏容器
@@ -41,14 +40,11 @@ const erd = elementResizeDetectorMaker();
 //是否刷新
 const isRefresh = ref(false);
 //用户身份
-const role = computed(mapGetters(["getRole"]).getRole.bind({ $store: store }));
+const role = computed(mapGetters(["getRole"]).getRole.bind({$store: store}));
 const route = useRoute();
+//底部距离
+const footerTopMargin = ref()
 
-/**
- * 底部距离
- */
-
-const footerTopMargin= ref()
 
 /**
  * 初始化
@@ -68,7 +64,7 @@ onMounted(() => {
       footerTopMargin.value = 80;
     } else {
       footerTopMargin.value =
-        document.documentElement.clientHeight - ele.offsetHeight - 233;
+          document.documentElement.clientHeight - ele.offsetHeight - 233;
     }
   });
   //路由 角色

@@ -19,7 +19,7 @@
           </el-col>
         </el-row>
       </template>
-      <vxe-table border :data="contestList" v-loading="loading">
+      <vxe-table border :data="contestList" v-loading="loading" align="center">
         <vxe-column field="id" title="#" width="90px"></vxe-column>
         <vxe-column field="title" title="比赛名"></vxe-column>
         <vxe-column field="startTime" title="开始时间"></vxe-column>

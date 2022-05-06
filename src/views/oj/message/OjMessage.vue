@@ -14,21 +14,21 @@
               <el-row justify="start" align="middle" style="width: 100%">
                 <el-col :span="23">
                   <div v-for="item in messages" :key="item.ID">
-                    <el-divider />
+                    <el-divider/>
                     <el-row
-                      :gutter="10"
-                      @click="openMessage(item)"
-                      style="cursor: pointer"
+                        :gutter="10"
+                        @click="openMessage(item)"
+                        style="cursor: pointer"
                     >
                       <el-col :span="8">
-                        <el-avatar :size="50" :src="item.Avatar" />
+                        <el-avatar :size="50" :src="item.Avatar"/>
                       </el-col>
                       <el-col :span="16" style="text-align: left">
                         <el-row style="font-size: 22px; color: #505bff">
                           <el-badge
-                            value="new"
-                            class="item"
-                            :hidden="item.Read"
+                              value="new"
+                              class="item"
+                              :hidden="item.Read"
                           >
                             <b>{{ item.Sender }}</b>
                           </el-badge>
@@ -55,25 +55,29 @@
 </template>
 <script setup>
 import MessagePage from "@/components/oj/common/OjMessagePage.vue";
-const { default: api } = require("@/api/api");
-const { ref, reactive } = require("@vue/reactivity");
-const { onBeforeMount } = require("@vue/runtime-core");
-const { ElMessage } = require("element-plus");
+import store from "@/store";
+
+const {default: api} = require("@/api/api");
+const {ref, reactive} = require("@vue/reactivity");
+const {onBeforeMount} = require("@vue/runtime-core");
+const {ElMessage} = require("element-plus");
 
 const messages = ref([]);
 const currentMessage = reactive({});
 const opened = ref(false);
 
 onBeforeMount(() => {
-  api.message.getUserMessageList().then((response) => {
-    if (!response) {
-      ElMessage.error("请求出错");
-    } else if (response.Statu != "000") {
-      ElMessage.error(response.Info);
-    } else {
-      messages.value = JSON.parse(response.Info);
-    }
-  });
+  if (store.getters.getIsLogin) {
+    api.message.getUserMessageList().then((response) => {
+      if (!response) {
+        ElMessage.error("请求出错");
+      } else if (response.Statu != "000") {
+        ElMessage.error(response.Info);
+      } else {
+        messages.value = JSON.parse(response.Info);
+      }
+    });
+  }
 });
 
 const openMessage = (item) => {
