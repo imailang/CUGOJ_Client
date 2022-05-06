@@ -84,7 +84,27 @@
                 </el-row>
               </div>
               <div v-else>
-                <vxe-table :data="contestProblems" ref="Xtable">
+                <vxe-toolbar ref="xToolbar" style="text-align: right">
+                  <template #buttons>
+                    <span style="color: #747474; margin-right: 10px"
+                      >点击按钮刷新比刷新页面更快哦</span
+                    >
+                    <el-button
+                      round
+                      :icon="Refresh"
+                      type="primary"
+                      v-loading="loading"
+                      @click="updateContest"
+                      >刷新</el-button
+                    >
+                  </template>
+                </vxe-toolbar>
+
+                <vxe-table
+                  :data="contestProblems"
+                  ref="Xtable"
+                  v-loading="loading"
+                >
                   <vxe-column
                     field="showID"
                     title="#"
@@ -161,7 +181,7 @@
 <script setup>
 import { onBeforeMount, onMounted, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
-import { Calendar, Goblet, User } from "@element-plus/icons-vue";
+import { Calendar, Goblet, User, Refresh } from "@element-plus/icons-vue";
 import moment from "moment";
 import { ElMessage } from "element-plus";
 import api from "@/api/api";
@@ -189,6 +209,8 @@ const judgerList = ref();
 
 const standings = ref();
 
+const loading = ref(false);
+
 onBeforeMount(() => {
   contestID.value = route.params.contestId;
 });
@@ -209,7 +231,9 @@ const getProblemURI = (id) => {
 };
 
 const updateContest = () => {
+  loading.value = true;
   api.contest.getContestDetail(contestID.value).then((response) => {
+    loading.value = false;
     if (typeof response === "undefined") {
       ElMessage.error("请求出错");
       return;
@@ -249,20 +273,8 @@ const updateContest = () => {
     contestInfo.problems = element.Problems;
     contestInfo.profile = element.Profile;
     contestInfo.description = element.Description;
-    console.log(contestInfo);
-    console.log(element);
-  });
-  api.contest.getRunningContestProblems(contestID.value).then((response) => {
-    if (typeof response === "undefined") {
-      ElMessage.error("请求出错");
-      return;
-    } else if (response.Statu != "000") {
-      contestProblems.value = [];
-      return;
-    }
-    var tmp = JSON.parse(response.Info);
     contestProblems.value = [];
-    tmp.forEach((item) => {
+    element.Problems.forEach((item) => {
       contestProblems.value.push({
         ID: item.ID,
         showID: item.ShowID,

@@ -539,7 +539,11 @@ const submit = () => {
           submitLoading.value = false;
           return;
         }
-        var params = [];
+        var params = [
+          {
+            CID: Number(response.Info),
+          },
+        ];
         contestProblems.value.forEach((item) => {
           params.push({
             ShowID: item.showID,
