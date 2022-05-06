@@ -10,7 +10,12 @@
           <el-button>查询</el-button>
         </el-col>
         <el-col :xs="6" :sm="4">
-          <el-button round :icon="Refresh" type="primary" v-loading="loading"
+          <el-button
+            round
+            :icon="Refresh"
+            type="primary"
+            v-loading="loading"
+            @click="updateRecords"
             >刷新</el-button
           >
         </el-col>
@@ -83,6 +88,7 @@ const { default: api } = require("@/api/api");
 const { ref, reactive } = require("@vue/reactivity");
 const { onMounted } = require("@vue/runtime-core");
 const { ElMessage } = require("element-plus");
+import { Refresh } from "@element-plus/icons-vue";
 
 // eslint-disable-next-line no-undef,no-unused-vars
 const props = defineProps({
@@ -158,7 +164,6 @@ const cellStyle = ({ row, column }) => {
 };
 
 const addRecord = (current, record) => {
-  console.log(record);
   var score = {
     pass: false,
     penalty: 0,
@@ -221,6 +226,8 @@ const calculateRanking = () => {
   }
   pageInfo.total = rankData.value.length;
   filterData();
+  console.log(rankData.value);
+  console.log(rankList.value);
 };
 
 const filterData = () => {
@@ -232,6 +239,7 @@ const filterData = () => {
 };
 
 const updateRecords = () => {
+  loading.value = true;
   api.contest.getRecords(Number(props.CID)).then((response) => {
     if (!response) {
       ElMessage.error("请求出错");
@@ -241,10 +249,13 @@ const updateRecords = () => {
       records.value = JSON.parse(response.Info);
       calculateRanking();
     }
+    loading.value = false;
+    emits("updated");
   });
 };
 
 defineExpose({ updateRecords });
+const emits = defineEmits(["updated"]);
 </script>
 <style scoped>
 .panel-title {

@@ -157,12 +157,25 @@
             <el-divider></el-divider>
           </div>
         </div>
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :total="totalPage"
-          @current-change="onCurrentChanged"
-        />
+        <vxe-pager
+          perfect
+          v-model:current-page="pageInfo.currentPage"
+          v-model:page-size="pageInfo.pageSize"
+          :total="Number(pageInfo.total)"
+          @page-change="handleSizeChange"
+          :page-sizes="[5, 10, 20, 50]"
+          :layouts="[
+            'PrevJump',
+            'PrevPage',
+            'JumpNumber',
+            'NextPage',
+            'NextJump',
+            'Sizes',
+            'FullJump',
+            'Total',
+          ]"
+        >
+        </vxe-pager>
       </el-card>
     </el-col>
   </el-row>
@@ -265,13 +278,18 @@ const loading = ref(false)
 const registerLoading = ref(false);
 const registerDialog = ref(false);
 const registerData = reactive({});
+const pageInfo = reactive({
+  currentPage: 1,
+  total: 0,
+  pageSize: 20,
+});
 const odds = reactive({
   pagequery: {
     offset: 0,
     pagesize: 10,
   },
+  order: "start_time desc",
 });
-const totalPage = ref(1);
 const registerParams = reactive({
   tid: "",
 });
@@ -320,8 +338,9 @@ const updateTeams = () => {
   });
 };
 
-const onCurrentChanged = (cur) => {
-  odds.pagequery.offset = cur - 1;
+const handleSizeChange = () => {
+  odds.pagequery.offset = pageInfo.currentPage - 1;
+  odds.pagequery.pagesize = pageInfo.pageSize;
   updateContestList();
 };
 
@@ -378,7 +397,7 @@ const updateContestList = () => {
       ElMessage.error("请求出错");
       return;
     }
-    totalPage.value = Math.max(Number(response.Info) / 10, 1);
+    pageInfo.total = Number(response.Info);
   });
   api.contest.getUserContestList(odds).then((response) => {
     loading.value=false
@@ -402,6 +421,9 @@ const updateContestList = () => {
         visible: element.Visible,
       });
     });
+    contests.value.sort((a, b) => {
+      return new Date(b.startTime) - new Date(a.startTime);
+    });
     contests.value.forEach((element) => {
       var d1 = new Date(element.startTime);
       var d2 = new Date(element.endTime);
@@ -423,7 +445,6 @@ const updateContestList = () => {
         ":" +
         duration.seconds().toString().padStart(2, "0");
     });
-    console.log(contests.value);
   });
 };
 
