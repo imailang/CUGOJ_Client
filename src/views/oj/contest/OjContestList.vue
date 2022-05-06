@@ -1,5 +1,5 @@
 <template>
-  <el-row justify="space-around">
+  <el-row justify="space-around" v-loading="loading">
     <el-col :span="24">
       <el-card>
         <template #header>
@@ -274,6 +274,7 @@ import router from "@/router";
 import api from "@/api/api";
 import { ElMessage } from "element-plus";
 
+const loading = ref(false)
 const registerLoading = ref(false);
 const registerDialog = ref(false);
 const registerData = reactive({});
@@ -322,7 +323,7 @@ const updateTeams = () => {
     if (typeof response === "undefined") {
       ElMessage.error("服务器响应出错");
     } else if (response.Statu != "000") {
-      ElMessage.error("请先登录");
+      return
     } else {
       teams.value = [];
 
@@ -390,6 +391,7 @@ const register = () => {
 };
 
 const updateContestList = () => {
+  loading.value=true
   api.contest.getUserContestCount(odds).then((response) => {
     if (typeof response === "undefined" || response.Statu != "000") {
       ElMessage.error("请求出错");
@@ -398,6 +400,7 @@ const updateContestList = () => {
     pageInfo.total = Number(response.Info);
   });
   api.contest.getUserContestList(odds).then((response) => {
+    loading.value=false
     if (typeof response === "undefined") {
       ElMessage.error("请求出错");
       return;

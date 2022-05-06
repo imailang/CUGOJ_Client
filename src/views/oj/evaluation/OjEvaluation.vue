@@ -41,7 +41,7 @@
     </template>
     <!-- 评测列表-->
     <div>
-      <vxe-table :data="evaluationList" ref="evaluationListRef" stripe align="center" show-overflow
+      <vxe-table :data="evaluationList" ref="evaluationListRef" stripe align="center" show-overflow v-loading="loading"
                  :row-config="{height: 35,isHover: true}">
         <vxe-column field="ID" title="评测编号"></vxe-column>
         <vxe-column field="PTitle" title="题目">
@@ -201,6 +201,8 @@ const LanguageList = reactive({
   "gnu cpp17": "c++17",
   "gnu cpp20": "c++20",
 });
+
+const loading =ref(false)
 onMounted(() => {
   getEvaluationList()
 })
@@ -233,6 +235,7 @@ const pageBody = ref({
  * 获取评测列表
  */
 const getEvaluationList = () => {
+  loading.value=true
   getListTotal()
   let params = {
     pagequery: {
@@ -259,11 +262,10 @@ const getEvaluationList = () => {
     params.odd3.p_title = searchKey.value
     params.odd1 = {}
   }
-
   api.judge.getJudgeList(params)
       .then(res => {
         evaluationList.value = JSON.parse(res.Info)
-        console.log(evaluationList.value)
+        loading.value=false
       })
 }
 /**

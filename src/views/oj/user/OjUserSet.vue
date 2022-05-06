@@ -68,9 +68,9 @@
                 <el-col :span="8">
                   <el-form-item label="性别">
                     <el-radio-group v-model="userInfo.Gender">
-                      <el-radio :label="0">保密</el-radio>
                       <el-radio :label="1">男</el-radio>
                       <el-radio :label="2">女</el-radio>
+                      <el-radio :label="3">保密</el-radio>
                     </el-radio-group>
                   </el-form-item>
                 </el-col>
@@ -203,7 +203,7 @@
   </div>
 </template>
 <script setup>
-import {onMounted, reactive, ref} from "vue";
+import {onBeforeUnmount, reactive, ref} from "vue";
 import {Lock, Place, Plus, Message} from "@element-plus/icons-vue";
 import store from "@/store";
 import {ElMessage} from "element-plus";
@@ -222,9 +222,10 @@ const passwordInfoRef = ref()
 const emailInfo = reactive({})
 const emailInfoRef = ref()
 
-onMounted(() => {
-
+onBeforeUnmount(() => {
 })
+
+
 /**
  * 邮箱验证 发送验证码
  */
