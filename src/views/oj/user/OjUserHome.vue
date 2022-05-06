@@ -38,7 +38,7 @@
               "
             >
               <el-tag type="success"
-              >最近上线时间:{{ calTime(userInfo.UpdatedAt) }}
+              >最近上线时间:{{ calTime(userInfo.LastLoginTime) }}
               </el-tag
               >
             </el-tooltip>
@@ -175,7 +175,6 @@ const calTime = (val) => {
 const getSubmitCount = () => {
   api.user.getSubmitCount(userInfo.value.ID)
       .then(res => {
-        console.log(res)
         if (typeof res === "undefined") {
           ElMessage.error("请求出错");
           return;

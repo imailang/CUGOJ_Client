@@ -5,10 +5,11 @@
         <div style="width: 50px ;text-align: left;color: white;font-size: 25px">{{ evaluationInfo.Status }}</div>
         <el-row style="margin-top: 5px">
           <el-col style="color: white;font-size: 14px">
-            <i> 运行时间{{ evaluationInfo.TimeUse }}ms </i>
-            <i> 运行内存{{ evaluationInfo.MemoryUse }}KB </i>
-            <i> 代码长度{{ evaluationInfo.Length }} </i>
-            <i> 语言{{ evaluationInfo.Language }} </i>
+            <i> 运行时间 {{ evaluationInfo.TimeUse }}ms </i>
+            <i> 运行内存 {{ evaluationInfo.MemoryUse }}KB </i>
+            <i> 代码长度 {{ evaluationInfo.Length }} </i>
+            <i> 语言 {{ evaluationInfo.Language }} </i>
+            <i> 提交时间 {{updateTime(evaluationInfo.SubmitTime)}}</i>
           </el-col>
         </el-row>
       </el-row>
@@ -38,6 +39,7 @@ import {CopyDocument} from "@element-plus/icons-vue";
 import useClipboard from "vue-clipboard3";
 import store from "@/store";
 import router from "@/router";
+import moment from "moment";
 
 
 /**
@@ -81,7 +83,12 @@ onMounted(() => {
   evaluationInfo.value.id = route.params.evaluationId;
   getJudgeFull()
 })
-
+/**
+ * 修改时间格式
+ */
+const updateTime = (val) => {
+  return moment(val).format("YYYY-MM-DD HH:mm:ss");
+};
 /**
  * 获取评测信息
  */

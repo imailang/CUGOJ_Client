@@ -21,7 +21,7 @@
     </template>
     <!-- 表-->
     <div>
-      <vxe-table :data="problemList" ref="problemListRef">
+      <vxe-table :data="problemList" ref="problemListRef" align="center">
         <vxe-column type="seq" width="60"></vxe-column>
         <vxe-column field="ID" title="题目ID"></vxe-column>
         <vxe-column field="Title" title="题目"></vxe-column>

@@ -514,7 +514,7 @@ const submitCode = async () => {
     api.judge.addJudge(tmp).then((response) => {
       if (response.Statu === "000") {
         ElMessage.success("提交成功");
-        loading.value=true
+        loading.value = true
         evaluationClick.value = {Code: '', Status: 'Compiling'}
         dialogVisible.value = true;
         const timer = setInterval(() => {
@@ -527,7 +527,8 @@ const submitCode = async () => {
                 res.Status !== "Running"
             ) {
               getJudgeCases(res.ID)
-              loading.value=false
+              getMyEvaluation()
+              loading.value = false
               clearInterval(timer);
             }
           });

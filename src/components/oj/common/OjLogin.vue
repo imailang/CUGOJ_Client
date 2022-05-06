@@ -56,29 +56,18 @@ import { mapGetters } from "vuex";
 import api from "@/api/api";
 import Md5 from "js-md5";
 import cookie from "js-cookie";
-import utils from "@/utils";
-const qiaoIP =require('qiao-get-ip')
 
-const IP= ref()
 
-const getIP= () => {
-  qiaoIP.getIpByIcanhazip()
-      .then(res=>{
-        IP.value=res
-      })
-}
+
 
 /**
  * 登录
  */
 const clickLogin = () => {
-  getIP()
-  console.log(utils.getDeviceType())
   api.user
     .login({
       username: formLogin.username,
       password: Md5(formLogin.password),
-      deviceType:utils.getDeviceType()
     })
     .then((res) => {
       if (res.code === 200) {
@@ -94,7 +83,7 @@ const clickLogin = () => {
           store.dispatch("changeIsLogin", true);
         });
       } else {
-        ElMessage.error("用户名或密码错误");
+        ElMessage.error(res.msg);
       }
     });
 };
