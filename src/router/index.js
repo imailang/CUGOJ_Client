@@ -66,7 +66,7 @@ router.beforeEach((to, from, next) => {
                 }
             } else {
                 if (to.matched.some(record => record.meta.requireAdminAuth)) { // 判断该路由是否需要管理员权限
-                    if (store.getters.getUserInfo.Title.split(';').includes('管理员')) {
+                    if (store.getters.getUserInfo.Admin==2) {
                         next()  //头衔是管理员
                     } else {
                         ElMessage.error("需要管理员权限")

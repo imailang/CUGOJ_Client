@@ -34,7 +34,7 @@
                 class="box-item"
                 effect="dark"
                 :content="
-                moment(userInfo.UpdatedAt).format('YYYY-MM-DD HH:mm:ss')
+                moment(userInfo.LastLoginTime).format('YYYY-MM-DD HH:mm:ss')
               "
             >
               <el-tag type="success"
@@ -106,7 +106,7 @@
 </template>
 
 <script setup>
-import {onBeforeMount, onMounted, ref} from "vue";
+import {onBeforeMount, ref,onMounted} from "vue";
 import moment from "moment";
 import store from "@/store";
 import api from "@/api/api";
@@ -119,13 +119,23 @@ const submitInfo = ref({})
 const teamInfo = ref([]);
 
 onBeforeMount(()=>{
+  getUserInfo()
+})
+onMounted(()=>{
   getSubmitCount();
   updateTeamInfo();
 })
-onMounted(() => {
 
-});
 
+
+const getUserInfo=()=>{
+  api.user.getUserById(store.getters.getUserInfo.ID)
+  .then(res=>{
+    store.dispatch('changeUserInfo',JSON.stringify(res))
+    userInfo.value=res;
+    console.log(userInfo.value)
+  })
+}
 /**
  * 更新团队信息
  */
