@@ -11,7 +11,7 @@ let store = new Vuex.Store({
      * 类似存储全局变量的数据
      */
     state: {
-        isLogin: Cookies.get('cugtoken') !== 'undefined',   //是否登录标识
+        isLogin:  Cookies.get('cugtoken') !== 'undefined'&&Cookies.get('cugtoken')!==undefined,   //是否登录标识
         role: 'user',   //用户身份
         userInfo: localStorage.getItem('userInfo'),     //用户信息
         loginVisible: false,   //登录窗口显示
@@ -42,7 +42,7 @@ let store = new Vuex.Store({
             return state.token
         },
         getUserInfo: (state) => {
-            if(state.userInfo==='undefined')return {}
+            if ( state.userInfo === 'undefined'||state.userInfo===undefined) return {}
             return JSON.parse(state.userInfo)
         }
     },
