@@ -72,8 +72,12 @@
         <vxe-column field="Length" title="代码长度"></vxe-column>
         <vxe-column field="Language" title="语言">
           <template v-slot="{row}">
-            <el-tooltip v-if="store.getters.getUserInfo.ID===row.UserInfo.ID" class="box-item" effect="dark" content="查看提交详情">
-              <el-link  @click="getEvaluationUri(row.ID)" style="color: #308ff1">{{ LanguageList[row.Language] }}</el-link>
+            <el-tooltip v-if="store.getters.getUserInfo.ID===row.UserInfo.ID" class="box-item" effect="dark"
+                        content="查看提交详情">
+              <el-link @click="getEvaluationUri(row.ID)" style="color: #308ff1">{{
+                  LanguageList[row.Language]
+                }}
+              </el-link>
             </el-tooltip>
             <div v-else>{{ LanguageList[row.Language] }}</div>
           </template>
@@ -108,6 +112,7 @@ import api from "@/api/api";
 import moment from "moment";
 import store from "@/store";
 import router from "@/router";
+import {ElMessage} from "element-plus";
 
 /**
  * 是否全部
@@ -202,7 +207,7 @@ const LanguageList = reactive({
   "gnu cpp20": "c++20",
 });
 
-const loading =ref(false)
+const loading = ref(false)
 onMounted(() => {
   getEvaluationList()
 })
@@ -235,7 +240,7 @@ const pageBody = ref({
  * 获取评测列表
  */
 const getEvaluationList = () => {
-  loading.value=true
+  loading.value = true
   getListTotal()
   let params = {
     pagequery: {
@@ -265,7 +270,7 @@ const getEvaluationList = () => {
   api.judge.getJudgeList(params)
       .then(res => {
         evaluationList.value = JSON.parse(res.Info)
-        loading.value=false
+        loading.value = false
       })
 }
 /**
@@ -280,7 +285,12 @@ const getListTotal = () => {
   //odd1   用户  状态
   {
     if (!isAllKey.value) {
-      params.odd1.UID = store.getters.getUserInfo.ID
+      if (!store.getters.getIsLogin) {
+        isAllKey.value= !isAllKey.value
+        ElMessage.error("未登录，无法选择查看自己的评测")
+      } else {
+        params.odd1.UID = store.getters.getUserInfo.ID
+      }
     }
     if (statusKey.value !== '状态') {
       params.odd1.status = statusKey.value
