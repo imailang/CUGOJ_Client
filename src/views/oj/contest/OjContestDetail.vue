@@ -39,7 +39,13 @@
       <el-col :span="12">开始时间: {{ contestInfo.startTime }}</el-col>
       <el-col :span="12">结束时间: {{ contestInfo.endTime }}</el-col>
     </el-row>
-    <el-slider v-model="curVal" size="large" disabled="true" />
+    <el-slider
+      :step="0.2"
+      v-model="curVal"
+      size="large"
+      @change="sliderChanged"
+      :format-tooltip="formatTooltip"
+    />
   </el-card>
 
   <el-card style="margin-top: 10px">
@@ -150,6 +156,7 @@
               <ContestProblem
                 :CPID="CPID"
                 :CID="contestID"
+                :Running="running"
                 @back="
                   () => {
                     CPID = 0;
@@ -211,6 +218,8 @@ const standings = ref();
 
 const loading = ref(false);
 
+const running = ref(false);
+
 onBeforeMount(() => {
   contestID.value = route.params.contestId;
 });
@@ -220,6 +229,36 @@ onBeforeMount(() => {
 onMounted(() => {
   updateContest();
 });
+
+const calculateTime = () => {
+  var d1 = contestInfo.startTimeDate;
+  var d2 = contestInfo.endTimeDate;
+  var length = moment.duration(d2 - d1);
+  curVal.value = Math.max(
+    0,
+    Math.min(100, (moment.duration(new Date() - d1) * 100) / length)
+  );
+};
+
+const formatTooltip = (val) => {
+  var length = moment.duration(
+    contestInfo.endTimeDate - contestInfo.startTimeDate
+  );
+  var cur = (val * length) / 6000000;
+  return cur.toFixed(0);
+};
+
+const sliderChanged = (val) => {
+  if (running.value) {
+    calculateTime();
+  } else {
+    var length = moment.duration(
+      contestInfo.endTimeDate - contestInfo.startTimeDate
+    );
+    var cur = (val * length) / 6000000;
+    standings.value.timeChanged(Number(cur.toFixed(0)));
+  }
+};
 
 const submited = () => {
   judgerList.value.getjudgerList();
@@ -244,12 +283,13 @@ const updateContest = () => {
     var element = JSON.parse(response.Info);
     var d1 = new Date(element.StartTime);
     var d2 = new Date(element.EndTime);
-    console.log(d1);
+
     var dnow = new Date();
     if (dnow < d1) {
       contestInfo.status = "未开始";
     } else if (dnow > d1 && dnow < d2) {
       contestInfo.status = "进行中";
+      running.value = true;
     } else if (dnow > d2) {
       contestInfo.status = "已结束";
     }

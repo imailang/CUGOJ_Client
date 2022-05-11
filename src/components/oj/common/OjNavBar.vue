@@ -43,20 +43,20 @@
             </el-button>
           </div>
           <!-- 登录显示-->
-          <el-row v-else class="btn-menu" align="middle">
+          <el-row v-else-if="isLogin" class="btn-menu" align="middle">
             <el-tooltip class="box-item" effect="dark" content="通知中心">
               <el-badge
-                  :value="messageCount"
-                  :max="99"
-                  class="item"
-                  type="primary"
-                  style="margin-right: 25px"
-                  :hidden="messageCount == 0"
+                :value="messageCount"
+                :max="99"
+                class="item"
+                type="primary"
+                style="margin-right: 25px"
+                :hidden="messageCount == 0"
               >
                 <el-icon
-                    :size="25"
-                    @click="clickMessage"
-                    style="cursor: pointer"
+                  :size="25"
+                  @click="clickMessage"
+                  style="cursor: pointer"
                 >
                   <BellFilled></BellFilled>
                 </el-icon>
@@ -79,21 +79,19 @@
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item @click="clickUserHome"
-                  >个人主页
-                  </el-dropdown-item
-                  >
+                    >个人主页
+                  </el-dropdown-item>
                   <el-dropdown-item @click="clickUserSet"
-                  >账户设置
-                  </el-dropdown-item
-                  >
+                    >账户设置
+                  </el-dropdown-item>
 
-                  <el-dropdown-item @click="clickAdminHome">管理员入口</el-dropdown-item>
+                  <el-dropdown-item @click="clickAdminHome"
+                    >管理员入口</el-dropdown-item
+                  >
 
                   <el-dropdown-item style="color: red" divided @click="logout"
-                  >退出
-                  </el-dropdown-item
-                  >
-
+                    >退出
+                  </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -108,8 +106,8 @@
 </template>
 
 <script setup>
-import {ArrowDown, BellFilled, Expand} from "@element-plus/icons-vue";
-import {computed, onBeforeMount, ref} from "vue";
+import { ArrowDown, BellFilled, Expand } from "@element-plus/icons-vue";
+import { computed, onBeforeMount, ref } from "vue";
 import store from "@/store";
 import { mapGetters } from "vuex";
 import NavBar from "@/components/oj/basic/BaseNavBar";
@@ -126,7 +124,6 @@ onBeforeMount(() => {
   if (isLogin.value) {
     loadMessageCount();
   }
-
 });
 
 /**
@@ -201,6 +198,8 @@ const userInfo = computed(
   mapGetters(["getUserInfo"]).getUserInfo.bind({ $store: store })
 );
 
+// const userInfo = reactive({});
+
 /**
  * 加载消息数
  */
@@ -209,7 +208,7 @@ const loadMessageCount = () => {
     if (!response) {
       ElMessage.error("请求出错");
     } else if (response.Statu != "000") {
-      store.dispatch('changeIsLogin',false)
+      store.dispatch("changeIsLogin", false);
     } else {
       messageCount.value = Number(response.Info);
     }

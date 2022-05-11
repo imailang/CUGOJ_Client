@@ -26,7 +26,7 @@ function login(params) {
  * 注销
  */
 function logout() {
-    return axios.post('/ojLogin/userInfo/logout',{})
+    return axios.post('/ojLogin/userInfo/logout', {})
 }
 
 /**
@@ -88,71 +88,53 @@ function getUserById(params) {
 /**
  * 根据昵称或者用户名查询用户
  */
-function queryUser(queryString) {
-    var params = {
-        pagequery: {
-            pagesize: 10,
-            offset: 0
-        },
-        odd1: {
-            "username like ?": "%" + queryString + "%"
-        },
-        odd2: {
-            "nickname like ?": "%" + queryString + "%"
-        }
-    }
-    return axios.post('/user/getuserlist', params)
+function queryUser(params) {
+    return axios.post('/user/getlikeuser', params)
 }
 
 /**
  * 修改用户
  */
-function changeUser(params)
-{
-    return axios.post('/user/changeuser',params)
+function changeUser(params) {
+    return axios.post('/user/changeuser', params)
 }
 
 /**
  * 用户信息模板
  */
-function getBaseUser()
-{
+function getBaseUser() {
     return axios.post('/user/getbaseuser')
 }
 
 /**
  * session会话检查
  */
-function checkSession()
-{
-    return axios.post('/ojLogin/userInfo/checkSession',{})
+function checkSession() {
+    return axios.post('/ojLogin/userInfo/checkSession', {})
 }
 
 /**
  * 踢人下线
  * @param params 用户ID
  */
-function kickout(params)
-{
-    return axios.post('/ojLogin/userInfo/kickout',params)
+function kickout(params) {
+    return axios.post('/ojLogin/userInfo/kickout', params)
 }
 
 /**
  * 封禁账号
  * @param params  用户ID  封时间s
  */
-function disable(params)
-{
-    return axios.post('/ojLogin/userInfo/disable',params)
+function disable(params) {
+    return axios.post('/ojLogin/userInfo/disable', params)
 }
 
 /**
  * 解封账号
  * @param params  用户ID
  */
-function untieDisable(params)
-{
-    return axios.post('/ojLogin/userInfo/untieDisable',params)
+function untieDisable(params) {
+    return axios.post('/ojLogin/userInfo/untieDisable', params)
 }
 export default {
     emailVerification,

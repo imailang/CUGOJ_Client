@@ -112,6 +112,8 @@ onMounted(() => {
   updateRecords();
 });
 
+const curTime = ref(0x7fffffff);
+
 const getCPID = (showID) => {
   for (var i = 0; i < props.problems.length; i++) {
     if (props.problems[i].showID == showID) {
@@ -196,6 +198,9 @@ const calculateRanking = () => {
     return a.SubmitTime - b.SubmitTime;
   });
   records.value.forEach((item) => {
+    if (item.SubmitTime > curTime.value) {
+      return;
+    }
     var id = item.UID;
     var current = {};
     if (tmp.has(id)) {
@@ -254,7 +259,12 @@ const updateRecords = () => {
   });
 };
 
-defineExpose({ updateRecords });
+const timeChanged = (time) => {
+  curTime.value = time;
+  calculateRanking();
+};
+
+defineExpose({ updateRecords, timeChanged });
 const emits = defineEmits(["updated"]);
 </script>
 <style scoped>

@@ -128,7 +128,7 @@
                   </el-button>
                   <el-button
                     :loading="loading"
-                    :disabled="!isLogin"
+                    :disabled="!isLogin || dialogVisible || loading || !Running"
                     size="large"
                     round
                     type="primary"
@@ -147,79 +147,134 @@
 
   <!-- 弹窗-->
   <el-dialog v-model="dialogVisible" title="评测详情">
-    <el-card :style="'background-color: ' + colorList[evaluationClick.Status]">
-      <el-row align="middle">
-        <el-col :span="4">
-          <div
-            style="width: 50px; text-align: left; color: white; font-size: 25px"
-          >
-            {{ evaluationClick.Status }}
-          </div>
-        </el-col>
-        <el-col :span="20">
-          <el-row style="color: white; font-size: 14px; text-align: left">
-            <el-col :span="20">
-              <el-row justify="space-between">
-                <el-col :span="12"
-                  >运行时间:{{ evaluationClick.TimeUse }}ms</el-col
-                >
-                <el-col :span="12">
-                  运行内存:{{ evaluationClick.MemoryUse }}KB</el-col
-                >
-              </el-row>
+    <div v-loading="loading">
+      <div
+        v-if="
+          evaluationClick.Status === 'AC' || evaluationClick.Status === 'WA'
+        "
+      >
+        <el-card
+          :style="'background-color: ' + colorList[evaluationClick.Status]"
+        >
+          <el-row align="middle">
+            <el-col :span="4">
+              <div
+                style="
+                  width: 50px;
+                  text-align: left;
+                  color: white;
+                  font-size: 25px;
+                "
+              >
+                {{ evaluationClick.Status }}
+              </div>
             </el-col>
             <el-col :span="20">
-              <el-row justify="space-between">
-                <el-col :span="12">
-                  代码长度:{{ evaluationClick.Length }}</el-col
-                >
-                <el-col :span="12"> 语言:{{ evaluationClick.Language }}</el-col>
+              <el-row style="color: white; font-size: 14px; text-align: left">
+                <el-col :span="20">
+                  <el-row justify="space-between">
+                    <el-col :span="12"
+                      >运行时间:{{ evaluationClick.TimeUse }}ms</el-col
+                    >
+                    <el-col :span="12">
+                      运行内存:{{ evaluationClick.MemoryUse }}KB</el-col
+                    >
+                  </el-row>
+                </el-col>
+                <el-col :span="20">
+                  <el-row justify="space-between">
+                    <el-col :span="12">
+                      代码长度:{{ evaluationClick.Length }}</el-col
+                    >
+                    <el-col :span="12">
+                      语言:{{ evaluationClick.Language }}</el-col
+                    >
+                  </el-row>
+                </el-col>
+                <el-col :span="24">
+                  提交时间{{
+                    moment(evaluationClick.SubmitTime).format(
+                      "YYYY-MM-DD HH:mm:ss"
+                    )
+                  }}
+                </el-col>
               </el-row>
-            </el-col>
-            <el-col :span="24">
-              提交时间{{
-                moment(evaluationClick.SubmitTime).format("YYYY-MM-DD HH:mm:ss")
-              }}
             </el-col>
           </el-row>
-        </el-col>
-      </el-row>
-    </el-card>
-    <el-row :gutter="30" style="margin-top: 30px">
-      <el-col :span="6" v-for="(item, index) in judgeCases" :key="index">
+        </el-card>
+        <!-- <el-row :gutter="30" style="margin-top: 30px">
+          <el-col :span="6" v-for="(item, index) in judgeCases" :key="index">
+            <el-card
+              :style="
+                'width: 90px;height: 80px;' +
+                'background-color: ' +
+                colorList[codeList[item.Status]]
+              "
+            >
+              <div style="position: absolute; left: 20px; top: 0; color: white">
+                #{{ index + 1 }}
+              </div>
+              <div style="font-size: 10px; color: white">
+                <div style="font-size: 15px">{{ codeList[item.Status] }}</div>
+                <div>{{ item.TimeUse }}ms</div>
+                <div>{{ item.MemoryUse }}KB</div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row> -->
+        <el-row style="text-align: left; margin-top: 30px">
+          <el-col :span="24">
+            <el-button
+              style="position: absolute; right: 0; top: 10px"
+              type="text"
+              @click="copy(evaluationClick.Code)"
+            >
+              <el-icon size="large">
+                <CopyDocument></CopyDocument>
+              </el-icon>
+              复制
+            </el-button>
+            <highlightjs :code="evaluationClick.Code"></highlightjs>
+          </el-col>
+        </el-row>
+      </div>
+      <div v-else-if="evaluationClick.Status === 'CE'">
         <el-card
-          :style="
-            'width: 90px;height: 80px;' +
-            'background-color: ' +
-            colorList[codeList[item.Status]]
-          "
+          :style="'background-color: ' + colorList[evaluationClick.Status]"
         >
-          <div style="position: absolute; left: 20px; top: 0; color: white">
-            #{{ index + 1 }}
-          </div>
-          <div style="font-size: 10px; color: white">
-            <div style="font-size: 15px">{{ codeList[item.Status] }}</div>
-            <div>{{ item.TimeUse }}ms</div>
-            <div>{{ item.MemoryUse }}KB</div>
+          <el-row align="middle">
+            <el-col :span="4">
+              <div
+                style="
+                  width: 50px;
+                  text-align: left;
+                  color: white;
+                  font-size: 25px;
+                "
+              >
+                {{ evaluationClick.Status }}
+              </div>
+            </el-col>
+            <el-col :span="20">
+              <el-row style="color: white; font-size: 14px; text-align: left">
+                <p
+                  v-html="evaluationClick.ErrorMessage.replace(/\n/g, '<br>')"
+                ></p>
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-card>
+      </div>
+      <div v-else>
+        <el-card
+          :style="'background-color: ' + colorList[evaluationClick.Status]"
+        >
+          <div style="text-align: left; color: white; font-size: 25px">
+            {{ evaluationClick.Status }}
           </div>
         </el-card>
-      </el-col>
-    </el-row>
-    <el-row style="text-align: left; margin-top: 30px">
-      <el-col :span="24">
-        <el-button
-          style="position: absolute; right: 0; top: 10px"
-          type="text"
-          @click="copy(evaluationClick.Code)"
-        >
-          <el-icon size="large">
-            <CopyDocument></CopyDocument>
-          </el-icon>
-          复制
-        </el-button>
-        <highlightjs :code="evaluationClick.Code"></highlightjs>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
   </el-dialog>
 </template>
 
@@ -244,8 +299,10 @@ const props = defineProps({
   CID: {
     default: 0,
   },
+  Running: {
+    default: false,
+  },
 });
-const judgeCases = ref();
 const dialogVisible = ref(false);
 const { toClipboard } = useClipboard();
 const contestProblemInfo = ref({});
@@ -278,18 +335,6 @@ const colorList = ref({
   MLE: "#2d468a",
   OLE: "#10efc6",
   SE: "#ff8000",
-});
-/**
- * code列表
- */
-const codeList = ref({
-  "010": "AC",
-  "011": "TLE",
-  "012": "RE",
-  "013": "MLE",
-  "014": "WA",
-  "015": "OLE",
-  "017": "SE",
 });
 
 /**
@@ -328,6 +373,7 @@ const loginFirst = () => {
  * 提交代码
  */
 const submitCode = async () => {
+  loading.value = true;
   await api.judge.getBaseContestJudge().then((response) => {
     const tmp = response;
     tmp.CPID = Number(props.CPID);
@@ -337,24 +383,28 @@ const submitCode = async () => {
     tmp.Code = code.value;
     tmp.CID = Number(props.CID);
     api.judge.addContestJudge(tmp).then((response) => {
-      if (response.Statu === "000") {
+      loading.value = false;
+      if (!response) {
+        ElMessage.error("请求出错");
+      } else if (response.Statu != "000") {
+        ElMessage.error(response.Info);
+      } else {
         ElMessage.success("提交成功");
-        loading.value = true;
+        evaluationClick.value = { Code: "", Status: "Pending" };
+        dialogVisible.value = true;
         const timer = setInterval(() => {
-          api.judge.getContestJudge(response.Info).then((res) => {
-            res = JSON.parse(res.Info);
-            console.log(res);
+          api.judge.getContestJudgeStatus(response.Info).then((res) => {
             if (
-              res.Status !== "Pending" &&
-              res.Status !== "Compiling" &&
-              res.Status !== "Running"
+              res.Info !== "Pending" &&
+              res.Info !== "Compiling" &&
+              res.Info !== "Running"
             ) {
               clearInterval(timer);
-              api.judge.getContestJudgeFull(res.ID).then((res) => {
+              api.judge.getContestJudgeFull(response.Info).then((res) => {
+                console.log(res);
                 evaluationClick.value = JSON.parse(res.Info);
                 dialogVisible.value = true;
               });
-              loading.value = false;
               //getJudgeCases(res.ID);
               emits("submited");
             }
