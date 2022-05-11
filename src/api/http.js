@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from "@/store";
 //import qs from 'qs'
 
 // // 根据环境变量区分接口默认地址这里看自己需求配
@@ -55,6 +56,12 @@ axios.defaults.timeout = 10000;
 //     return /^(2|3)\d{2}$/.test(status)
 // }
 axios.interceptors.response.use(response => {
+    if(response.headers.logout)
+    {
+        store.commit("changeUserToken", undefined);
+        store.commit("changeUserInfo", undefined);
+        store.commit("changeIsLogin", false);
+    }
     return response.data;
     //看项目实际情况，这样写返回的数据就只有主体内容
 }, error => {
