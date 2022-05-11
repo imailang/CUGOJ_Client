@@ -11,7 +11,9 @@ let store = new Vuex.Store({
      * 类似存储全局变量的数据
      */
     state: {
+
         isLogin:  Cookies.get('cugtoken') !== 'undefined'&&Cookies.get('cugtoken')!==undefined,   //是否登录标识
+
         role: 'user',   //用户身份
         userInfo: localStorage.getItem('userInfo'),     //用户信息
         loginVisible: false,   //登录窗口显示
@@ -42,7 +44,9 @@ let store = new Vuex.Store({
             return state.token
         },
         getUserInfo: (state) => {
+
             if ( state.userInfo === 'undefined'||state.userInfo===undefined) return {}
+
             return JSON.parse(state.userInfo)
         }
     },
@@ -50,25 +54,25 @@ let store = new Vuex.Store({
      * 提供跟后台接口打交道的方法，并调用mutations提供的方法
      */
     actions: {
-        changeIsLogin({commit}, val) {
+        changeIsLogin({ commit }, val) {
             commit("changeIsLogin", val)
         },
-        changeRole({commit}, val) {
+        changeRole({ commit }, val) {
             commit("changeRole", val)
         },
-        changeLoginVisible({commit}, val) {
+        changeLoginVisible({ commit }, val) {
             commit("changeLoginVisible", val)
         },
-        changeRegisterVisible({commit}, val) {
+        changeRegisterVisible({ commit }, val) {
             commit("changeRegisterVisible", val)
         },
-        changeLeftDrawerVisible({commit}, val) {
+        changeLeftDrawerVisible({ commit }, val) {
             commit("changeLeftDrawerVisible", val)
         },
-        changeUserToken({commit}, val) {
+        changeUserToken({ commit }, val) {
             commit('changeUserToken', val)
         },
-        changeUserInfo({commit}, val) {
+        changeUserInfo({ commit }, val) {
             commit('changeUserInfo', val)
         }
     },
@@ -93,7 +97,7 @@ let store = new Vuex.Store({
         },
         changeUserToken(state, val) {
             state.token = val
-            Cookies.set('cugtoken', val, {expires: 15})
+            Cookies.set('cugtoken', val, { expires: 15 })
         },
         changeUserInfo(state, val) {
             localStorage.setItem('userInfo', val)

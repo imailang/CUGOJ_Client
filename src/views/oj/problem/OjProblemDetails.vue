@@ -19,15 +19,15 @@
                 <div v-show="description.BackGround !== ''">
                   <div style="color: #3090f2">题目背景 ：</div>
                   <p
-                      style="margin-left: 30px"
-                      v-html="description.BackGround"
+                    style="margin-left: 30px"
+                    v-html="description.BackGround"
                   ></p>
                 </div>
                 <div v-show="description.Description !== ''">
                   <div style="color: #3090f2">题目描述 ：</div>
                   <p
-                      style="margin-left: 30px"
-                      v-html="description.Description"
+                    style="margin-left: 30px"
+                    v-html="description.Description"
                   ></p>
                 </div>
                 <div v-show="description.Input !== ''">
@@ -40,10 +40,10 @@
                 </div>
                 <div>
                   <el-row
-                      v-for="(item, index) in description.Examples"
-                      :key="index"
-                      justify="space-between"
-                      :gutter="20"
+                    v-for="(item, index) in description.Examples"
+                    :key="index"
+                    justify="space-between"
+                    :gutter="20"
                   >
                     <el-col :span="12">
                       <div style="color: #3090f2">
@@ -72,13 +72,13 @@
                       </el-card>
                     </el-col>
                     <el-col
-                        :span="24"
-                        style="margin-top: 10px; font-size: 14px"
+                      :span="24"
+                      style="margin-top: 10px; font-size: 14px"
                     >
                       <i>用例提示：</i>
                       <p
-                          style="margin-left: 30px"
-                          v-html="marked(item.tips)"
+                        style="margin-left: 30px"
+                        v-html="marked(item.tips)"
                       ></p>
                     </el-col>
                   </el-row>
@@ -86,8 +86,8 @@
                 <div v-show="description.Hint !== ''">
                   <div style="color: #3090f2">提示 ：</div>
                   <p
-                      style="margin-left: 30px; font-size: 14px"
-                      v-html="description.Hint"
+                    style="margin-left: 30px; font-size: 14px"
+                    v-html="description.Hint"
                   ></p>
                 </div>
               </div>
@@ -105,20 +105,17 @@
               <!-- 评测列表-->
               <div>
                 <vxe-table
-                    :data="evaluationList"
-                    ref="evaluationListRef"
-                    stripe
-                    align="center"
-                    show-overflow
-                    highlight-hover-row
-                    border="inner"
-                    :row-config="{ height: 35 }"
+                  :data="evaluationList"
+                  ref="evaluationListRef"
+                  stripe
+                  align="center"
+                  show-overflow
+                  highlight-hover-row
+                  border="inner"
+                  :row-config="{ height: 35 }"
                 >
-                  <vxe-column
-                      field="ID"
-                      title="评测编号"
-                  >
-                    <template v-slot="{row}">
+                  <vxe-column field="ID" title="评测编号">
+                    <template v-slot="{ row }">
                       <el-button type="text" @click="getJudgeCases(row.ID)">
                         #{{ row.ID }}
                       </el-button>
@@ -128,11 +125,11 @@
                     <template v-slot="{ row }">
                       <el-button type="text" @click="getJudgeCases(row.ID)">
                         <el-tag
-                            :style="
-                          'background-color:' +
-                          colorList[row.Status] +
-                          ';color: white;font-size:14px;width:80px'
-                        "
+                          :style="
+                            'background-color:' +
+                            colorList[row.Status] +
+                            ';color: white;font-size:14px;width:80px'
+                          "
                         >
                           {{ row.Status }}
                         </el-tag>
@@ -148,9 +145,9 @@
                     </template>
                   </vxe-column>
                   <vxe-column
-                      field="Length"
-                      title="代码长度"
-                      width="50px"
+                    field="Length"
+                    title="代码长度"
+                    width="50px"
                   ></vxe-column>
                   <vxe-column field="Language" title="语言"></vxe-column>
                   <vxe-column field="Judger" title="评测机"></vxe-column>
@@ -164,13 +161,13 @@
               <!-- 分页-->
               <div>
                 <vxe-pager
-                    perfect
-                    v-model:current-page="pageBody.offset"
-                    v-model:page-size="pageBody.pageSize"
-                    :total="Number(pageBody.totalPage)"
-                    @page-change="handleSizeChange"
-                    :page-sizes="[5, 10, 20, 50]"
-                    :layouts="[
+                  perfect
+                  v-model:current-page="pageBody.offset"
+                  v-model:page-size="pageBody.pageSize"
+                  :total="Number(pageBody.totalPage)"
+                  @page-change="handleSizeChange"
+                  :page-sizes="[5, 10, 20, 50]"
+                  :layouts="[
                     'PrevJump',
                     'PrevPage',
                     'JumpNumber',
@@ -191,33 +188,32 @@
         <!--提交页-->
         <el-scrollbar class="problem-right">
           <OjCodeEditor
-              v-model:code="code"
-              v-model:language="language"
+            v-model:code="code"
+            v-model:language="language"
           ></OjCodeEditor>
           <el-row
-              justify="end"
-              style="position: absolute; right: 30px; bottom: 25px"
-              @click="loginFirst"
+            justify="end"
+            style="position: absolute; right: 30px; bottom: 25px"
+            @click="loginFirst"
           >
             <el-button
-                :disabled="!isLogin"
-                round
-                type="warning"
-                size="large"
-                @click="reset"
-                style="margin-right: 10px"
-            >重置
+              :disabled="!isLogin"
+              round
+              type="warning"
+              size="large"
+              @click="reset"
+              style="margin-right: 10px"
+              >重置
             </el-button>
             <el-button
-                v-loading="loading"
-                :disabled="!isLogin"
-                size="large"
-                round
-                type="primary"
-                @click="submitCode"
-                style="margin-right: 10px"
-            >提交
-
+              v-loading="loading"
+              :disabled="!isLogin || loading || dialogVisible"
+              size="large"
+              round
+              type="primary"
+              @click="submitCode"
+              style="margin-right: 10px"
+              >提交
             </el-button>
           </el-row>
         </el-scrollbar>
@@ -228,50 +224,110 @@
   <!-- 弹窗-->
   <el-dialog v-model="dialogVisible" title="评测详情">
     <div v-loading="loading">
-      <div v-if="evaluationClick.Status==='AC'||evaluationClick.Status==='WA'">
-        <el-card :style="'background-color: '+colorList[evaluationClick.Status]">
+      <div v-if="evaluationClick.Status === 'CE'">
+        <el-card
+          :style="'background-color: ' + colorList[evaluationClick.Status]"
+        >
           <el-row align="middle">
             <el-col :span="4">
-              <div style="width: 50px ;text-align: left;color: white;font-size: 25px">{{ evaluationClick.Status }}</div>
+              <div
+                style="
+                  width: 50px;
+                  text-align: left;
+                  color: white;
+                  font-size: 25px;
+                "
+              >
+                {{ evaluationClick.Status }}
+              </div>
             </el-col>
             <el-col :span="20">
-              <el-row style="color: white;font-size: 14px;text-align: left">
+              <el-row style="color: white; font-size: 14px; text-align: left">
+                <p
+                  v-html="evaluationClick.ErrorMessage.replace(/\n/g, '<br>')"
+                ></p>
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-card>
+      </div>
+      <div v-else>
+        <el-card
+          :style="'background-color: ' + colorList[evaluationClick.Status]"
+        >
+          <el-row align="middle">
+            <el-col :span="4">
+              <div
+                style="
+                  width: 50px;
+                  text-align: left;
+                  color: white;
+                  font-size: 25px;
+                "
+              >
+                {{ evaluationClick.Status }}
+              </div>
+            </el-col>
+            <el-col :span="20">
+              <el-row style="color: white; font-size: 14px; text-align: left">
                 <el-col :span="20">
                   <el-row justify="space-between">
-                    <el-col :span="12">运行时间:{{ evaluationClick.TimeUse }}ms</el-col>
-                    <el-col :span="12"> 运行内存:{{ evaluationClick.MemoryUse }}KB</el-col>
+                    <el-col :span="12"
+                      >运行时间:{{ evaluationClick.TimeUse }}ms</el-col
+                    >
+                    <el-col :span="12">
+                      运行内存:{{ evaluationClick.MemoryUse }}KB</el-col
+                    >
                   </el-row>
                 </el-col>
                 <el-col :span="20">
                   <el-row justify="space-between">
-                    <el-col :span="12"> 代码长度:{{ evaluationClick.Length }}</el-col>
-                    <el-col :span="12"> 语言:{{ evaluationClick.Language }}</el-col>
+                    <el-col :span="12">
+                      代码长度:{{ evaluationClick.Length }}</el-col
+                    >
+                    <el-col :span="12">
+                      语言:{{ evaluationClick.Language }}</el-col
+                    >
                   </el-row>
                 </el-col>
                 <el-col :span="24">
-                  提交时间{{ moment(evaluationClick.SubmitTime).format('YYYY-MM-DD HH:mm:ss') }}
+                  提交时间{{
+                    moment(evaluationClick.SubmitTime).format(
+                      "YYYY-MM-DD HH:mm:ss"
+                    )
+                  }}
                 </el-col>
               </el-row>
             </el-col>
           </el-row>
         </el-card>
         <el-row :gutter="30" style="margin-top: 30px">
-          <el-col :span="6" v-for="(item,index) in judgeCases" :key="index">
-            <el-card :style="'width: 90px;height: 80px;'+'background-color: '+colorList[codeList[item.Status]]">
-              <div style="position:absolute;left: 20px ;top: 0;color: white"> #{{ index + 1 }}</div>
-              <div style="font-size: 10px;color: white">
+          <el-col :span="6" v-for="(item, index) in judgeCases" :key="index">
+            <el-card
+              :style="
+                'width: 90px;height: 80px;' +
+                'background-color: ' +
+                colorList[codeList[item.Status]]
+              "
+            >
+              <div style="position: absolute; left: 20px; top: 0; color: white">
+                #{{ index + 1 }}
+              </div>
+              <div style="font-size: 10px; color: white">
                 <div style="font-size: 15px">{{ codeList[item.Status] }}</div>
                 <div>{{ item.TimeUse }}ms</div>
-                <div> {{ item.MemoryUse }}KB</div>
-
+                <div>{{ item.MemoryUse }}KB</div>
               </div>
             </el-card>
           </el-col>
         </el-row>
-        <el-row style="text-align: left;margin-top: 30px">
+        <el-row style="text-align: left; margin-top: 30px">
           <el-col :span="24">
-            <el-button style="position: absolute;right: 0;top:10px" type="text"
-                       @click="copy(evaluationClick.Code)">
+            <el-button
+              style="position: absolute; right: 0; top: 10px"
+              type="text"
+              @click="copy(evaluationClick.Code)"
+            >
               <el-icon size="large">
                 <CopyDocument></CopyDocument>
               </el-icon>
@@ -281,54 +337,35 @@
           </el-col>
         </el-row>
       </div>
-      <div v-else-if="evaluationClick.Status==='CE'">
-        <el-card :style="'background-color: '+colorList[evaluationClick.Status]">
-          <el-row align="middle">
-            <el-col :span="4">
-              <div style="width: 50px ;text-align: left;color: white;font-size: 25px">{{ evaluationClick.Status }}</div>
-            </el-col>
-            <el-col :span="20">
-              <el-row style="color: white;font-size: 14px;text-align: left">
-                <p v-html="evaluationClick.ErrorMessage.replace(/\n/g, '<br>')"></p>
-              </el-row>
-            </el-col>
-          </el-row>
-        </el-card>
-      </div>
-      <div v-else>
-        <el-card :style="'background-color: '+colorList[evaluationClick.Status]">
-          <div style="text-align: left;color: white;font-size: 25px">{{ evaluationClick.Status }}</div>
-        </el-card>
-      </div>
     </div>
   </el-dialog>
 </template>
 
 <script setup>
-import {computed, onMounted, reactive, ref} from "vue";
-import {useRoute} from "vue-router";
-import {Clock, CopyDocument, Notebook} from "@element-plus/icons-vue";
+import { computed, onMounted, reactive, ref } from "vue";
+import { useRoute } from "vue-router";
+import { Clock, CopyDocument, Notebook } from "@element-plus/icons-vue";
 import api from "@/api/api";
 import OjCodeEditor from "@/components/oj/common/OjCodeEditor";
-import {Splitpanes, Pane} from "splitpanes";
+import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
-import {marked} from "marked";
-import {ElMessage} from "element-plus";
+import { marked } from "marked";
+import { ElMessage } from "element-plus";
 import useClipboard from "vue-clipboard3";
 import store from "@/store";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 import moment from "moment";
 
-const loading = ref(false)
-const judgeCases = ref()
-const dialogVisible = ref(false)
-const {toClipboard} = useClipboard();
+const loading = ref(false);
+const judgeCases = ref();
+const dialogVisible = ref(false);
+const { toClipboard } = useClipboard();
 const route = useRoute();
 const problemStatus = ref("");
 const problemInfo = ref({});
 const description = ref({});
 const code = ref(
-    '#include<iostream>\nusing namespace std;\nint main(){\n    cout<<"hello";\n}'
+  '#include<iostream>\nusing namespace std;\nint main(){\n    cout<<"hello";\n}'
 );
 const language = ref("c++11");
 const submitLanguage = ref({
@@ -366,7 +403,7 @@ const codeList = ref({
   "014": "WA",
   "015": "OLE",
   "017": "SE",
-})
+});
 /**
  * 评测列表
  */
@@ -379,14 +416,14 @@ const evaluationListRef = ref();
  * 最近评测  点击评测
  */
 const evaluationClick = ref({
-  Code: '',
-  Status: 'Compiling'
-})
+  Code: "",
+  Status: "Compiling",
+});
 /**
  * 获取store 是否登录字段
  */
 const isLogin = computed(
-    mapGetters(["getIsLogin"]).getIsLogin.bind({$store: store})
+  mapGetters(["getIsLogin"]).getIsLogin.bind({ $store: store })
 );
 /**
  * 分页
@@ -397,30 +434,26 @@ const pageBody = reactive({
   totalPage: null,
 });
 
-
 /**
  * 获取测试点信息
  * @param id 编号
  */
 const getJudgeCases = (id) => {
-  api.judge.getJudgeFull(id)
-      .then(res => {
-        evaluationClick.value = JSON.parse(res.Info)
-      })
-  api.judge.getJudgeCases(id)
-      .then(res => {
-        if (res.Statu === '000') {
-          judgeCases.value = JSON.parse(res.Info)
-          dialogVisible.value = true
-        }
-      })
-}
+  api.judge.getJudgeFull(id).then((res) => {
+    evaluationClick.value = JSON.parse(res.Info);
+  });
+  api.judge.getJudgeCases(id).then((res) => {
+    if (res.Statu === "000") {
+      judgeCases.value = JSON.parse(res.Info);
+      dialogVisible.value = true;
+    }
+  });
+};
 /**
  * 翻页
  */
 const handleSizeChange = () => {
-  let pages =
-      Math.floor(pageBody.totalPage / pageBody.pageSize) + 1;
+  let pages = Math.floor(pageBody.totalPage / pageBody.pageSize) + 1;
   if (pageBody.offset >= pages) {
     pageBody.offset = pages;
   }
@@ -446,35 +479,35 @@ const beforeChangeTab = (activeName) => {
  */
 const getMyEvaluation = () => {
   api.judge
-      .getJudgeList({
-        pagequery: {
-          offset: pageBody.offset - 1,
-          pagesize: pageBody.pageSize,
-        },
-        odd1: {
-          UID: store.getters.getUserInfo.ID,
-          p_id: problemInfo.value.ID,
-        },
-      })
-      .then((res) => {
-        evaluationList.value = JSON.parse(res.Info);
-        console.log(evaluationList.value)
-      });
+    .getJudgeList({
+      pagequery: {
+        offset: pageBody.offset - 1,
+        pagesize: pageBody.pageSize,
+      },
+      odd1: {
+        UID: store.getters.getUserInfo.ID,
+        p_id: problemInfo.value.ID,
+      },
+    })
+    .then((res) => {
+      evaluationList.value = JSON.parse(res.Info);
+      console.log(evaluationList.value);
+    });
 };
 /**
  * 获取我的评测总数
  */
 const getMyListTotal = () => {
   api.judge
-      .getJudgeCount({
-        odd1: {
-          UID: store.getters.getUserInfo.ID,
-          p_id: problemInfo.value.ID,
-        },
-      })
-      .then((res) => {
-        pageBody.totalPage = res.Info;
-      });
+    .getJudgeCount({
+      odd1: {
+        UID: store.getters.getUserInfo.ID,
+        p_id: problemInfo.value.ID,
+      },
+    })
+    .then((res) => {
+      pageBody.totalPage = res.Info;
+    });
 };
 /**
  * 修改时间格式
@@ -504,6 +537,7 @@ const loginFirst = () => {
  * 提交代码
  */
 const submitCode = async () => {
+  loading.value = true;
   await api.judge.getBaseJudge().then((response) => {
     const tmp = response;
     tmp.PID = problemInfo.value.ID;
@@ -512,24 +546,27 @@ const submitCode = async () => {
     tmp.UID = store.getters.getUserInfo.ID;
     tmp.Code = code.value;
     api.judge.addJudge(tmp).then((response) => {
-      if (response.Statu === "000") {
+      loading.value = false;
+      if (!response) {
+        ElMessage.error("请求出错");
+      } else if (response.Statu != "000") {
+        ElMessage.error(response.Info);
+      } else {
         ElMessage.success("提交成功");
-        loading.value = true
-        evaluationClick.value = {Code: '', Status: 'Compiling'}
+        judgeCases.value = [];
+        evaluationClick.value = { Code: "", Status: "Pending" };
         dialogVisible.value = true;
         const timer = setInterval(() => {
-          api.judge.getJudge(response.Info).then((res) => {
-            res = JSON.parse(res.Info);
-            evaluationClick.value = res
+          api.judge.getJudgeStatus(response.Info).then((res) => {
+            console.log(res.Info);
             if (
-                res.Status !== "Pending" &&
-                res.Status !== "Compiling" &&
-                res.Status !== "Running"
+              res.Info !== "Pending" &&
+              res.Info !== "Compiling" &&
+              res.Info !== "Running"
             ) {
-              getJudgeCases(res.ID)
-              getMyEvaluation()
-              loading.value = false
               clearInterval(timer);
+              getJudgeCases(response.Info);
+              getMyEvaluation();
             }
           });
         }, 500);
@@ -568,7 +605,6 @@ const getProblem = () => {
     description.value.Examples = JSON.parse(description.value.Examples);
   });
 };
-
 </script>
 
 <style scoped>
@@ -589,7 +625,6 @@ const getProblem = () => {
 .el-tabs--border-card {
   border-bottom: 0;
 }
-
 
 .main {
   position: fixed;

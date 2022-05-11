@@ -47,6 +47,20 @@ function getJudge(params) {
 }
 
 /**
+ * 获取评测运行状态
+ */
+function getJudgeStatus(params) {
+    return axios.post('/judge/getjudgestatus', params)
+}
+
+/**
+ * 获取比赛评测运行状态
+ */
+function getContestJudgeStatus(params) {
+    return axios.post('/judge/getcontestjudgestatus', params)
+}
+
+/**
  * 获取比赛评测
  */
 function getContestJudge(params) {
@@ -99,4 +113,6 @@ export default {
     getContestJudgeList,
     getJudgeFull,
     getJudgeCases,
-  }
+    getJudgeStatus,
+    getContestJudgeStatus,
+}
