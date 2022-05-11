@@ -7,6 +7,7 @@
         </el-col>
       </el-row>
     </template>
+    <!-- 表格-->
     <vxe-table border :data="userList" stripe align="center" show-overflow :row-config="{height: 45,isHover: true}">
       <vxe-column type="seq" width="40"></vxe-column>
       <vxe-column field="Avatar" title="头像" width="70">
@@ -16,6 +17,16 @@
       </vxe-column>
       <vxe-column field="ID" title="用户ID"></vxe-column>
       <vxe-column field="Username" title="用户名"></vxe-column>
+      <vxe-column field="Nickname" title="昵称">
+        <template v-slot="{row}">
+          <div :style="'color:'+row.NameColor ">{{ row.Nickname }}</div>
+        </template>
+      </vxe-column>
+      <vxe-column title="头衔">
+        <template v-slot="{row}">
+          <OjTitle :title="row.Title" :key="row.ID"></OjTitle>
+        </template>
+      </vxe-column>
       <vxe-column field="Email" title="邮箱"></vxe-column>
       <vxe-column field="LastLoginIP" title="上次登录IP"></vxe-column>
       <vxe-column field="LastLoginTime" title="上次登录时间">
@@ -29,10 +40,11 @@
           <el-check-tag :checked="row.Status===0" @change="disableUser(row)">{{ row.Status === 0 ? '封禁' : '解封' }}
           </el-check-tag>
           <el-button type="warning" style="margin-left: 8px;" @click="kickUser(row)">下线</el-button>
-          <el-button type="primary" style="margin-left: 8px;" @click="kickUser(row)">编辑</el-button>
+          <el-button type="primary" style="margin-left: 8px;" @click="clickEdit(row)">编辑</el-button>
           <el-button type="danger" style="margin-left: 8px;" @click="kickUser(row)">删除</el-button>
         </template>
       </vxe-column>
+
     </vxe-table>
     <!-- 分页-->
     <div>
@@ -47,6 +59,11 @@
       </vxe-pager>
     </div>
   </el-card>
+  <vxe-modal v-model="editDialog.visible" title="编辑&保存" width="800" min-width="600" min-height="300" resize
+             destroy-on-close>
+    <AdminUserEdit v-model:user-info="editDialog.userInfo"></AdminUserEdit>
+  </vxe-modal>
+
 </template>
 
 <script setup>
@@ -54,7 +71,17 @@ import {onMounted, ref} from "vue";
 import api from "@/api/api";
 import utils from "@/utils";
 import {ElMessage, ElMessageBox} from "element-plus";
+import OjTitle from "@/components/OjTitle";
+import AdminUserEdit from "@/views/admin/user/AdminUserEdit";
+import {reactive} from "@vue/reactivity";
 
+/**
+ * 编辑数据
+ */
+const editDialog = reactive({
+  visible: false,
+  userInfo: '',
+})
 /**
  * 用户列表
  */
@@ -89,10 +116,8 @@ const disableUser = (row) => {
             time: 2592000
           })
               .then(res => {
-                console.log(res)
-                ElMessage.success(res.msg)
                 if (res.code === 200) {
-                  ElMessage.success('封禁成功')
+                  ElMessage.success("封禁成功")
                 }
               })
         })
@@ -105,7 +130,6 @@ const disableUser = (row) => {
       ID: row.ID
     })
         .then(res => {
-          ElMessage.success(res.msg)
           if (res.code === 200) {
             ElMessage.success('解封成功')
           }
@@ -118,19 +142,27 @@ const disableUser = (row) => {
  */
 const kickUser = (row) => {
   api.user.kickout({
-    ID:row.ID
-  }).then(res=>{
+    ID: row.ID
+  }).then(res => {
     if (res.code === 200) {
       ElMessage.success(res.msg)
     }
   })
 }
-
-
+/**
+ * 打开编辑
+ * @param row
+ */
+const clickEdit = (row) => {
+  editDialog.visible = true
+  editDialog.userInfo = row
+}
+/**
+ * 初始化
+ */
 onMounted(() => {
   getUserList()
 })
-
 /**
  * 获取用户列表
  */

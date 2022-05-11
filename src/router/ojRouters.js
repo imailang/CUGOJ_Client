@@ -49,8 +49,7 @@ const ojRouters = [
             },
             {
                 path: '/problem',
-                component: OjProblem
-
+                component: OjProblem,
             },
             {
                 path: '/problem/:problemId',
@@ -63,12 +62,11 @@ const ojRouters = [
             {
                 path: '/evaluation',
                 component: OjEvaluation,
-                meta: { requireAuth: true },
+
             },
             {
                 path: '/evaluation/:evaluationId',
                 component: OjEvaluationDetails,
-                meta: { requireAuth: true },
             },
             {
                 path: '/discuss',
@@ -76,7 +74,7 @@ const ojRouters = [
             },
             {
                 path: '/contest',
-                component: OjContestList
+                component: OjContestList,
             },
             {
                 path: '/contest/:contestId',
