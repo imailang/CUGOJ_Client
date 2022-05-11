@@ -13,8 +13,9 @@
             <el-col :xs="14" :sm="16" :lg="18">
               <el-row style="text-align: left">
                 <el-col :span="24">
-                  <el-row align="middle" justify="space-between">
+                  <el-row align="middle">
                     <b style="font-size: 50px">{{ userInfo.Username }}</b>
+                    <OjTitle :title="userInfo.Title"></OjTitle>
                   </el-row>
                 </el-col>
                 <el-col :span="24">
@@ -112,13 +113,14 @@ import store from "@/store";
 import api from "@/api/api";
 import {ElMessage} from "element-plus";
 import router from "@/router";
+import OjTitle from "@/components/OjTitle";
 
 const userInfo = ref(store.getters.getUserInfo);
 const submitInfo = ref({})
 
 const teamInfo = ref([]);
 
-onBeforeMount(()=>{
+onBeforeMount(() => {
   getSubmitCount();
   updateTeamInfo();
 })
