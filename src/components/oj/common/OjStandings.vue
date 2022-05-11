@@ -224,7 +224,7 @@ const calculateRanking = () => {
     if (a.Count == b.Count) {
       return a.Penalty - b.Penalty;
     }
-    return a.Count - b.Count;
+    return b.Count - a.Count;
   });
   for (var i = 0; i < rankData.value.length; i++) {
     rankData.value[i].Rank = i + 1;
