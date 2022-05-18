@@ -312,7 +312,7 @@
 
 <script setup>
 import { onBeforeMount, reactive, ref } from "vue";
-import AdminMakedown from "@/components/admin/common/AdminMakedown";
+import AdminMakedown from "@/components/admin/common/AdminMarkdown";
 import { Delete } from "@element-plus/icons-vue";
 import { marked } from "marked";
 import api from "@/api/api";

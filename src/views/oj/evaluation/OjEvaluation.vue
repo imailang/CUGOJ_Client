@@ -229,6 +229,15 @@ const getEvaluationUri = (evaluationId) => {
   })
 }
 /**
+ * 点击跳转题目
+ */
+const getProblemUri = (problemId) => {
+  router.push({
+    path: '/problem/' + problemId
+  })
+}
+
+/**
  * 分页
  */
 const pageBody = ref({

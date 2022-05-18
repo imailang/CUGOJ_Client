@@ -4,6 +4,7 @@
     class="el-menu-demo"
     router
     :collapse="isCollapse"
+    :unique-opened="true"
   >
     <el-menu-item index="/admin/home">
       <el-icon>
@@ -53,6 +54,26 @@
           <Grid></Grid>
         </el-icon>
         <span>竞赛列表</span>
+      </el-menu-item>
+    </el-sub-menu>
+    <el-sub-menu index="/admin/notice">
+      <template #title>
+        <el-icon>
+          <Grid></Grid>
+        </el-icon>
+        <span>公告管理</span>
+      </template>
+      <el-menu-item index="/admin/notice/contest">
+        <el-menu-item index="/admin/notice/home">
+          <el-icon>
+            <Grid></Grid>
+          </el-icon>
+          <span>首页公告</span>
+        </el-menu-item>
+        <el-icon>
+          <Grid></Grid>
+        </el-icon>
+        <span>竞赛公告</span>
       </el-menu-item>
     </el-sub-menu>
   </el-menu>

@@ -146,7 +146,7 @@ const logout = () => {
  */
 const clickAdminHome = () => {
   console.log(userInfo.value);
-  window.open("/admin/home", "_blank");
+  window.open("/cugoj/admin/home", "_blank");
 };
 /**
  * 跳转账户设置

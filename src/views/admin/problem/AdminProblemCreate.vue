@@ -1,22 +1,22 @@
 <template>
   <el-card>
     <template #header>
-      <el-page-header content="创建题目" @back="goBack" />
+      <el-page-header content="创建题目" @back="goBack"/>
     </template>
     <el-form
-      ref="problemInfoRef"
-      :model="problemInfo"
-      label-position="top"
-      label-width="70px"
+        ref="problemInfoRef"
+        :model="problemInfo"
+        label-position="top"
+        label-width="70px"
     >
       <!-- 题目标题-->
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form-item prop="title" label="题目标题" required>
             <el-input
-              placeholder="请输入题目标题"
-              size="large"
-              v-model="problemInfo.title"
+                placeholder="请输入题目标题"
+                size="large"
+                v-model="problemInfo.title"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -25,62 +25,62 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item
-            label="时间限制"
-            v-model="problemInfo.timeLimit"
-            required
-          >
-            <vxe-input
+              label="时间限制"
               v-model="problemInfo.timeLimit"
-              type="integer"
+              required
+          >
+            <vxe-input
+                v-model="problemInfo.timeLimit"
+                type="integer"
             ></vxe-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item
-            label="内存限制"
-            v-model="problemInfo.memoryLimit"
-            required
-          >
-            <vxe-input
+              label="内存限制"
               v-model="problemInfo.memoryLimit"
-              type="integer"
+              required
+          >
+            <vxe-input
+                v-model="problemInfo.memoryLimit"
+                type="integer"
             ></vxe-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item
-            label="栈限制"
-            v-model="problemInfo.stackLimit"
-            required
+              label="栈限制"
+              v-model="problemInfo.stackLimit"
+              required
           >
             <vxe-input
-              v-model="problemInfo.stackLimit"
-              type="integer"
+                v-model="problemInfo.stackLimit"
+                type="integer"
             ></vxe-input>
           </el-form-item>
         </el-col>
       </el-row>
       <!-- 题目描述模块-->
-      <el-switch v-model="problemInfo.markdown" />
+      <el-switch v-model="problemInfo.markdown"/>
       <i style="font-size: 10px; color: #cac6c6">文件上传描述</i>
       <!-- 开启markdown-->
       <el-row v-if="problemInfo.markdown" :gutter="20">
         <el-col :span="24">
           <el-form-item
-            label="文件上传"
-            v-model="problemInfo.description"
-            prop="description"
+              label="文件上传"
+              v-model="problemInfo.description"
+              prop="description"
           >
             <el-upload
-              class="upload-demo"
-              drag
-              :limit="1"
-              :auto-upload="false"
-              accept=".md"
-              :on-change="selectFile"
+                class="upload-demo"
+                drag
+                :limit="1"
+                :auto-upload="false"
+                accept=".md"
+                :on-change="selectFile"
             >
               <el-icon class="el-icon--upload">
-                <upload-filled />
+                <upload-filled/>
               </el-icon>
               <div class="el-upload__text">
                 请将Makedown文件拖到此处 <em>点击上传</em>
@@ -95,12 +95,12 @@
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item
-              label="题目背景"
-              v-model="problemInfo.background"
-              prop="background"
+                label="题目背景"
+                v-model="problemInfo.background"
+                prop="background"
             >
               <AdminMakedown
-                v-model:code="problemInfo.background"
+                  v-model:code="problemInfo.background"
               ></AdminMakedown>
             </el-form-item>
           </el-col>
@@ -109,12 +109,12 @@
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item
-              label="题目描述"
-              v-model="problemInfo.description"
-              prop="description"
+                label="题目描述"
+                v-model="problemInfo.description"
+                prop="description"
             >
               <AdminMakedown
-                v-model:code="problemInfo.description"
+                  v-model:code="problemInfo.description"
               ></AdminMakedown>
             </el-form-item>
           </el-col>
@@ -123,9 +123,9 @@
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item
-              label="输入描述"
-              v-model="problemInfo.input"
-              prop="input"
+                label="输入描述"
+                v-model="problemInfo.input"
+                prop="input"
             >
               <AdminMakedown v-model:code="problemInfo.input"></AdminMakedown>
             </el-form-item>
@@ -135,9 +135,9 @@
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item
-              label="输出描述"
-              v-model="problemInfo.output"
-              prop="output"
+                label="输出描述"
+                v-model="problemInfo.output"
+                prop="output"
             >
               <AdminMakedown v-model:code="problemInfo.output"></AdminMakedown>
             </el-form-item>
@@ -148,21 +148,21 @@
           <el-col :span="24">
             题目样例
             <el-form-item
-              v-for="(example, index) in problemInfo.examples"
-              prop="examples"
-              :key="index"
+                v-for="(example, index) in problemInfo.examples"
+                prop="examples"
+                :key="index"
             >
               <AdminAccordion
-                :title="'样例' + (index + 1)"
-                v-model:is-open="example.isOpen"
-                :index="index"
+                  :title="'样例' + (index + 1)"
+                  v-model:is-open="example.isOpen"
+                  :index="index"
               >
                 <template v-slot:header>
                   <el-button
-                    type="danger"
-                    size="small"
-                    :icon="Delete"
-                    @click="delExample(index)"
+                      type="danger"
+                      size="small"
+                      :icon="Delete"
+                      @click="delExample(index)"
                   >
                     删除
                   </el-button>
@@ -172,10 +172,10 @@
                   <el-col :xs="24" :md="12">
                     <el-form-item label="输入样例" v-model="example.input">
                       <el-input
-                        :rows="5"
-                        type="textarea"
-                        placeholder="样例输入"
-                        v-model="example.input"
+                          :rows="5"
+                          type="textarea"
+                          placeholder="样例输入"
+                          v-model="example.input"
                       >
                       </el-input>
                     </el-form-item>
@@ -183,10 +183,10 @@
                   <el-col :xs="24" :md="12">
                     <el-form-item label="输出样例" v-model="example.output">
                       <el-input
-                        :rows="5"
-                        type="textarea"
-                        placeholder="输出样例"
-                        v-model="example.output"
+                          :rows="5"
+                          type="textarea"
+                          placeholder="输出样例"
+                          v-model="example.output"
                       >
                       </el-input>
                     </el-form-item>
@@ -194,7 +194,7 @@
                   <el-col :span="24">
                     <el-form-item label="样例提示" v-model="example.tips">
                       <AdminMakedown
-                        v-model:code="example.tips"
+                          v-model:code="example.tips"
                       ></AdminMakedown>
                     </el-form-item>
                   </el-col>
@@ -205,11 +205,11 @@
           <el-col :span="24">
             <div class="add-example-btn">
               <el-button
-                class="add-examples"
-                @click="addExample"
-                :icon="Plus"
-                type="large"
-                >添加样例
+                  class="add-examples"
+                  @click="addExample"
+                  :icon="Plus"
+                  type="large"
+              >添加样例
               </el-button>
             </div>
           </el-col>
@@ -218,9 +218,9 @@
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item
-              label="题目提示"
-              v-model="problemInfo.hint"
-              prop="hint"
+                label="题目提示"
+                v-model="problemInfo.hint"
+                prop="hint"
             >
               <AdminMakedown v-model:code="problemInfo.hint"></AdminMakedown>
             </el-form-item>
@@ -228,20 +228,21 @@
         </el-row>
       </div>
       <el-button @click="submit" type="primary" style="width: 100%"
-        >提交</el-button
+      >提交
+      </el-button
       >
     </el-form>
   </el-card>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import AdminMakedown from "@/components/admin/common/AdminMakedown";
-import { Delete, Plus, UploadFilled } from "@element-plus/icons-vue";
-import { marked } from "marked";
+import {ref} from "vue";
+import AdminMakedown from "@/components/admin/common/AdminMarkdown";
+import {Delete, Plus, UploadFilled} from "@element-plus/icons-vue";
+import {marked} from "marked";
 import api from "@/api/api";
 import router from "@/router";
-import { ElMessage } from "element-plus";
+import {ElMessage} from "element-plus";
 import AdminAccordion from "@/components/admin/common/AdminAccordion";
 
 /**

@@ -9,6 +9,9 @@ const AdminContestCreate = () => import('@/views/admin/contest/AdminContestCreat
 const AdminContestEdit = () => import('@/views/admin/contest/AdminContestEdit')
 const AdminProblemEdit = () => import('@/views/admin/problem/AdminProblemEdit')
 const AdminCasesEdit = () => import('@/views/admin/problem/AdminCasesEdit')
+const AdminNoticeContest = ()=>import('@/views/admin/notice/AdminNoticeContest')
+const AdminNoticeHome = ()=>import('@/views/admin/notice/AdminNoticeHome')
+
 const adminRouters = [
     {
         path: '/admin',
@@ -64,6 +67,16 @@ const adminRouters = [
                         path: '/admin/problem/cases/:problemId',
                         component: AdminCasesEdit,
                         meta: { title: '测试用例编辑', requireAuth: true ,requireAdminAuth: true}
+                    },
+                    {
+                        path: '/admin/notice/home',
+                        component: AdminNoticeHome,
+                        meta: { title: '首页公告', requireAuth: true ,requireAdminAuth: true},
+                    },
+                    {
+                        path: '/admin/notice/contest',
+                        component: AdminNoticeContest,
+                        meta: { title: '竞赛公告', requireAuth: true ,requireAdminAuth: true},
                     },
                 ]
             }
