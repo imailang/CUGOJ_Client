@@ -1,4 +1,4 @@
-# oj3
+# CUGOJ
 
 ## Project setup
 ```
