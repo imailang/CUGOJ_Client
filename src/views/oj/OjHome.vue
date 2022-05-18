@@ -35,7 +35,32 @@
         </el-row>
       </el-card>
       <div class="card-top">
-        <el-card shadow="always"> 公告</el-card>
+        <el-card shadow="hover" style="--el-card-padding: 0">
+          <el-row justify="center" style="margin: 20px 0;font-size: 20px;">
+            <b>公告</b>
+          </el-row>
+
+          <CUGMarkdown :code="'```c++\n'+
+'#include<iostream>\n'+
+'using namespace std;\n'+
+'```\n'+
+'|3|2|3|\n'+
+'|-|-|-|\n'+
+'|content1|content2|content3|\n```c++\n'+
+'#include<iostream>\n'+
+'using namespace std;\n'+
+'```\n'+
+'|3|2|3|\n'+
+'|-|-|-|\n'+
+'|content1|content2|content3|\n```c++\n'+
+'#include<iostream>\n'+
+'using namespace std;\n'+
+'```\n'+
+'|3|2|3|\n'+
+'|-|-|-|\n'+
+'|content1|content2|content3|\n'" :is-edit="false"></CUGMarkdown>
+        </el-card>
+
       </div>
     </el-col>
     <el-col :sm="9" :xs="24">
@@ -62,6 +87,7 @@ import {ref} from "vue";
 import router from "@/router";
 import api from "@/api/api";
 import {ElMessage} from "element-plus";
+import CUGMarkdown from "@/components/CUGMarkdown";
 
 const nowDate = ref(new Date())
 const problemId = ref('')

@@ -221,7 +221,7 @@ import {useRoute} from "vue-router";
 import router from "@/router";
 import api from "@/api/api";
 import {Delete, Plus, UploadFilled} from "@element-plus/icons-vue";
-import AdminMakedown from "@/components/admin/common/AdminMakedown";
+import AdminMakedown from "@/components/admin/common/AdminMarkdown";
 import {marked} from "marked";
 import {ElMessage} from "element-plus";
 import AdminAccordion from "@/components/admin/common/AdminAccordion";

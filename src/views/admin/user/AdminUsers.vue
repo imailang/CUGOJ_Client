@@ -8,7 +8,7 @@
       </el-row>
     </template>
     <!-- 表格-->
-    <vxe-table border :data="userList" stripe align="center" show-overflow :row-config="{height: 45,isHover: true}">
+    <vxe-table :loading="loading" border :data="userList" stripe align="center" show-overflow :row-config="{height: 45,isHover: true}">
       <vxe-column type="seq" width="40"></vxe-column>
       <vxe-column field="Avatar" title="头像" width="70">
         <template v-slot="{row}">
@@ -24,7 +24,7 @@
       </vxe-column>
       <vxe-column title="头衔">
         <template v-slot="{row}">
-          <OjTitle :title="row.Title" :key="row.ID"></OjTitle>
+          <CUGTitle :title="row.Title" :key="row.ID"></CUGTitle>
         </template>
       </vxe-column>
       <vxe-column field="Email" title="邮箱"></vxe-column>
@@ -67,14 +67,14 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from "vue";
+import {onMounted, ref,reactive} from "vue";
 import api from "@/api/api";
 import utils from "@/utils";
 import {ElMessage, ElMessageBox} from "element-plus";
-import OjTitle from "@/components/OjTitle";
 import AdminUserEdit from "@/views/admin/user/AdminUserEdit";
-import {reactive} from "@vue/reactivity";
+import CUGTitle from "@/components/CUGTitle";
 
+const loading = ref(false)
 /**
  * 编辑数据
  */
@@ -167,6 +167,7 @@ onMounted(() => {
  * 获取用户列表
  */
 const getUserList = () => {
+  loading.value=true
   getListTotal()
   api.user.getUserList({
     "pagequery": {
@@ -176,6 +177,7 @@ const getUserList = () => {
   }).then(response => {
     userList.value = JSON.parse(response.Info)
     console.log('用户列表', userList.value)
+    loading.value=false
   })
 }
 /**
@@ -191,7 +193,11 @@ const getListTotal = () => {
  * 翻页
  */
 const handleSizeChange = () => {
-  let pages = Math.floor(pageBody.value.totalPage / pageBody.value.pageSize) + 1;
+  let pages = Math.floor(pageBody.value.totalPage / pageBody.value.pageSize);
+  if(pageBody.value.totalPage%pageBody.value.pageSize!==0)
+  {
+    pages+=1;
+  }
   console.log(pages)
   if (pageBody.value.offset >= pages) {
     pageBody.value.offset = pages

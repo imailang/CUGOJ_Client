@@ -15,7 +15,7 @@
                 <el-col :span="24">
                   <el-row align="middle">
                     <b style="font-size: 50px">{{ userInfo.Username }}</b>
-                    <OjTitle :title="userInfo.Title"></OjTitle>
+                    <CUGTitle :title="userInfo.Title"></CUGTitle>
                   </el-row>
                 </el-col>
                 <el-col :span="24">
@@ -113,7 +113,7 @@ import store from "@/store";
 import api from "@/api/api";
 import {ElMessage} from "element-plus";
 import router from "@/router";
-import OjTitle from "@/components/OjTitle";
+import CUGTitle from "@/components/CUGTitle";
 
 const userInfo = ref(store.getters.getUserInfo);
 const submitInfo = ref({})

@@ -229,6 +229,15 @@ const getEvaluationUri = (evaluationId) => {
   })
 }
 /**
+ * 点击跳转题目
+ */
+const getProblemUri = (problemId) => {
+  router.push({
+    path: '/problem/' + problemId
+  })
+}
+
+/**
  * 分页
  */
 const pageBody = ref({
@@ -312,8 +321,11 @@ const getListTotal = () => {
  * 翻页
  */
 const handleSizeChange = () => {
-  let pages = Math.floor(pageBody.value.totalPage / pageBody.value.pageSize) + 1;
-  console.log(pages)
+  let pages = Math.floor(pageBody.value.totalPage / pageBody.value.pageSize);
+  if(pageBody.value.totalPage%pageBody.value.pageSize!==0)
+  {
+    pages+=1;
+  }
   if (pageBody.value.offset >= pages) {
     pageBody.value.offset = pages
   }

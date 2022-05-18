@@ -1,11 +1,13 @@
 <template>
   <el-container class="admin-container">
     <el-row>
+      <!-- 窄-->
       <el-col :xs="24" :sm="0">
         <el-aside width="70px">
           <AdminNavBar :is-collapse="true"></AdminNavBar>
         </el-aside>
       </el-col>
+      <!-- 宽 -->
       <el-col :xs="0" :sm="24">
         <el-aside width="200px">
           <router-link to="/admin/home">
@@ -17,7 +19,6 @@
           </router-link>
           <AdminNavBar :is-collapse="false"></AdminNavBar>
         </el-aside>
-
       </el-col>
     </el-row>
     <el-container>

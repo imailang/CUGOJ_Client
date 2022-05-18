@@ -57,7 +57,6 @@
                       calAcRate(row.SubmitNumber, row.SubmitACNumber)"
                       :status="calAcStatus(calAcRate(row.SubmitNumber, row.SubmitACNumber))"
                       :stroke-width="24"
-
                   />
                 </el-tooltip>
               </template>
@@ -161,12 +160,9 @@ const calAcStatus = (rate) => {
     return 'exception'
   } else if (rate <= 40) {
     return 'warning'
-  }
-  else if(rate<=80)
-  {
+  } else if (rate <= 80) {
     return 'primary'
-  }
-  else{
+  } else {
     return 'success'
   }
 }
@@ -175,11 +171,12 @@ const calAcStatus = (rate) => {
  * 翻页
  */
 const handleSizeChange = () => {
-  let pages =
-      Math.floor(pageBody.value.totalPage / pageBody.value.pageSize) + 1;
-  console.log(pages);
+  let pages = Math.floor(pageBody.value.totalPage / pageBody.value.pageSize);
+  if (pageBody.value.totalPage % pageBody.value.pageSize !== 0) {
+    pages += 1;
+  }
   if (pageBody.value.offset >= pages) {
-    pageBody.value.offset = pages;
+    pageBody.value.offset = pages
   }
   getProblemList();
 };
