@@ -15,16 +15,17 @@
                 </div>
               </template>
               <div style="text-align: left">
-                <div class="problem-title">#P{{problemInfo.ID}} {{ problemInfo.Title }}</div>
+                <div class="problem-title">#P{{ problemInfo.ID }} {{ problemInfo.Title }}</div>
                 <div style="margin:10px 0;">
-                  <el-card style="border-left: 2px solid rgb(25,91,190);border-right: 2px solid rgb(25,91,190);background-color: #f4f4f4;--el-card-padding: 15px">
+                  <el-card
+                      style="border-left: 2px solid rgb(25,91,190);border-right: 2px solid rgb(25,91,190);background-color: #f4f4f4;--el-card-padding: 15px">
                     <el-row>
                       <el-col :span="24">
                         <div>
                           <el-icon style="vertical-align: -2px">
                             <Stopwatch></Stopwatch>
                           </el-icon>
-                          时间限制：{{problemInfo.TimeLimit}} ms
+                          时间限制：{{ problemInfo.TimeLimit }} ms
                         </div>
                       </el-col>
                       <el-col :span="24">
@@ -32,18 +33,15 @@
                           <el-icon style="vertical-align: -2px">
                             <Cpu></Cpu>
                           </el-icon>
-                          空间限制：{{problemInfo.MemoryLimit}} MB
+                          空间限制：{{ problemInfo.MemoryLimit }} MB
                         </div>
                       </el-col>
                     </el-row>
                   </el-card>
                 </div>
                 <div v-show="description.BackGround !== ''">
-                  <div style="color: #3090f2">题目背景 ：</div>
-                  <p
-                      style="margin-left: 30px"
-                      v-html="description.BackGround"
-                  ></p>
+                  <div style="color: #3090f2"><b>题目背景</b></div>
+                  <p v-html="description.BackGround"></p>
                 </div>
                 <div v-show="description.Description !== ''">
                   <div style="color: #3090f2"><b>描述</b></div>
@@ -52,11 +50,11 @@
                   ></p>
                 </div>
                 <div v-show="description.Input !== ''">
-                  <div style="color: #3090f2">输入描述 ：</div>
+                  <div style="color: #3090f2"><b>输入描述</b></div>
                   <p v-html="description.Input"></p>
                 </div>
                 <div v-show="description.Output !== ''">
-                  <div style="color: #3090f2">输出描述 ：</div>
+                  <div style="color: #3090f2"><b>输出描述</b></div>
                   <p v-html="description.Output"></p>
                 </div>
                 <div>
@@ -68,7 +66,7 @@
                   >
                     <el-col :span="12">
                       <div style="color: #3090f2">
-                        输入用例{{ index + 1 }}:
+                        <b style="font-size: 15px;">输入用例{{ index + 1 }}:</b>
                         <el-button type="text" @click="copy(item.input)">
                           <el-icon size="large">
                             <CopyDocument></CopyDocument>
@@ -81,7 +79,7 @@
                     </el-col>
                     <el-col :span="12">
                       <div style="color: #3090f2">
-                        输出用例{{ index + 1 }}:
+                        <b style="font-size: 15px;">输出用例{{ index + 1 }}:</b>
                         <el-button type="text" @click="copy(item.output)">
                           <el-icon size="large">
                             <CopyDocument></CopyDocument>
@@ -105,7 +103,7 @@
                   </el-row>
                 </div> <!-- 用例-->
                 <div v-show="description.Hint !== ''">
-                  <div style="color: #3090f2">提示</div>
+                  <div style="color: #3090f2"><b>提示</b></div>
                   <p
                       style="font-size: 14px"
                       v-html="description.Hint"
@@ -214,7 +212,7 @@
           ></OjCodeEditor>
           <el-row
               justify="end"
-              style="position: absolute; right: 30px; bottom: 25px"
+              style="position: absolute; right: 30px; bottom: 15px"
               @click="loginFirst"
           >
             <el-button
@@ -628,6 +626,7 @@ const getProblem = () => {
     problemStatus.value = response.Statu;
     description.value = problemInfo.value.Description;
     description.value.Examples = JSON.parse(description.value.Examples);
+    console.log(problemInfo.value)
   });
 };
 </script>
@@ -643,7 +642,6 @@ const getProblem = () => {
 }
 
 .problem-left {
-  height: 100%;
   background-color: #ffffff;
 }
 
@@ -664,8 +662,8 @@ const getProblem = () => {
   background-color: #ffffff;
   border: 0;
 }
-
->>> .CodeMirror {
-  height: 776px;
+b{
+  font-size: 22px;
 }
+
 </style>

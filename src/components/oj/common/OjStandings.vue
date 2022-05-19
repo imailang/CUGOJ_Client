@@ -3,13 +3,13 @@
     <!-- 标题头 -->
     <template #header>
       <el-row justify="space-between" align="middle">
-        <el-col :xs="7" :sm="4"><p class="panel-title">排名</p></el-col>
+        <el-col :xs="7" :sm="4"><p class="panel-title" style="text-align: left">排名</p></el-col>
         <el-col :xs="8" :sm="4"> </el-col>
         <el-col :xs="9" :sm="6"> <el-input></el-input></el-col>
         <el-col :xs="6" :sm="5" style="text-align: left">
           <el-button>查询</el-button>
         </el-col>
-        <el-col :xs="6" :sm="4">
+        <el-col :xs="6" :sm="4" style="text-align:right">
           <el-button
             round
             :icon="Refresh"

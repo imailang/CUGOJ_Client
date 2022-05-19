@@ -3,7 +3,7 @@
     <!-- 标题头 -->
     <template #header>
       <el-row justify="space-between" align="middle">
-        <el-col :xs="7" :sm="4"><p class="panel-title">评测列表</p></el-col>
+        <el-col :xs="7" :sm="4"><p class="panel-title" style="text-align: left">评测列表</p></el-col>
         <el-col :xs="8" :sm="4"> </el-col>
         <el-col :xs="9" :sm="6"> </el-col>
         <el-col :xs="6" :sm="5">
@@ -24,7 +24,7 @@
             </template>
           </el-dropdown>
         </el-col>
-        <el-col :xs="6" :sm="4">
+        <el-col :xs="6" :sm="4" style="text-align: right">
           <el-button
             round
             :icon="Refresh"

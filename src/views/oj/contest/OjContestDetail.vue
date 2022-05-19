@@ -5,7 +5,8 @@
         <b>{{ contestInfo.title }}</b>
       </h1>
     </template>
-    <el-row justify="space-between" align="middle">
+    <div style="margin: 0 50px">
+    <el-row justify="space-between" align="middle" >
       <el-col :span="6" style="text-align: left">
         <el-tag
           effect="plain"
@@ -45,7 +46,7 @@
       size="large"
       @change="sliderChanged"
       :format-tooltip="formatTooltip"
-    />
+    /></div>
   </el-card>
 
   <el-card style="margin-top: 10px">
@@ -181,8 +182,6 @@
       </el-col>
     </el-row>
   </el-card>
-
-  sds
 </template>
 
 <script setup>
@@ -331,13 +330,13 @@ const updateContest = () => {
 </script>
 
 <style scoped>
-::v-deep .el-card__header {
+>>> .el-card__header {
   border-bottom: 0;
   padding-bottom: 0;
 }
 
-::v-deep .el-card__body {
-  padding: 50px;
+>>> .el-card__body {
+  padding: 1px;
 }
 
 .demo-tabs > .el-tabs__content {

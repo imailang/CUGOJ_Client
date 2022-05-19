@@ -1,33 +1,36 @@
 <template>
-  <el-card style="text-align: left">
-    <el-row>
-      <el-col :span="12">
-        <el-select :model-value="language" filterable placeholder="Select" @change="changeLanguage">
-          <el-option
-              v-for="item in languages"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-          />
-        </el-select>
-      </el-col>
-      <el-col :span="12">
-        <el-select v-model="theme" filterable placeholder="Select" @change="changeTheme">
-          <el-option label="solarized" value="solarized"></el-option>
-          <el-option label="monokai" value="monokai"></el-option>
-          <el-option label="material" value="material"></el-option>
-        </el-select>
-      </el-col>
-    </el-row>
-
-    <codemirror
-        :value="code"
-        :options="options"
-        ref="container"
-        @change="codeChange"
-    >
-    </codemirror>
-  </el-card>
+  <div ref="main">
+    <el-card :style="'height:'+clientHeight+'px'">
+      <el-row style="text-align: left">
+        <el-col :span="12">
+          语言：
+          <el-select :model-value="language" filterable placeholder="Select" @change="changeLanguage">
+            <el-option
+                v-for="item in languages"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+            />
+          </el-select>
+        </el-col>
+        <el-col :span="12">
+          主题：
+          <el-select v-model="theme" filterable placeholder="Select" @change="changeTheme">
+            <el-option label="solarized" value="solarized"></el-option>
+            <el-option label="monokai" value="monokai"></el-option>
+            <el-option label="material" value="material"></el-option>
+          </el-select>
+        </el-col>
+      </el-row>
+      <codemirror
+          :value="code"
+          :options="options"
+          ref="container"
+          @change="codeChange"
+          style="text-align: left">
+      </codemirror>
+    </el-card>
+  </div>
 </template>
 
 <script setup>
@@ -36,7 +39,6 @@ import {codemirror} from 'vue-codemirror-lite';
 import 'codemirror/theme/monokai.css';
 import 'codemirror/theme/solarized.css';
 import 'codemirror/theme/material.css';
-
 // highlightSelectionMatches 高亮
 import 'codemirror/addon/scroll/annotatescrollbar.js';
 import 'codemirror/addon/search/matchesonscrollbar.js';
@@ -45,7 +47,6 @@ import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/searchcursor.js';
 import 'codemirror/addon/search/search.js';
 import 'codemirror/addon/search/match-highlighter.js';
-
 //////////////////////////// 语言
 //text/x-sql
 import 'codemirror/mode/sql/sql';
@@ -77,7 +78,12 @@ import 'codemirror/addon/hint/show-hint.js';
 import 'codemirror/addon/hint/anyword-hint.js';
 import 'codemirror/addon/selection/mark-selection.js';
 import {onMounted, ref, toRaw} from "vue";
+import elementResizeDetectorMaker from "element-resize-detector";
 
+//监听页面大小变化
+const erd = elementResizeDetectorMaker();
+const main = ref()
+const clientHeight = ref(document.documentElement.clientHeight)
 const container = ref()
 const editor = ref()
 const options = ref({
@@ -158,7 +164,6 @@ const languages = ref([
   },
 ])
 const theme = ref('solarized')
-
 const editorLanguage = ref({
   'gnu c99': 'text/x-csrc',
   'gnu c11': 'text/x-csrc',
@@ -193,6 +198,13 @@ const codeChange = () => {
  */
 onMounted(() => {
   editor.value = container.value.editor
+  erd.listenTo(main.value, () => {
+    // console.log('屏幕高度',document.documentElement.clientHeight)
+    // console.log('主窗口高度',ele.offsetHeight)
+    clientHeight.value = document.documentElement.clientHeight-75
+    editor.value.setSize('auto', clientHeight.value - 50)
+  });
+
 })
 
 /**
@@ -205,7 +217,6 @@ const changeTheme = (val) => {
  * 改变语言
  */
 const changeLanguage = (val) => {
-  console.log(val)
   toRaw(editor.value).setOption('mode', calLanguage(val))
   emits('update:language', val)
 }
@@ -224,5 +235,7 @@ const calLanguage = (val) => {
 
 
 <style scoped>
-
+>>> .CodeMirror {
+  height: 100%;
+}
 </style>

@@ -8,7 +8,7 @@
       <div ref="main" id="oj-content">
         <router-view></router-view>
       </div>
-      <oj-footer :style="'margin-top:' + footerTopMargin + 'px'"></oj-footer>
+      <OjFooter :style="'margin-top:' + footerTopMargin + 'px'"></OjFooter>
     </el-scrollbar>
   </div>
   <div v-else>
@@ -51,9 +51,7 @@ const footerTopMargin = ref()
  * 解决顶部导航组件响应变化
  */
 onMounted(() => {
-  // localStorage.setItem('userInfo',undefined)
   erd.listenTo(affix.value, () => {
-
     reloadNavBar();
   });
 

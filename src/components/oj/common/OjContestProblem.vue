@@ -114,7 +114,7 @@
                 ></OjCodeEditor>
                 <el-row
                   justify="end"
-                  style="position: absolute; right: 30px; bottom: 25px"
+                  style="position: absolute; right: 20px; bottom: 20px"
                   @click="loginFirst"
                 >
                   <el-button
@@ -455,9 +455,6 @@ const getProblem = () => {
 
 // eslint-disable-next-line no-undef
 const emits = defineEmits(["back", "submited"]);
-/**
- * 编辑区代码变化
- */
 
 const backToList = () => {
   emits("back");
@@ -472,6 +469,7 @@ const backToList = () => {
 
 .problem-right {
   background-color: #ffffff;
+  height: 100%;
 }
 
 .problem-left {
@@ -487,9 +485,5 @@ const backToList = () => {
   padding: 0;
   background-color: #ffffff;
   border: 0;
-}
-
->>> .CodeMirror {
-  height: 776px;
 }
 </style>
